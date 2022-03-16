@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class AverageSpeedCard extends StatefulWidget {
   final String header;
@@ -13,13 +13,13 @@ class AverageSpeedCard extends StatefulWidget {
 }
 
 class _AverageSpeedCardState extends State<AverageSpeedCard> {
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(widget.header,
-            style: GoogleFonts.lato(
-                fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
+            style: app_theme.textTheme.bodyText1?.copyWith(color: Colors.white),
             textAlign: TextAlign.center),
         const SizedBox(height: 10),
         Container(
@@ -43,16 +43,10 @@ class _AverageSpeedCardState extends State<AverageSpeedCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(widget.speed,
-                    style: GoogleFonts.lato(
-                        fontSize: 28,
-                        color: const Color(0xFF01172F),
-                        fontWeight: FontWeight.w600),
+                    style: app_theme.textTheme.headline4,
                     textAlign: TextAlign.center),
                 Text("km/h",
-                    style: GoogleFonts.lato(
-                        fontSize: 16,
-                        color: const Color(0xFF01172F),
-                        fontWeight: FontWeight.w600),
+                    style: app_theme.textTheme.subtitle1,
                     textAlign: TextAlign.center),
               ],
             ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'current_speed_card.dart';
 import 'average_speed_card.dart';
+
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 void main() {
   runApp(const MyApp());
@@ -13,14 +14,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     return MaterialApp(
       title: 'Loopsnelheid App',
-      theme: ThemeData(
-      ),
+      theme: app_theme.themeData,
       home: const Dashboard(title: 'Loopsnelheid App Dashboard'),
     );
   }
@@ -70,10 +69,7 @@ class _DashboardState extends State<Dashboard> {
         margin: const EdgeInsets.only(left: 20, right: 20),
         body: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFF264DD2), Color(0xFF2F23C1)]),
+            gradient: app_theme.mainLinearGradient,
           ),
           child: Stack(
             children: [
@@ -92,10 +88,7 @@ class _DashboardState extends State<Dashboard> {
                     const SizedBox(height: 70),
                     Text(
                       "Loopsnelheid",
-                      style: GoogleFonts.lato(
-                          fontSize: 40,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
+                      style: app_theme.textTheme.headline3?.copyWith(color: Colors.white),
                     ),
                     const SizedBox(height: 20),
                     const Icon(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class CurrentSpeedCard extends StatefulWidget {
   final String speed;
@@ -12,6 +12,16 @@ class CurrentSpeedCard extends StatefulWidget {
 }
 
 class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
+
+  final lightBlueGradient = const LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0xFF2F23C1),
+      Color(0xFF0FBDF4)
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,42 +40,23 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
         ],
       ),
       child: CustomPaint(
-        painter: CirclePainter(),
+        painter: CirclePainter(gradient: lightBlueGradient),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 widget.speed,
-                style: GoogleFonts.lato(
-                    fontSize: 60,
-                    fontWeight: FontWeight.w600,
+                style: app_theme.textTheme.headline2!.copyWith(
                     foreground: Paint()
-                      ..shader = const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFF2F23C1),
-                          Color(0xFF0FBDF4)
-                        ],
-                      ).createShader(const Rect.fromLTWH(0, 260, 0, 200))
+                      ..shader = lightBlueGradient.createShader(const Rect.fromLTWH(0, 260, 0, 200))
                 ),
               ),
               Text(
-                "km/h",
-                style: GoogleFonts.lato(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                    foreground: Paint()
-                      ..shader = const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFF2F23C1),
-                          Color(0xFF0FBDF4)
-                        ],
-                      ).createShader(const Rect.fromLTWH(0, 325, 0, 200))
-                ),
+                  "km/h",
+                  style: app_theme.textTheme.headline5!.copyWith(
+                      foreground: Paint()
+                        ..shader = lightBlueGradient.createShader(const Rect.fromLTWH(0, 325, 0, 200)))
               ),
             ],
           ),
@@ -76,22 +67,27 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
 }
 
 class CirclePainter extends CustomPainter {
+  final Color? color;
+  final Gradient? gradient;
+
+  CirclePainter({this.color, this.gradient})
+      : assert((color != null || gradient != null),
+  "One of the parameters must be provided",
+  );
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
 
     final paint = Paint()
-      ..shader = const LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          Color(0xFF2F23C1),
-          Color(0xFF0FBDF4)
-        ],
-      ).createShader(const Rect.fromLTWH(0, -100, 0, 500)
-      )
       ..strokeWidth = 18
       ..style = PaintingStyle.stroke;
+    if (gradient != null) {
+      paint.shader = gradient!.createShader(const Rect.fromLTWH(0, -100, 0, 500));
+    }
+    else {
+      paint.color = color!;
+    }
 
     canvas.drawCircle(
       center,
