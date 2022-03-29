@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
+import 'app_theme.dart' as app_theme;
+
 class CurrentSpeedCard extends StatefulWidget {
   final String speed;
 
@@ -33,10 +35,7 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
           Radius.circular(20.0),
         ),
         boxShadow: [
-          BoxShadow(
-              color: Color(0x40000000),
-              offset: Offset(0, 8),
-              blurRadius: 4),
+          app_theme.bottomBoxShadow,
         ],
       ),
       child: CustomPaint(
@@ -48,15 +47,16 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
               Text(
                 widget.speed,
                 style: app_theme.textTheme.headline2!.copyWith(
-                    foreground: Paint()
-                      ..shader = lightBlueGradient.createShader(const Rect.fromLTWH(0, 260, 0, 200))
+                  foreground: Paint()
+                    ..shader = lightBlueGradient.createShader(const Rect.fromLTWH(0, 260, 0, 200)),
                 ),
               ),
               Text(
-                  "km/h",
-                  style: app_theme.textTheme.headline5!.copyWith(
-                      foreground: Paint()
-                        ..shader = lightBlueGradient.createShader(const Rect.fromLTWH(0, 325, 0, 200)))
+                "km/h",
+                style: app_theme.textTheme.headline6!.copyWith(
+                  foreground: Paint()
+                    ..shader = lightBlueGradient.createShader(const Rect.fromLTWH(0, 325, 0, 200)),
+                ),
               ),
             ],
           ),

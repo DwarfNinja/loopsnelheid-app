@@ -5,7 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'current_speed_card.dart';
 import 'average_speed_card.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'app_theme.dart' as app_theme;
 
 void main() {
   runApp(const MyApp());
@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF01172F),
+      backgroundColor: app_theme.blue,
       key: _globalKey,
       drawer: Drawer(
         child: ListView(
@@ -88,7 +88,7 @@ class _DashboardState extends State<Dashboard> {
                     const SizedBox(height: 70),
                     Text(
                       "Loopsnelheid",
-                      style: app_theme.textTheme.headline3?.copyWith(color: Colors.white),
+                      style: app_theme.textTheme.headline3!.copyWith(color: Colors.white),
                     ),
                     const SizedBox(height: 20),
                     const Icon(

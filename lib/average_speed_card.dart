@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+
+import 'app_theme.dart' as app_theme;
 
 class AverageSpeedCard extends StatefulWidget {
   final String header;
@@ -19,7 +20,7 @@ class _AverageSpeedCardState extends State<AverageSpeedCard> {
     return Column(
       children: [
         Text(widget.header,
-            style: app_theme.textTheme.bodyText1?.copyWith(color: Colors.white),
+            style: app_theme.textTheme.bodyText1!.copyWith(color: Colors.white),
             textAlign: TextAlign.center),
         const SizedBox(height: 10),
         Container(
@@ -33,10 +34,7 @@ class _AverageSpeedCardState extends State<AverageSpeedCard> {
                 Radius.circular(16.0),
               ),
               boxShadow: [
-                BoxShadow(
-                    color: Color(0x40000000),
-                    offset: Offset(0, 8),
-                    blurRadius: 4),
+                app_theme.bottomBoxShadow,
               ],
             ),
             child: Column(
