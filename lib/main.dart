@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loopsnelheidapp/CalculateCurrentSpeed.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:geolocator/geolocator.dart';
+
+import 'CalculateCurrentSpeed.dart';
 
 import 'current_speed_card.dart';
 import 'average_speed_card.dart';
@@ -36,6 +40,9 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+
+  CalculateCurrentSpeed calculateCurrentSpeed = CalculateCurrentSpeed();
+  Future<Position> resultPosition = async calculateCurrentSpeed._determinePosition();
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +104,7 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    const CurrentSpeedCard(speed: "4.2"),
+                    CurrentSpeedCard(speed: ),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
