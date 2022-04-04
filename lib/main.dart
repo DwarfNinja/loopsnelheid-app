@@ -1,18 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:loopsnelheidapp/CalculateCurrentSpeed.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:geolocator/geolocator.dart';
-
-import 'CalculateCurrentSpeed.dart';
+import 'calculate_location.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'current_speed_card.dart';
 import 'average_speed_card.dart';
 
 import 'app_theme.dart' as app_theme;
 
-void main() {
+void main() async {
   runApp(const MyApp());
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+  Position positionResult = await _determinePosition().then((value) => value);
+  print(positionResult);
 }
 
 class MyApp extends StatelessWidget {
@@ -40,9 +77,6 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-
-  CalculateCurrentSpeed calculateCurrentSpeed = CalculateCurrentSpeed();
-  Future<Position> resultPosition = async calculateCurrentSpeed._determinePosition();
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +138,7 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    CurrentSpeedCard(speed: ),
+                    const CurrentSpeedCard(speed: "4.2"),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
