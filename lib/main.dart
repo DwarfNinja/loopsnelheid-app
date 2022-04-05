@@ -1,25 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:geolocator/geolocator.dart';
-import 'calculate_location.dart';
+
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'current_speed_card.dart';
 import 'average_speed_card.dart';
-import 'calculate_speed.dart' as http;
+
 import 'app_theme.dart' as app_theme;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Position positionResult = await http.determinePosition().then((value) => value);
-  print(positionResult.speed);
-
-  runApp(MyApp(positionResult: positionResult));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key, required this.positionResult}) : super(key: key);
-  final Position positionResult;
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,32 +26,49 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      home: Dashboard(title: 'Loopsnelheid App Dashboard', position: positionResult),
+      home: const Dashboard(title: 'Loopsnelheid App Dashboard'),
     );
   }
 }
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key, required this.title, required this.position}) : super(key: key);
-  final Position position;
+  const Dashboard({Key? key, required this.title}) : super(key: key);
+
   final String title;
 
   @override
-  State<Dashboard> createState() => _DashboardState(this.position);
-
-
+  State<Dashboard> createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-  Position position;
-  _DashboardState(this.position);
 
+  double currentSpeedMs = 0;
+
+  static const LocationSettings locationSettings = LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 10,
+  );
+
+  void initPos() async {
+    Stream<Position> positionStream =
+    Geolocator.getPositionStream(locationSettings: locationSettings);
+    positionStream.listen((Position? position) {
+      setState(() {
+        currentSpeedMs = position?.speed ?? 0.0;
+      });
+    });
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    initPos();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    double current_speed = position.speed * 3.6;
-
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
@@ -102,7 +118,8 @@ class _DashboardState extends State<Dashboard> {
                     const SizedBox(height: 70),
                     Text(
                       "Loopsnelheid",
-                      style: app_theme.textTheme.headline3!.copyWith(color: Colors.white),
+                      style: app_theme.textTheme.headline3!
+                          .copyWith(color: Colors.white),
                     ),
                     const SizedBox(height: 20),
                     const Icon(
@@ -111,14 +128,14 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    CurrentSpeedCard(speed: current_speed.toStringAsFixed(2)),
+                    CurrentSpeedCard(speedMs: currentSpeedMs),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
-                        AverageSpeedCard(header: "GEM WEEK", speed: "3.7"),
+                        AverageSpeedCard(header: "GEM WEEK", speed: "0.0"),
                         SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM MAAND", speed: "4.1")
+                        AverageSpeedCard(header: "GEM MAAND", speed: "0.0")
                       ],
                     ),
                   ],

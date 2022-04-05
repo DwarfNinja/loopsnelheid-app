@@ -4,11 +4,11 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'app_theme.dart' as app_theme;
 
 class CurrentSpeedCard extends StatefulWidget {
-  final String speed;
+  final double speedMs;
 
-  const CurrentSpeedCard({Key? key, required this.speed})
+  const CurrentSpeedCard({Key? key, required this.speedMs})
       : super(key: key);
-
+  
   @override
   _CurrentSpeedCardState createState() => _CurrentSpeedCardState();
 }
@@ -45,7 +45,7 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                widget.speed,
+                convertMsToKmh(widget.speedMs).toStringAsFixed(1),
                 style: app_theme.textTheme.headline2!.copyWith(
                   foreground: Paint()
                     ..shader = lightBlueGradient.createShader(const Rect.fromLTWH(0, 260, 0, 200)),
@@ -63,6 +63,10 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
         ),
       ),
     );
+  }
+
+  double convertMsToKmh(double speed) {
+    return speed * 3.6;
   }
 }
 
