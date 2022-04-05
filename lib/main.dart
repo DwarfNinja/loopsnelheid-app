@@ -10,7 +10,7 @@ import 'calculate_speed.dart' as http;
 import 'app_theme.dart' as app_theme;
 
 void main() async {
-
+  WidgetsFlutterBinding.ensureInitialized();
   Position positionResult = await http.determinePosition().then((value) => value);
   print(positionResult.speed);
 
@@ -38,16 +38,21 @@ class Dashboard extends StatefulWidget {
   final String title;
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  State<Dashboard> createState() => _DashboardState(this.position);
+
+
 }
 
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  Position position;
+  _DashboardState(this.position);
 
-  get position => position ?? "0.0";
 
   @override
   Widget build(BuildContext context) {
+    double current_speed = position.speed * 3.6;
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
@@ -106,7 +111,7 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    CurrentSpeedCard(speed: position.speed),
+                    CurrentSpeedCard(speed: current_speed.toStringAsFixed(2)),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
