@@ -10,15 +10,16 @@ import 'calculate_speed.dart' as http;
 import 'app_theme.dart' as app_theme;
 
 void main() async {
-  runApp(const MyApp());
 
   Position positionResult = await http.determinePosition().then((value) => value);
   print(positionResult.speed);
 
+  runApp(MyApp(positionResult: positionResult));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.positionResult}) : super(key: key);
+  final Position positionResult;
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +27,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      home: const Dashboard(title: 'Loopsnelheid App Dashboard'),
+      home: Dashboard(title: 'Loopsnelheid App Dashboard', position: positionResult),
     );
   }
 }
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key, required this.title}) : super(key: key);
-
+  const Dashboard({Key? key, required this.title, required this.position}) : super(key: key);
+  final Position position;
   final String title;
 
   @override
@@ -42,6 +43,8 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+
+  get position => position ?? "0.0";
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +106,7 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    const CurrentSpeedCard(speed: "4.2"),
+                    CurrentSpeedCard(speed: position.speed),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
