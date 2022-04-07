@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
-import 'app_theme.dart' as app_theme;
-
 class CurrentSpeedCard extends StatefulWidget {
   final double speedMs;
 
@@ -10,7 +8,7 @@ class CurrentSpeedCard extends StatefulWidget {
       : super(key: key);
   
   @override
-  _CurrentSpeedCardState createState() => _CurrentSpeedCardState();
+  State<CurrentSpeedCard> createState() => _CurrentSpeedCardState();
 }
 
 class _CurrentSpeedCardState extends State<CurrentSpeedCard> {

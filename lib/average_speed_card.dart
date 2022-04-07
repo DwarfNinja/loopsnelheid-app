@@ -10,7 +10,7 @@ class AverageSpeedCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  _AverageSpeedCardState createState() => _AverageSpeedCardState();
+  State<AverageSpeedCard> createState() => _AverageSpeedCardState();
 }
 
 class _AverageSpeedCardState extends State<AverageSpeedCard> {
