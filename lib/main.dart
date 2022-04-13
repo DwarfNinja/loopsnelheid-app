@@ -70,11 +70,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
-      drawer: Drawer(
-        child: ListView(
-          children: const [],
-        ),
-      ),
+      drawer: const SideBar(),
       body: SlidingUpPanel(
         panel: Column(
           children: const [
