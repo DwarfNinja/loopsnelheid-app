@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:loopsnelheidapp/sidebar.dart';
+// import 'package:loopsnelheidapp/sidebar.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:loopsnelheidapp/current_speed_card.dart';
 import 'package:loopsnelheidapp/average_speed_card.dart';
+
+import 'package:loopsnelheidapp/settings.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
