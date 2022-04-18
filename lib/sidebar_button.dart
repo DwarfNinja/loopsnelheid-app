@@ -22,7 +22,7 @@ class _SideBarButtonState extends State<SideBarButton> {
           app_theme.bottomBoxShadow
         ]
       ),
-      child: TextButton(
+      child: ElevatedButton(
         style: TextButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),

@@ -25,14 +25,14 @@ class SideBar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
+                      Container( //TODO: To be replaced for app icon
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: app_theme.blue
                         ),
-                        width: 90,
-                        height: 90,
-                        child: const Icon(Icons.directions_walk, size: 60, color: app_theme.white),
+                        width: 85,
+                        height: 85,
+                        child: const Icon(Icons.directions_walk, size: 65, color: app_theme.white),
                       ),
                       const SizedBox(width: 130),
                       Column(
