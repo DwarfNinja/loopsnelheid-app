@@ -1,15 +1,14 @@
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TimePickerWidget extends StatefulWidget {
+  const TimePickerWidget({Key? key}) : super(key: key);
+
   @override
   _TimePickerWidgetState createState() => _TimePickerWidgetState();
 }
 
 class _TimePickerWidgetState extends State<TimePickerWidget> {
-  TimeOfDay time = TimeOfDay(hour: 10, minute: 30);
+  TimeOfDay time = const TimeOfDay(hour: 10, minute: 30);
 
   @override
   Widget build(BuildContext context){
@@ -23,24 +22,23 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
           children: [
             Text(
               '$hours:$minute',
-              style: TextStyle(fontSize: 32),
+              style: const TextStyle(fontSize: 32),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              child: Text('Selecteer begintijd'),
+              child: const Text('Selecteer begintijd'),
               onPressed: () async {
                 TimeOfDay? newTime = await showTimePicker(
-                    context: context,
-                    initialTime: time,
+                  context: context,
+                  initialTime: time,
                 );
                 if (newTime == null) return;
 
                 setState(() => time = newTime);
-                },
+              },
             ),
           ],
-        )
-
+        ),
       ),
     );
   }
