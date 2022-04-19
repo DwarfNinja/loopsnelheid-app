@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:loopsnelheidapp/sidebar.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'current_speed_card.dart';
-import 'average_speed_card.dart';
+import 'package:loopsnelheidapp/current_speed_card.dart';
+import 'package:loopsnelheidapp/average_speed_card.dart';
 
-import 'app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -26,15 +26,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      home: const Dashboard(title: 'Loopsnelheid App Dashboard'),
+      home: const Dashboard(),
     );
   }
 }
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const Dashboard({Key? key}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -50,7 +48,7 @@ class _DashboardState extends State<Dashboard> {
     distanceFilter: 10,
   );
 
-  void initPos() async {
+  void initPositionStream() async {
     Stream<Position> positionStream =
     Geolocator.getPositionStream(locationSettings: locationSettings);
     positionStream.listen((Position? position) {
@@ -63,7 +61,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    initPos();
+    initPositionStream();
     super.initState();
   }
 
@@ -72,11 +70,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
-      drawer: Drawer(
-        child: ListView(
-          children: const [],
-        ),
-      ),
+      drawer: const SideBar(),
       body: SlidingUpPanel(
         panel: Column(
           children: const [
