@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/sidebar_button.dart';
 
-class SideBar extends StatelessWidget {
+class SideBar extends StatefulWidget {
 
   const SideBar({Key? key}) : super(key: key);
+
+  @override
+  State<SideBar> createState() => _SideBarState();
+}
+
+class _SideBarState extends State<SideBar> {
+
+  String currentRoute = "/";
 
   @override
   Widget build(BuildContext context) {
@@ -38,22 +46,38 @@ class SideBar extends StatelessWidget {
                       Column(
                         children: [
                           IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: const Icon(Icons.close_rounded, size: 50),
-                            padding: EdgeInsets.zero),
+                              onPressed: () => Navigator.pop(context),
+                              icon: const Icon(Icons.close_rounded, size: 50),
+                              padding: EdgeInsets.zero),
                           Text("Sluiten", style: app_theme.textTheme.bodyText2)
                         ],
                       )
                     ],
                   ),
                   const SizedBox(height: 110),
-                  const SideBarButton(iconData: Icons.home, text: "Dashboard"),
+                  SideBarButton(
+                    iconData: Icons.home,
+                    text: "Dashboard",
+                    onPressed: () => executeRoute(context, "/"),
+                  ),
                   const SizedBox(height: 50),
-                  const SideBarButton(iconData: Icons.settings, text: "Instellingen"),
+                  SideBarButton(
+                    iconData: Icons.settings,
+                    text: "Instellingen",
+                    onPressed: () => executeRoute(context, "/"),
+                  ),
                   const SizedBox(height: 50),
-                  const SideBarButton(iconData: Icons.support, text: "Help"),
+                  SideBarButton(
+                    iconData: Icons.support,
+                    text: "Help",
+                    onPressed: () => executeRoute(context, "/"),
+                  ),
                   const SizedBox(height: 50),
-                  const SideBarButton(iconData: Icons.info, text: "Over"),
+                  SideBarButton(
+                    iconData: Icons.info,
+                    text: "Over",
+                    onPressed: () => executeRoute(context, "/"),
+                  ),
                 ],
               ),
             ),
@@ -61,5 +85,14 @@ class SideBar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void executeRoute(BuildContext context, String name) {
+    if (currentRoute != name) {
+      Navigator.pushReplacementNamed(context, name);
+    } else {
+      Navigator.pop(context);
+    }
+    currentRoute = name;
   }
 }
