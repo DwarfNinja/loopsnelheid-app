@@ -12,7 +12,7 @@ import 'current_speed_card.dart';
 import 'average_speed_card.dart';
 
 import 'app_theme.dart' as app_theme;
-import 'measure_service.dart';
+import 'services/measure_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +46,8 @@ class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
   double currentSpeedMs = 0;
+  double weeklySpeedMs = 0;
+  double monthlySpeedMs = 0;
 
   List<Measure> measureList = [];
 
@@ -60,12 +62,17 @@ class _DashboardState extends State<Dashboard> {
     positionStream.listen((Position? position) {
       setState(() {
         currentSpeedMs = position?.speed ?? 0.0;
+
         Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs.toString());
         measureList.add(measure);
+
         if (measureList.length > 10) {
-          HttpService httpService = HttpService();
-          httpService.storeMeasures(measureList);
+          MeasureService measureService = MeasureService();
+          measureService.storeMeasures(measureList);
           measureList.clear();
+
+          measureService.getAverageWeeklyMeasure().then((value) => weeklySpeedMs = value.averageSpeed);
+          measureService.getAverageMonthlyMeasure().then((value) => monthlySpeedMs = value.averageSpeed);
         }
       });
     });
@@ -143,10 +150,10 @@ class _DashboardState extends State<Dashboard> {
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        AverageSpeedCard(header: "GEM WEEK", speed: "0.0"),
+                      children: [
+                        AverageSpeedCard(header: "GEM WEEK", speed: weeklySpeedMs),
                         SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM MAAND", speed: "0.0")
+                        AverageSpeedCard(header: "GEM MAAND", speed: monthlySpeedMs)
                       ],
                     ),
                   ],
