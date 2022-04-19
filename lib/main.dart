@@ -1,19 +1,21 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:geolocator/geolocator.dart';
-import 'package:loopsnelheidapp/sidebar.dart';
+import 'package:loopsnelheidapp/models/measure.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'package:loopsnelheidapp/current_speed_card.dart';
-import 'package:loopsnelheidapp/average_speed_card.dart';
+import 'current_speed_card.dart';
+import 'average_speed_card.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'app_theme.dart' as app_theme;
+import 'measure_service.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -26,13 +28,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      home: const Dashboard(),
+      home: const Dashboard(title: 'Loopsnelheid App Dashboard'),
     );
   }
 }
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({Key? key, required this.title}) : super(key: key);
+
+  final String title;
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -43,17 +47,26 @@ class _DashboardState extends State<Dashboard> {
 
   double currentSpeedMs = 0;
 
+  List<Measure> measureList = [];
+
   static const LocationSettings locationSettings = LocationSettings(
     accuracy: LocationAccuracy.high,
     distanceFilter: 10,
   );
 
-  void initPositionStream() async {
+  void initPos() async {
     Stream<Position> positionStream =
     Geolocator.getPositionStream(locationSettings: locationSettings);
     positionStream.listen((Position? position) {
       setState(() {
         currentSpeedMs = position?.speed ?? 0.0;
+        Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs.toString());
+        measureList.add(measure);
+        if (measureList.length > 10) {
+          HttpService httpService = HttpService();
+          httpService.storeMeasures(measureList);
+          measureList.clear();
+        }
       });
     });
     setState(() {});
@@ -61,7 +74,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    initPositionStream();
+    initPos();
     super.initState();
   }
 
@@ -70,7 +83,11 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
-      drawer: const SideBar(),
+      drawer: Drawer(
+        child: ListView(
+          children: const [],
+        ),
+      ),
       body: SlidingUpPanel(
         panel: Column(
           children: const [
