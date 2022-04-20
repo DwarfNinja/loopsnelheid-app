@@ -3,27 +3,41 @@ import 'package:flutter/material.dart';
 
 import 'dart:math';
 
-List maakTimeSpan(_randomHour){
-    var randomTijden = [];
+List setRandomTimes(){
+    var randomTimes = [];
+
+    Random random = Random();
+
+    int _randomMorningHour = 8 + random.nextInt(12 - 8);
+    int _randomAfternoonHour = 13 + random.nextInt(17 - 13);
+
+    randomTimes.add(setTimeSpan(_randomMorningHour));
+    randomTimes.add(setTimeSpan(_randomAfternoonHour));
+
+    return randomTimes;
+}
+
+List setTimeSpan(_randomHour){
+    var randomTimes = [];
 
     Random random = Random();
 
     int _randomMinute = random.nextInt(60);
 
     TimeOfDay start = TimeOfDay(hour: _randomHour, minute: _randomMinute);
-    TimeOfDay eind = TimeOfDay(hour: _randomHour, minute: _randomMinute+15);
-    if(eind.minute > 60){
-        eind.hour + 1;
-        eind.minute - 60;
+    TimeOfDay end = TimeOfDay(hour: _randomHour, minute: _randomMinute+15);
+    if(end.minute > 60){
+        end.hour + 1;
+        end.minute - 60;
     }
 
     double startTime(TimeOfDay start) => start.hour + start.minute/60;
-    double eindTime(TimeOfDay eind) => eind.hour + eind.minute/60;
+    double endTime(TimeOfDay end) => end.hour + end.minute/60;
 
-    randomTijden.add(startTime(start));
-    randomTijden.add(eindTime(eind));
+    randomTimes.add(startTime(start));
+    randomTimes.add(endTime(end));
 
-    return randomTijden;
+    return randomTimes;
 
     // TimeOfDay start = TimeOfDay(hour: _randomOchtendHour, minute: _randomMinute);
     // TimeOfDay end = TimeOfDay(hour: _randomMiddagHour, minute: _randomMinute);
@@ -55,17 +69,3 @@ List maakTimeSpan(_randomHour){
     // return randomTijden;
 }
 
-List setRandomTijden(){
-    var randomTijden = [];
-
-    Random random = Random();
-
-    int _randomOchtendHour = 8 + random.nextInt(12 - 8);
-    int _randomMiddagHour = 13 + random.nextInt(17 - 13);
-
-    randomTijden.add(maakTimeSpan(_randomOchtendHour));
-    randomTijden.add(maakTimeSpan(_randomMiddagHour));
-
-    return randomTijden;
-
-}
