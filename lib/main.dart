@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,9 +13,11 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:loopsnelheidapp/current_speed_card.dart';
 import 'package:loopsnelheidapp/average_speed_card.dart';
 
-import 'package:loopsnelheidapp/settings.dart';
+import 'package:loopsnelheidapp/settings.dart' as settings;
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'dart:io';
+
 
 void main() async {
   runApp(const MyApp());
@@ -63,8 +67,20 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    initPositionStream();
-    super.initState();
+    List tijden = settings.setRandomTijden();
+
+    TimeOfDay now = TimeOfDay.now();
+    double rightNow(TimeOfDay now) => now.hour + now.minute/60.0;
+
+    if (rightNow(now) >= tijden[0][0] && rightNow(now) <= tijden[0][1]) {
+      initPositionStream();
+      super.initState();
+    } else if (rightNow(now) >= tijden[1][0] && rightNow(now) <= tijden[1][1]) {
+      initPositionStream();
+      super.initState();
+    } else {
+      0.0;
+    }
   }
 
   @override
