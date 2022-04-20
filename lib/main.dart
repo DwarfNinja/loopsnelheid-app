@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:loopsnelheidapp/settings/settings.dart';
 import 'package:loopsnelheidapp/sidebar.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+
 
 import 'package:loopsnelheidapp/current_speed_card.dart';
 import 'package:loopsnelheidapp/average_speed_card.dart';
@@ -29,7 +31,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      home: const Dashboard(),
+      routes: {
+        "/": (context) => const Dashboard(),
+        "/settings" : (context) => const Settings()
+      }
     );
   }
 }
