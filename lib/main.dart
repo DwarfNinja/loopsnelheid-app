@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:geolocator/geolocator.dart';
-// import 'package:loopsnelheidapp/sidebar.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -88,11 +87,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
-      drawer: Drawer(
-        child: ListView(
-          children: const [],
-        ),
-      ),
+      drawer: const SideBar(),
       body: SlidingUpPanel(
         panel: Column(
           children: const [
