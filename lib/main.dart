@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,10 +11,9 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:loopsnelheidapp/current_speed_card.dart';
 import 'package:loopsnelheidapp/average_speed_card.dart';
 
-import 'package:loopsnelheidapp/settings/settings.dart' as settings;
+import 'package:loopsnelheidapp/settings/time_scheduler.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'dart:io';
 
 
 void main() async {
@@ -67,7 +64,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    List times = settings.setRandomTimes();
+    List times = setRandomTimes();
 
     TimeOfDay now = TimeOfDay.now();
     double rightNow(TimeOfDay now) => now.hour + now.minute/60.0;
