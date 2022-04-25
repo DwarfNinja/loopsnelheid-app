@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:loopsnelheidapp/custom_page_route.dart';
 import 'package:loopsnelheidapp/settings/settings.dart';
 import 'package:loopsnelheidapp/sidebar.dart';
 
@@ -31,13 +32,22 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      routes: {
-        "/": (context) => const Dashboard(),
-        "/settings" : (context) => const Settings()
-      }
+      onGenerateRoute: onGenerateRoute
     );
   }
+
+  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case "/":
+        return CustomPageRoute(child: const Dashboard());
+      case "/settings":
+        return CustomPageRoute(child: const Settings());
+    }
+    throw UnsupportedError('Unknown route: ${settings.name}');
+  }
 }
+
+
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
