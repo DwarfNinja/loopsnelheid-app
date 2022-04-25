@@ -4,14 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:loopsnelheidapp/settings/settings.dart';
 import 'package:loopsnelheidapp/sidebar.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+
 import 'package:loopsnelheidapp/current_speed_card.dart';
 import 'package:loopsnelheidapp/average_speed_card.dart';
 
+import 'package:loopsnelheidapp/settings/time_scheduler.dart';
+
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+
 
 void main() async {
   runApp(const MyApp());
@@ -26,7 +31,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      home: const Dashboard(),
+      routes: {
+        "/": (context) => const Dashboard(),
+        "/settings" : (context) => const Settings()
+      }
     );
   }
 }
@@ -61,8 +69,20 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    initPositionStream();
-    super.initState();
+    List times = setRandomTimes();
+
+    TimeOfDay now = TimeOfDay.now();
+    double rightNow(TimeOfDay now) => now.hour + now.minute/60.0;
+
+    if (rightNow(now) >= times[0][0] && rightNow(now) <= times[0][1]) {
+      initPositionStream();
+      super.initState();
+    } else if (rightNow(now) >= times[1][0] && rightNow(now) <= times[1][1]) {
+      initPositionStream();
+      super.initState();
+    } else {
+      0.0;
+    }
   }
 
   @override
