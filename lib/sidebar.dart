@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/sidebar_button.dart';
 
+String currentRoute = "/";
+
 class SideBar extends StatefulWidget {
 
   const SideBar({Key? key}) : super(key: key);
@@ -11,8 +13,6 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
-
-  String currentRoute = "/";
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class _SideBarState extends State<SideBar> {
                   SideBarButton(
                     iconData: Icons.settings,
                     text: "Instellingen",
-                    onPressed: () => executeRoute(context, "/"),
+                    onPressed: () => executeRoute(context, "/settings"),
                   ),
                   const SizedBox(height: 50),
                   SideBarButton(
@@ -90,7 +90,8 @@ class _SideBarState extends State<SideBar> {
   void executeRoute(BuildContext context, String name) {
     if (currentRoute != name) {
       Navigator.pushReplacementNamed(context, name);
-    } else {
+    }
+    else {
       Navigator.pop(context);
     }
     currentRoute = name;
