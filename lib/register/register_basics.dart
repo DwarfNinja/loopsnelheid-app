@@ -65,8 +65,7 @@ class _RegisterBasicsState extends State<RegisterBasics> {
               child: Padding(
                 padding: const EdgeInsets.all(30),
                 child: Column(
-
-                  children:  [
+                  children: [
                     const InputField(text: "E-mailadres", hint: "Voer hier uw e-mailadres in", private: false),
                     const SizedBox(height: 20),
                     const InputField(text: "Wachtwoord", hint: "Voer hier uw wachtwoord in", private: true),

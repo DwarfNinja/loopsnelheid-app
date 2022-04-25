@@ -33,7 +33,7 @@ class _InputFieldState extends State<InputField> {
           ),
           const SizedBox(height: 10),
           TextFormField(
-            obscureText: !passwordVisible,
+            obscureText: !widget.private ? false : !passwordVisible,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(16.0),
               border: const OutlineInputBorder(
@@ -44,9 +44,9 @@ class _InputFieldState extends State<InputField> {
                 borderSide: BorderSide(width: 2, color: app_theme.blue),
                 borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: app_theme.green),
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 2, color: empty ? app_theme.grey : app_theme.green),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
               errorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(width: 2, color: app_theme.red),
@@ -70,12 +70,16 @@ class _InputFieldState extends State<InputField> {
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                empty = true;
                 return widget.text + " mag niet leeg zijn";
               }
-              empty = false;
               return null;
             },
+            onChanged: (String? value) => setState(() {
+              if (value == null || value.isEmpty) {
+                empty = true;
+              }
+              empty = false;
+            }),
           ),
         ],
       ),
