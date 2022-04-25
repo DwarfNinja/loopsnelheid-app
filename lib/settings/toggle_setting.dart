@@ -32,6 +32,8 @@ class _ToggleSettingState extends State<ToggleSetting> {
           valueFontSize: 10,
           toggleSize: 25,
           value: status,
+          activeText: "Aan",
+          inactiveText: "Uit",
           activeColor: app_theme.green,
           inactiveColor: app_theme.red,
           showOnOff: true,
