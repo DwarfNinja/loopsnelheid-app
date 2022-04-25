@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:loopsnelheidapp/custom_page_route.dart';
+import 'package:loopsnelheidapp/register/register_basics.dart';
 import 'package:loopsnelheidapp/settings/settings.dart';
 import 'package:loopsnelheidapp/sidebar.dart';
 
@@ -42,12 +43,12 @@ class MyApp extends StatelessWidget {
         return CustomPageRoute(child: const Dashboard());
       case "/settings":
         return CustomPageRoute(child: const Settings());
+      case "/register_basics":
+        return CustomPageRoute(child: const RegisterBasics());
     }
     throw UnsupportedError('Unknown route: ${settings.name}');
   }
 }
-
-
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
