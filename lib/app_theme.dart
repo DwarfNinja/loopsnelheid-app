@@ -52,11 +52,11 @@ final TextTheme textTheme = TextTheme(
       color: Colors.black,
       fontWeight: FontWeight.w500),
   headline5: GoogleFonts.montserrat(
-      fontSize: 28,
+      fontSize: 24,
       color: Colors.black,
       fontWeight: FontWeight.w500),
   headline6: GoogleFonts.montserrat(
-      fontSize: 24,
+      fontSize: 20,
       color: Colors.black,
       fontWeight: FontWeight.w500),
   bodyText1: GoogleFonts.montserrat(

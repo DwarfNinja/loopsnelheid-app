@@ -41,7 +41,7 @@ class _AverageSpeedCardState extends State<AverageSpeedCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(widget.speed,
-                    style: app_theme.textTheme.headline4,
+                    style: app_theme.textTheme.headline5,
                     textAlign: TextAlign.center),
                 Text("km/h",
                     style: app_theme.textTheme.subtitle1,
