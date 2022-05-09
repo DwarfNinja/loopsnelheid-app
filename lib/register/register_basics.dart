@@ -71,26 +71,11 @@ class _RegisterBasicsState extends State<RegisterBasics> {
                     const InputField(text: "Wachtwoord", hint: "Voer hier uw wachtwoord in", private: true),
                     const SizedBox(height: 20),
                     const InputField(text: "Bevestig wachtwoord", hint: "Herhaal het wachtwoord", private: true),
-                    const SizedBox(height: 20),
-                    CheckboxLine(
-                      text: "Ik ga akkoord met de algemene voorwaarden",
-                      value: termsAndConditions,
-                      onChanged: (bool? value) => setState(() => termsAndConditions = !termsAndConditions),
-                    ),
-                    const SizedBox(height: 15),
-                    CheckboxLine(
-                      text: "Ik ga akkoord met de privacy verklaring",
-                      value: privacyStatement,
-                      onChanged: (bool? value) => setState(() => privacyStatement = !privacyStatement),
-                    ),
-                    const SizedBox(height: 15),
-                    CheckboxLine(
-                      text: "Ik ben ouder dan 16 jaar of heb toestemming \n van een ouder/voogd",
-                      value: olderThanSixteen,
-                      onChanged: (bool? value) => setState(() => olderThanSixteen = !olderThanSixteen),
-                    ),
+
                     const SizedBox(height: 25),
-                    FormButton(text: "Volgende", onPressed: () => null)
+                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => Navigator.pushNamed(context, "/register_details")),
+                    const SizedBox(height: 15),
+                    FormButton(text: "Ga Terug", color: app_theme.white, onPressed: () => Navigator.pushReplacementNamed(context, "/"))
                   ],
                 ),
               ),
