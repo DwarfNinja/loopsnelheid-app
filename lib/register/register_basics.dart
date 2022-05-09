@@ -73,7 +73,7 @@ class _RegisterBasicsState extends State<RegisterBasics> {
                     const InputField(text: "Bevestig wachtwoord", hint: "Herhaal het wachtwoord", private: true),
 
                     const SizedBox(height: 25),
-                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => Navigator.pushNamed(context, "/register_details")),
+                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => Navigator.pushNamed(context, "/register_documents")),
                     const SizedBox(height: 15),
                     FormButton(text: "Ga Terug", color: app_theme.white, onPressed: () => Navigator.pushReplacementNamed(context, "/"))
                   ],

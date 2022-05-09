@@ -28,7 +28,7 @@ class CheckboxLine extends StatelessWidget {
             ),
           ),
         ),
-        Text(text, style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 12,color: app_theme.grey))
+        Text(text, style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 13,color: app_theme.grey))
       ]
     );
   }
