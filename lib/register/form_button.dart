@@ -4,9 +4,10 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 class FormButton extends StatelessWidget {
 
   final String text;
+  final Color color;
   final Function() onPressed;
 
-  const FormButton({Key? key, required this.text, required this.onPressed}) : super(key: key);
+  const FormButton({Key? key, required this.text, required this.color, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +24,10 @@ class FormButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             minimumSize: const Size(450, 60),
-            backgroundColor: app_theme.blue,
+            backgroundColor: color,
         ),
         onPressed: onPressed,
-        child: Text(text, style: app_theme.textTheme.headline6!.copyWith(color: app_theme.white))
+        child: Text(text, style: app_theme.textTheme.headline6!.copyWith(color: color.computeLuminance() > 0.5 ? app_theme.black : app_theme.white))
       ),
     );
   }
