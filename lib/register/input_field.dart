@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class InputField extends StatefulWidget {
 
-  const InputField({Key? key, required this.text, required this.hint, required this.private}) : super(key: key);
   final String text;
   final String hint;
   final bool private;
+  final IconData? icon;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+
+  const InputField({Key? key,
+    required this.text,
+    required this.hint,
+    this.private = false,
+    this.icon,
+    this.keyboardType,
+    this.inputFormatters
+  }) : super(key: key);
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -17,6 +29,30 @@ class _InputFieldState extends State<InputField> {
 
   bool passwordVisible = false;
   bool empty = true;
+
+  Widget? getIcon() {
+    if (widget.private) {
+      return IconButton(
+        icon: Icon(
+          passwordVisible ? Icons.visibility : Icons.visibility_off,
+          color: app_theme.grey,
+        ),
+        onPressed: () {
+          setState(() {
+            passwordVisible = !passwordVisible;
+          });
+        },
+      );
+    }
+    else if (widget.icon != null) {
+      return Icon(
+        widget.icon,
+        color: app_theme.grey);
+    }
+    else {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +69,9 @@ class _InputFieldState extends State<InputField> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            inputFormatters: widget.inputFormatters,
+            keyboardType: widget.keyboardType ?? TextInputType.text,
+            maxLines: 1,
             obscureText: !widget.private ? false : !passwordVisible,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(16.0),
@@ -57,16 +96,7 @@ class _InputFieldState extends State<InputField> {
                   fontSize: 16,
                   color: app_theme.grey,
                   fontWeight: FontWeight.w300),
-              suffixIcon: widget.private ? IconButton(
-                icon: Icon(
-                  passwordVisible ? Icons.visibility : Icons.visibility_off,
-                ),
-                onPressed: () {
-                  setState(() {
-                    passwordVisible = !passwordVisible;
-                  });
-                },
-              ) : null,
+              suffixIcon: getIcon(),
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {
