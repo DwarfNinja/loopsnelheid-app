@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:loopsnelheidapp/custom_page_route.dart';
 import 'package:loopsnelheidapp/register/register_basics.dart';
@@ -25,6 +26,7 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
