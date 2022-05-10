@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:geolocator/geolocator.dart';
 import 'package:loopsnelheidapp/custom_page_route.dart';
 import 'package:loopsnelheidapp/register/register_basics.dart';
@@ -13,16 +12,19 @@ import 'package:loopsnelheidapp/sidebar.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-
 import 'package:loopsnelheidapp/current_speed_card.dart';
 import 'package:loopsnelheidapp/average_speed_card.dart';
 
 import 'package:loopsnelheidapp/settings/time_scheduler.dart';
 
+import 'package:loopsnelheidapp/services/measure_service.dart';
+import 'package:loopsnelheidapp/models/measure.dart';
+
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -67,6 +69,10 @@ class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
   double currentSpeedMs = 0;
+  double weeklySpeedMs = 0;
+  double monthlySpeedMs = 0;
+
+  List<Measure> measureList = [];
 
   static const LocationSettings locationSettings = LocationSettings(
     accuracy: LocationAccuracy.high,
@@ -79,6 +85,18 @@ class _DashboardState extends State<Dashboard> {
     positionStream.listen((Position? position) {
       setState(() {
         currentSpeedMs = position?.speed ?? 0.0;
+
+        Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs.toString());
+        measureList.add(measure);
+
+        if (measureList.length > 10) {
+          MeasureService measureService = MeasureService();
+          measureService.storeMeasures(measureList);
+          measureList.clear();
+
+          measureService.getAverageWeeklyMeasure().then((value) => weeklySpeedMs = value.averageSpeed);
+          measureService.getAverageMonthlyMeasure().then((value) => monthlySpeedMs = value.averageSpeed);
+        }
       });
     });
     setState(() {});
@@ -163,10 +181,10 @@ class _DashboardState extends State<Dashboard> {
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        AverageSpeedCard(header: "GEM WEEK", speed: "0.0"),
+                      children: [
+                        AverageSpeedCard(header: "GEM WEEK", speed: weeklySpeedMs),
                         SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM MAAND", speed: "0.0")
+                        AverageSpeedCard(header: "GEM MAAND", speed: monthlySpeedMs)
                       ],
                     ),
                   ],
