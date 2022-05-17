@@ -7,10 +7,9 @@ import 'package:loopsnelheidapp/models/average_measure.dart';
 import '../models/measure.dart';
 
 class MeasureService {
-  //TODO: IP to be replaced for environment
-  final String averageWeeklyEndpoint = "http://192.168.1.160:8080/stats/week";
-  final String averageMonthlyEndpoint = "http://192.168.1.160:8080/stats/month";
-  final String storeMeasureEndpoint = "http://192.168.1.160:8080/measures";
+  final String averageWeeklyEndpoint =  dotenv.env['BACKEND_API_URL']! + "/stats/week";
+  final String averageMonthlyEndpoint = dotenv.env['BACKEND_API_URL']! + "stats/month";
+  final String storeMeasureEndpoint = dotenv.env['BACKEND_API_URL']! + "/measures";
 
   Future<AverageMeasure> getAverageWeeklyMeasure() async {
     final response = await http.get(Uri.parse(averageWeeklyEndpoint));
