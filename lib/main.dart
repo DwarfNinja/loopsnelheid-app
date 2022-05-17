@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:loopsnelheidapp/custom_page_route.dart';
 import 'package:loopsnelheidapp/register/register_basics.dart';
 import 'package:loopsnelheidapp/register/register_details.dart';
 import 'package:loopsnelheidapp/register/register_documents.dart';
 import 'package:loopsnelheidapp/settings/settings.dart';
+import 'package:loopsnelheidapp/settings/toggle_setting.dart';
 import 'package:loopsnelheidapp/sidebar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -74,6 +78,8 @@ class _DashboardState extends State<Dashboard> {
 
   List<Measure> measureList = [];
 
+  var settings = {};
+
   static const LocationSettings locationSettings = LocationSettings(
     accuracy: LocationAccuracy.high,
     distanceFilter: 10,
@@ -102,22 +108,36 @@ class _DashboardState extends State<Dashboard> {
     setState(() {});
   }
 
+  Future<Object?> getSetting(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.get(key);
+  }
+
   @override
   void initState() {
-    List times = setRandomTimes();
+    var measureSetting = false;
+    getSetting("measure").then((value) {
+      measureSetting = value as bool;
+      if(measureSetting){
+        initPositionStream();
+        super.initState();
+      }
+    });
 
-    TimeOfDay now = TimeOfDay.now();
-    double rightNow(TimeOfDay now) => now.hour + now.minute/60.0;
+    // List times = setRandomTimes();
 
-    if (rightNow(now) >= times[0][0] && rightNow(now) <= times[0][1]) {
-      initPositionStream();
-      super.initState();
-    } else if (rightNow(now) >= times[1][0] && rightNow(now) <= times[1][1]) {
-      initPositionStream();
-      super.initState();
-    } else {
-      0.0;
-    }
+    // TimeOfDay now = TimeOfDay.now();
+    // double rightNow(TimeOfDay now) => now.hour + now.minute/60.0;
+    //
+    // if (rightNow(now) >= times[0][0] && rightNow(now) <= times[0][1]) {
+    //   initPositionStream();
+    //   super.initState();
+    // } else if (rightNow(now) >= times[1][0] && rightNow(now) <= times[1][1]) {
+    //   initPositionStream();
+    //   super.initState();
+    // } else {
+    //   0.0;
+    // }
   }
 
   @override
