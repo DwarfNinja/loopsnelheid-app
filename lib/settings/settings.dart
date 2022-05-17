@@ -66,9 +66,13 @@ class _SettingsState extends State<Settings> {
                       child: Column(
                         children: const [
                           SizedBox(height: 50),
-                          ToggleSetting(text: "Meten"),
+                          ToggleSetting(
+                              text: "Meten",
+                              setting: "measure"),
                           SizedBox(height: 20),
-                          ToggleSetting(text: "Meldingen"),
+                          ToggleSetting(
+                              text: "Meldingen",
+                              setting: "notifications"),
                         ],
                       ),
                     ),
