@@ -1,32 +1,38 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/register/form_button.dart';
 import 'package:loopsnelheidapp/register/input_field.dart';
-
 import 'package:loopsnelheidapp/sidebar.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-
-import 'checkbox_line.dart';
+import '../models/user.dart';
+import '../services/shared_preferences_service.dart';
 
 class RegisterBasics extends StatefulWidget {
-
-  const RegisterBasics({Key? key})
-      : super(key: key);
+  const RegisterBasics({Key? key}) : super(key: key);
 
   @override
   State<RegisterBasics> createState() => _RegisterBasicsState();
 }
 
 class _RegisterBasicsState extends State<RegisterBasics> {
-
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-
-  bool termsAndConditions = false;
-  bool privacyStatement = false;
-  bool olderThanSixteen = false;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordConfirmationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    sharedPreferencesService.getSharedPreferenceInstance();
+
+    onPressedNextButton() {
+      final user = User(emailController.text, passwordController.text);
+      sharedPreferencesService.setObject("user", user);
+      Navigator.pushNamed(context, "/register_details");
+    }
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
@@ -41,8 +47,8 @@ class _RegisterBasicsState extends State<RegisterBasics> {
             const SizedBox(height: 25),
             Text(
               "Loopsnelheid",
-              style: app_theme.textTheme.headline3!
-                  .copyWith(color: Colors.white),
+              style:
+                  app_theme.textTheme.headline3!.copyWith(color: Colors.white),
             ),
             const Icon(
               Icons.directions_walk,
@@ -50,7 +56,7 @@ class _RegisterBasicsState extends State<RegisterBasics> {
               size: 60,
             ),
             const SizedBox(height: 10),
-            Container (
+            Container(
               width: double.infinity,
               height: 650,
               decoration: const BoxDecoration(
@@ -66,16 +72,31 @@ class _RegisterBasicsState extends State<RegisterBasics> {
                 padding: const EdgeInsets.all(30),
                 child: Column(
                   children: [
-                    const InputField(text: "E-mailadres", hint: "Voer hier uw e-mailadres in"),
+                    InputField(
+                        controller: emailController,
+                        text: "E-mailadres",
+                        hint: "Voer hier uw e-mailadres in"),
                     const SizedBox(height: 20),
-                    const InputField(text: "Wachtwoord", hint: "Voer hier uw wachtwoord in", private: true),
+                    InputField(
+                        controller: passwordController,
+                        text: "Wachtwoord",
+                        hint: "Voer hier uw wachtwoord in",
+                        private: true),
                     const SizedBox(height: 20),
-                    const InputField(text: "Bevestig wachtwoord", hint: "Herhaal het wachtwoord", private: true),
-
+                    InputField(
+                        controller: passwordConfirmationController,
+                        mustBeTheSame: passwordController,
+                        text: "Bevestig wachtwoord",
+                        hint: "Herhaal het wachtwoord",
+                        private: true),
                     const SizedBox(height: 25),
-                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => Navigator.pushNamed(context, "/register_documents")),
+                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => onPressedNextButton()),
                     const SizedBox(height: 15),
-                    FormButton(text: "Ga Terug", color: app_theme.white, onPressed: () => Navigator.pushReplacementNamed(context, "/"))
+                    FormButton(
+                        text: "Ga Terug",
+                        color: app_theme.white,
+                        onPressed: () =>
+                            Navigator.pushReplacementNamed(context, "/"))
                   ],
                 ),
               ),

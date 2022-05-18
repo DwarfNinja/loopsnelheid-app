@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/register/form_button.dart';
-
+import 'package:loopsnelheidapp/register/register_basics.dart';
+import 'package:loopsnelheidapp/services/register_service.dart';
 import 'package:loopsnelheidapp/sidebar.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-
+import '../models/user.dart';
+import '../services/shared_preferences_service.dart';
 import 'checkbox_line.dart';
 
 class RegisterDocuments extends StatefulWidget {
-
-  const RegisterDocuments({Key? key})
-      : super(key: key);
+  const RegisterDocuments({Key? key}) : super(key: key);
 
   @override
   State<RegisterDocuments> createState() => _RegisterDocumentsState();
 }
 
 class _RegisterDocumentsState extends State<RegisterDocuments> {
-
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
   bool termsAndConditions = false;
@@ -26,6 +25,24 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    sharedPreferencesService.getSharedPreferenceInstance();
+
+    assignUserValues(User user) {
+      user.termsAndConditions = termsAndConditions;
+      user.privacyStatement = privacyStatement;
+      user.olderThanSixteen = olderThanSixteen;
+
+      sharedPreferencesService.setObject('user', user);
+      RegisterService registerService = RegisterService();
+      registerService.registerUser(user);
+    }
+
+    onPressedNextButton() {
+      sharedPreferencesService.getObject("user").then((user) => (assignUserValues(User.fromJson(user))));
+      Navigator.pushNamed(context, "/");
+    }
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
@@ -49,7 +66,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
               size: 60,
             ),
             const SizedBox(height: 10),
-            Container (
+            Container(
               width: double.infinity,
               height: 650,
               decoration: const BoxDecoration(
@@ -67,32 +84,49 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
                   children: [
                     Row(
                       children: const [
-                        Document(text: "Algemene Voorwaarden", image: AssetImage('assets/images/lorem_ipsum_document.png')),
-                        Document(text: "Privacy Verklaring", image: AssetImage('assets/images/lorem_ipsum_document.png'))
+                        Document(
+                            text: "Algemene Voorwaarden",
+                            image: AssetImage(
+                                'assets/images/lorem_ipsum_document.png')),
+                        Document(
+                            text: "Privacy Verklaring",
+                            image: AssetImage(
+                                'assets/images/lorem_ipsum_document.png'))
                       ],
                     ),
                     const SizedBox(height: 25),
                     CheckboxLine(
                       text: "Ik ga akkoord met de Algemene Voorwaarden",
                       value: termsAndConditions,
-                      onChanged: (bool? value) => setState(() => termsAndConditions = !termsAndConditions),
+                      onChanged: (bool? value) => setState(
+                          () => termsAndConditions = !termsAndConditions),
                     ),
                     const SizedBox(height: 15),
                     CheckboxLine(
                       text: "Ik ga akkoord met de Privacy Verklaring",
                       value: privacyStatement,
-                      onChanged: (bool? value) => setState(() => privacyStatement = !privacyStatement),
+                      onChanged: (bool? value) =>
+                          setState(() => privacyStatement = !privacyStatement),
                     ),
                     const SizedBox(height: 15),
                     CheckboxLine(
-                      text: "Ik ben ouder dan 16 jaar of heb toestemming \n van een ouder/voogd",
+                      text:
+                          "Ik ben ouder dan 16 jaar of heb toestemming \n van een ouder/voogd",
                       value: olderThanSixteen,
-                      onChanged: (bool? value) => setState(() => olderThanSixteen = !olderThanSixteen),
+                      onChanged: (bool? value) =>
+                          setState(() => olderThanSixteen = !olderThanSixteen),
                     ),
                     const SizedBox(height: 25),
-                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => Navigator.pushNamed(context, "/register_details")),
+                    FormButton(
+                        text: "Volgende",
+                        color: app_theme.blue,
+                        onPressed: () =>
+                        onPressedNextButton()),
                     const SizedBox(height: 15),
-                    FormButton(text: "Ga Terug", color: app_theme.white, onPressed: () => Navigator.pop(context))
+                    FormButton(
+                        text: "Ga Terug",
+                        color: app_theme.white,
+                        onPressed: () => Navigator.pop(context))
                   ],
                 ),
               ),
@@ -105,11 +139,11 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 }
 
 class Document extends StatelessWidget {
-
   final String text;
   final ImageProvider image;
 
-  const Document({Key? key, required this.text, required this.image}) : super(key: key);
+  const Document({Key? key, required this.text, required this.image})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -122,26 +156,23 @@ class Document extends StatelessWidget {
           TextButton(
             onPressed: () => showDialog(
                 context: context,
-                builder: (widget) => const ImageDialog(image: AssetImage('assets/images/lorem_ipsum_document.png'))),
+                builder: (widget) => const ImageDialog(
+                    image:
+                        AssetImage('assets/images/lorem_ipsum_document.png'))),
             child: Container(
               width: 140,
               height: 180,
               decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: image,
-                      fit: BoxFit.cover
-                  ),
+                  image: DecorationImage(image: image, fit: BoxFit.cover),
                   boxShadow: const [
                     app_theme.bottomBoxShadow,
                   ],
                   border: Border.all(color: app_theme.grey, width: 2),
-                  borderRadius: BorderRadius.circular(15)
-              ),
+                  borderRadius: BorderRadius.circular(15)),
             ),
           ),
           const SizedBox(height: 10),
-          Text(
-              text,
+          Text(text,
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 14))
         ],
       ),
@@ -161,11 +192,7 @@ class ImageDialog extends StatelessWidget {
         width: 500,
         height: 500,
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: image,
-                fit: BoxFit.contain
-            )
-        ),
+            image: DecorationImage(image: image, fit: BoxFit.contain)),
       ),
     );
   }

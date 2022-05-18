@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:intl/intl.dart';
 import 'package:loopsnelheidapp/register/form_button.dart';
 import 'package:loopsnelheidapp/register/input_field.dart';
 
@@ -8,6 +9,8 @@ import 'package:loopsnelheidapp/sidebar.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
+import '../models/user.dart';
+import '../services/shared_preferences_service.dart';
 import 'date_input.dart';
 
 class RegisterDetails extends StatefulWidget {
@@ -20,11 +23,32 @@ class RegisterDetails extends StatefulWidget {
 }
 
 class _RegisterDetailsState extends State<RegisterDetails> {
-
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  final dateOfBirthController = TextEditingController();
+  final weightController = TextEditingController();
+  bool isFemale = false;
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    sharedPreferencesService.getSharedPreferenceInstance();
+
+    assignUserValues(User user) {
+      final format = DateFormat("dd-MM-yyyy");
+      DateTime gettingDate = format.parse(dateOfBirthController.text);
+      String formattedDate = DateFormat('yyyy-MM-dd').format(gettingDate);
+
+      user.weight = int.parse(weightController.text);
+      user.dateOfBirth = formattedDate;
+      user.sex = isFemale ? "FEMALE" : "MALE";
+      sharedPreferencesService.setObject('user', user);
+    }
+
+    onPressedNextButton() {
+      sharedPreferencesService.getObject("user").then((user) => (assignUserValues(User.fromJson(user))));
+      Navigator.pushNamed(context, "/register_documents");
+    }
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
@@ -64,11 +88,18 @@ class _RegisterDetailsState extends State<RegisterDetails> {
                 padding: const EdgeInsets.all(30),
                 child: Column(
                   children: [
-                    const GenderToggle(),
+                    GenderToggle(
+                        value: isFemale,
+                        onToggle: (val) {
+                          setState(() {
+                            isFemale = val;
+                          });
+                        }),
                     const SizedBox(height: 25),
-                    const DateInput(),
+                    DateInput(controller: dateOfBirthController),
                     const SizedBox(height: 20),
                     InputField(
+                      controller: weightController,
                       text: "Gewicht",
                       hint: "Voer uw gewicht in kilogram",
                       keyboardType: TextInputType.number,
@@ -77,7 +108,7 @@ class _RegisterDetailsState extends State<RegisterDetails> {
                       ],
                     ),
                     const SizedBox(height: 25),
-                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => null),
+                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => onPressedNextButton()),
                     const SizedBox(height: 15),
                     FormButton(text: "Ga Terug", color: app_theme.white, onPressed: () => Navigator.pop(context))
                   ],
@@ -92,17 +123,16 @@ class _RegisterDetailsState extends State<RegisterDetails> {
 }
 
 class GenderToggle extends StatefulWidget {
+  final Function(bool) onToggle;
+  final bool value;
 
-  const GenderToggle({Key? key}) : super(key: key);
+  const GenderToggle({Key? key, required this.onToggle, required this.value}) : super(key: key);
 
   @override
   State<GenderToggle> createState() => _GenderToggleState();
 }
 
 class _GenderToggleState extends State<GenderToggle> {
-
-  bool status = false;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -123,7 +153,7 @@ class _GenderToggleState extends State<GenderToggle> {
           height: 40,
           valueFontSize: 18,
           toggleSize: 35,
-          value: status,
+          value: widget.value,
           activeText: "Vrouw",
           inactiveText: "Man",
           activeIcon: const Icon(Icons.female),
@@ -131,12 +161,7 @@ class _GenderToggleState extends State<GenderToggle> {
           activeColor: app_theme.red,
           inactiveColor: app_theme.blue,
           showOnOff: true,
-          onToggle: (val) {
-            setState(() {
-              status = val;
-              },
-            );
-          },
+          onToggle: widget.onToggle,
         ),
       ],
     );

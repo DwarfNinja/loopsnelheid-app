@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 import '../models/verify_token.dart';
 
-class MeasureService {
+class RegisterService {
   final String registerUserEndpoint =
       dotenv.env['BACKEND_API_URL']! + "/auth/register";
 
