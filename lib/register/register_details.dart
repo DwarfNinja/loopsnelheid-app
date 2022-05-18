@@ -21,13 +21,14 @@ class RegisterDetails extends StatefulWidget {
 
 class _RegisterDetailsState extends State<RegisterDetails> {
 
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
+
+  bool submitted = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: app_theme.blue,
-      key: _globalKey,
       drawer: const SideBar(),
       body: Container(
         decoration: const BoxDecoration(
@@ -62,25 +63,40 @@ class _RegisterDetailsState extends State<RegisterDetails> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(30),
-                child: Column(
-                  children: [
-                    const GenderToggle(),
-                    const SizedBox(height: 25),
-                    const DateInput(),
-                    const SizedBox(height: 20),
-                    InputField(
-                      text: "Gewicht",
-                      hint: "Voer uw gewicht in kilogram",
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}'), allow: true)
-                      ],
-                    ),
-                    const SizedBox(height: 25),
-                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => null),
-                    const SizedBox(height: 15),
-                    FormButton(text: "Ga Terug", color: app_theme.white, onPressed: () => Navigator.pop(context))
-                  ],
+                child: Form(
+                  key: formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: Column(
+                    children: [
+                      const GenderToggle(),
+                      const SizedBox(height: 25),
+                      const DateInput(),
+                      const SizedBox(height: 20),
+                      InputField(
+                        text: "Gewicht",
+                        hint: "Voer uw gewicht in kilogram",
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}'), allow: true)
+                        ],
+                      ),
+                      const SizedBox(height: 25),
+                      FormButton(
+                          text: "Volgende",
+                          color: app_theme.blue,
+                          onPressed: () {
+                            setState(() => submitted = true);
+                            if (formKey.currentState!.validate()) {
+                              //TODO: Navigate to mail confirmation page;
+                            }
+                          }),
+                      const SizedBox(height: 15),
+                      FormButton(
+                          text: "Ga Terug",
+                          color: app_theme.white,
+                          onPressed: () => Navigator.pop(context))
+                    ],
+                  ),
                 ),
               ),
             ),

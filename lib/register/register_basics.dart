@@ -19,17 +19,14 @@ class RegisterBasics extends StatefulWidget {
 
 class _RegisterBasicsState extends State<RegisterBasics> {
 
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
-  bool termsAndConditions = false;
-  bool privacyStatement = false;
-  bool olderThanSixteen = false;
+  bool submitted = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: app_theme.blue,
-      key: _globalKey,
       drawer: const SideBar(),
       body: Container(
         decoration: const BoxDecoration(
@@ -64,19 +61,31 @@ class _RegisterBasicsState extends State<RegisterBasics> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(30),
-                child: Column(
-                  children: [
-                    const InputField(text: "E-mailadres", hint: "Voer hier uw e-mailadres in"),
-                    const SizedBox(height: 20),
-                    const InputField(text: "Wachtwoord", hint: "Voer hier uw wachtwoord in", private: true),
-                    const SizedBox(height: 20),
-                    const InputField(text: "Bevestig wachtwoord", hint: "Herhaal het wachtwoord", private: true),
+                child: Form(
+                  key: formKey,
+                  autovalidateMode: submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                  child: Column(
+                    children: [
+                      const InputField(text: "E-mailadres", hint: "Voer hier uw e-mailadres in"),
+                      const SizedBox(height: 20),
+                      const InputField(text: "Wachtwoord", hint: "Voer hier uw wachtwoord in", private: true),
+                      const SizedBox(height: 20),
+                      const InputField(text: "Bevestig wachtwoord", hint: "Herhaal het wachtwoord", private: true),
 
-                    const SizedBox(height: 25),
-                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => Navigator.pushNamed(context, "/register_documents")),
-                    const SizedBox(height: 15),
-                    FormButton(text: "Ga Terug", color: app_theme.white, onPressed: () => Navigator.pushReplacementNamed(context, "/"))
-                  ],
+                      const SizedBox(height: 25),
+                      FormButton(
+                          text: "Volgende",
+                          color: app_theme.blue,
+                          onPressed: () {
+                            setState(() => submitted = true);
+                            if (formKey.currentState!.validate()) {
+                              Navigator.pushNamed(context, "/register_documents");
+                            }
+                          }),
+                      const SizedBox(height: 15),
+                      FormButton(text: "Ga Terug", color: app_theme.white, onPressed: () => Navigator.pushReplacementNamed(context, "/"))
+                    ],
+                  ),
                 ),
               ),
             ),
