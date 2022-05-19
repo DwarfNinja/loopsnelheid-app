@@ -131,3 +131,38 @@ class _LoginState extends State<Login> {
     );
   }
 }
+
+void alertDialog(BuildContext context) {
+  var alert = AlertDialog(
+      title: Text(
+        "Inloggen niet gelukt",
+        style: app_theme.textTheme.headline5!
+          .copyWith(color: app_theme.red)
+      ),
+      content: Text(
+        'Controleer uw ingevoerde gegevens nog eens.',
+          style: app_theme.textTheme.bodyText2!
+              .copyWith(color: app_theme.black)
+      ),
+      backgroundColor: app_theme.white,
+      alignment: AlignmentDirectional.topCenter,
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context)
+                .pop(false);
+            },
+          child: Text(
+              'Melding sluiten',
+              style: app_theme.textTheme.bodyText2!
+                  .copyWith(color: app_theme.black, fontSize: 14))
+        ),
+      ]
+  );
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    }
+  );
+}
