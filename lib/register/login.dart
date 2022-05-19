@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/register/form_button.dart';
 import 'package:loopsnelheidapp/register/input_field.dart';
@@ -6,7 +9,8 @@ import 'package:loopsnelheidapp/sidebar.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
-import 'checkbox_line.dart';
+import '../services/login_service.dart';
+import '../services/shared_preferences_service.dart';
 
 class Login extends StatefulWidget {
 
@@ -20,13 +24,37 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
 
   final formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   bool submitted = false;
-
   bool stayLoggedIn = false;
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    sharedPreferencesService.getSharedPreferenceInstance();
+
+    userAuthenticate() {
+      LoginService loginService = LoginService();
+      return loginService.authenticate(emailController.text, passwordController.text);
+    }
+
+    handleAuthenticateResponse(response) {
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body!);
+        sharedPreferencesService.setString("token", body['access_token']);
+
+        Navigator.pushNamed(context, "/");
+      } else if (response.statusCode == 401) {
+        alertDialog(context);
+      }
+    }
+
+    onPressedLoginButton() {
+      userAuthenticate().then((response) => handleAuthenticateResponse(response));
+    }
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       drawer: const SideBar(),
@@ -69,22 +97,25 @@ class _LoginState extends State<Login> {
                   child: Column(
                     children: [
                       const SizedBox(height: 30),
-                      const InputField(text: "E-mailadres", hint: "Voer hier uw e-mailadres in"),
+                      InputField(
+                          controller: emailController,
+                          text: "E-mailadres", hint: "Voer hier uw e-mailadres in"
+                      ),
                       const SizedBox(height: 20),
-                      const InputField(text: "Wachtwoord", hint: "Voer hier uw wachtwoord in", private: true),
+                      InputField(
+                          controller: passwordController,
+                          text: "Wachtwoord",
+                          hint: "Voer hier uw wachtwoord in",
+                          private: true
+                      ),
                       const SizedBox(height: 25),
-                      CheckboxLine(
-                          text: "Ingelogd blijven",
-                          value: stayLoggedIn,
-                          onChanged: (bool? value) => setState(() => stayLoggedIn = !stayLoggedIn)),
-                      const SizedBox(height: 50),
                       FormButton(
-                          text: "Volgende",
+                          text: "Inloggen",
                           color: app_theme.blue,
                           onPressed: () {
                             setState(() => submitted = true);
                             if (formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, "/");
+                              onPressedLoginButton();
                             }
                           }),
                       const SizedBox(height: 15),

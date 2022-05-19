@@ -24,6 +24,8 @@ import 'package:loopsnelheidapp/models/measure.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
+import 'register/login.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

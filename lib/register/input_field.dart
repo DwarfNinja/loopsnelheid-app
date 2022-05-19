@@ -103,7 +103,7 @@ class _InputFieldState extends State<InputField> {
             if (value == null || value.isEmpty) {
               return widget.text + " mag niet leeg zijn";
             }
-            if (widget.mustBeTheSame != null && widget.mustBeTheSame!.text == value) {
+            if (widget.mustBeTheSame != null && !textTheSame) {
                 return "De wachtwoorden moeten hetzelfde zijn";
             }
             return null;
