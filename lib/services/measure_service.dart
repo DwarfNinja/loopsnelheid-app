@@ -6,11 +6,17 @@ import '../models/measure.dart';
 
 class MeasureService {
   //TODO: IP to be replaced for environment
+  final String averageDailyEndpoint = "http://192.168.1.160:8080/stats/today";
   final String averageWeeklyEndpoint = "http://192.168.1.160:8080/stats/week";
   final String averageMonthlyEndpoint = "http://192.168.1.160:8080/stats/month";
   final String storeMeasureEndpoint = "http://192.168.1.160:8080/measures";
 
 
+
+  Future<AverageMeasure> getAverageDailyMeasure() async {
+    final response = await http.get(Uri.parse(averageDailyEndpoint));
+    return AverageMeasure.fromJson(jsonDecode(response.body));
+  }
 
   Future<AverageMeasure> getAverageWeeklyMeasure() async {
     final response = await http.get(Uri.parse(averageWeeklyEndpoint));
@@ -26,6 +32,8 @@ class MeasureService {
   List<Measure> getGraphMeasures(Map<String, dynamic> measures) {
     List<Measure> graphMeasures = [];
     measures.forEach((date, speed) => graphMeasures.add(Measure(date, speed)));
+
+
     return graphMeasures;
   }
 

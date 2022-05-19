@@ -48,10 +48,10 @@ class _DashboardState extends State<Dashboard> {
   Map<String, dynamic> weeklyMeasures = {};
   Map<String, dynamic> monthlyMeasures = {};
   double currentSpeedMs = 0;
+  double dailySpeedMs = 0;
   double weeklySpeedMs = 0;
   double monthlySpeedMs = 0;
 
-  List<Measure> weeklyGraphMeasures = [];
   List<Measure> measureList = [];
 
   static const LocationSettings locationSettings = LocationSettings(
@@ -73,6 +73,10 @@ class _DashboardState extends State<Dashboard> {
           measureService.storeMeasures(measureList);
           measureList.clear();
 
+          measureService.getAverageDailyMeasure().then((value) => {
+            dailySpeedMs = value.averageSpeed,
+          });
+
           measureService.getAverageWeeklyMeasure().then((value) => {
             weeklySpeedMs = value.averageSpeed,
             weeklyMeasures = value.measures
@@ -83,8 +87,8 @@ class _DashboardState extends State<Dashboard> {
             monthlyMeasures = value.measures
           });
         }
-        measureService.getGraphMeasures(weeklyMeasures);
 
+        print(measureService.getGraphMeasures(weeklyMeasures));
 
       });
     });
@@ -158,7 +162,7 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    CurrentSpeedCard(speedMs: currentSpeedMs),
+                    CurrentSpeedCard(speedMs: dailySpeedMs),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
