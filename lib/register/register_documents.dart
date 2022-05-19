@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/register/form_button.dart';
-import 'package:loopsnelheidapp/register/register_basics.dart';
 import 'package:loopsnelheidapp/services/register_service.dart';
 import 'package:loopsnelheidapp/sidebar.dart';
 
