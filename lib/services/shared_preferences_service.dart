@@ -17,4 +17,14 @@ class SharedPreferencesService {
     final String? object = sharedPreferences.getString(name);
     return jsonDecode(object!);
   }
+
+  setString(String name, String value) async {
+    sharedPreferences.setString(name, value);
+  }
+
+  getString(String name) async {
+    final String? string = sharedPreferences.getString(name);
+
+    return string;
+  }
 }

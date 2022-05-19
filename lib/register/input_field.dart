@@ -70,6 +70,7 @@ class _InputFieldState extends State<InputField> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          controller: widget.controller,
           inputFormatters: widget.inputFormatters,
           keyboardType: widget.keyboardType ?? TextInputType.text,
           maxLines: 1,
