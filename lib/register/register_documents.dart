@@ -17,11 +17,13 @@ class RegisterDocuments extends StatefulWidget {
 }
 
 class _RegisterDocumentsState extends State<RegisterDocuments> {
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   bool termsAndConditions = false;
   bool privacyStatement = false;
   bool olderThanSixteen = false;
+
+  bool submitted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +41,15 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
     }
 
     onPressedNextButton() {
-      sharedPreferencesService.getObject("user").then((user) => (assignUserValues(User.fromJson(user))));
-      Navigator.pushNamed(context, "/");
+        setState(() => submitted = true);
+        if (formKey.currentState!.validate()) {
+                sharedPreferencesService.getObject("user").then((user) => (assignUserValues(User.fromJson(user))));
+          Navigator.pushNamed(context, "/");
+        }
     }
 
     return Scaffold(
       backgroundColor: app_theme.blue,
-      key: _globalKey,
       drawer: const SideBar(),
       body: Container(
         decoration: const BoxDecoration(
@@ -57,8 +61,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
             const SizedBox(height: 25),
             Text(
               "Loopsnelheid",
-              style: app_theme.textTheme.headline3!
-                  .copyWith(color: Colors.white),
+              style: app_theme.textTheme.headline3!.copyWith(color: Colors.white),
             ),
             const Icon(
               Icons.directions_walk,
@@ -80,54 +83,47 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(30),
-                child: Column(
-                  children: [
-                    Row(
-                      children: const [
-                        Document(
-                            text: "Algemene Voorwaarden",
-                            image: AssetImage(
-                                'assets/images/lorem_ipsum_document.png')),
-                        Document(
-                            text: "Privacy Verklaring",
-                            image: AssetImage(
-                                'assets/images/lorem_ipsum_document.png'))
-                      ],
-                    ),
-                    const SizedBox(height: 25),
-                    CheckboxLine(
-                      text: "Ik ga akkoord met de Algemene Voorwaarden",
-                      value: termsAndConditions,
-                      onChanged: (bool? value) => setState(
-                          () => termsAndConditions = !termsAndConditions),
-                    ),
-                    const SizedBox(height: 15),
-                    CheckboxLine(
-                      text: "Ik ga akkoord met de Privacy Verklaring",
-                      value: privacyStatement,
-                      onChanged: (bool? value) =>
-                          setState(() => privacyStatement = !privacyStatement),
-                    ),
-                    const SizedBox(height: 15),
-                    CheckboxLine(
-                      text:
-                          "Ik ben ouder dan 16 jaar of heb toestemming \n van een ouder/voogd",
-                      value: olderThanSixteen,
-                      onChanged: (bool? value) =>
-                          setState(() => olderThanSixteen = !olderThanSixteen),
-                    ),
-                    const SizedBox(height: 25),
-                    FormButton(
-                        text: "Volgende",
-                        color: app_theme.blue,
-                        onPressed: () =>
-                        onPressedNextButton()),
-                    const SizedBox(height: 15),
-                    FormButton(
-                        text: "Ga Terug",
-                        color: app_theme.white,
-                        onPressed: () => Navigator.pop(context))
-                  ],
+                child: Form(
+                  key: formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: const [
+                          Document(text: "Algemene Voorwaarden", image: AssetImage('assets/images/lorem_ipsum_document.png')),
+                          Document(text: "Privacy Verklaring", image: AssetImage('assets/images/lorem_ipsum_document.png'))
+                        ],
+                      ),
+                      const SizedBox(height: 25),
+                      CheckboxLine(
+                        text: "Ik ga akkoord met de Algemene Voorwaarden",
+                        value: termsAndConditions,
+                        onChanged: (bool? value) => setState(() => termsAndConditions = !termsAndConditions),
+                      ),
+                      const SizedBox(height: 15),
+                      CheckboxLine(
+                        text: "Ik ga akkoord met de Privacy Verklaring",
+                        value: privacyStatement,
+                        onChanged: (bool? value) => setState(() => privacyStatement = !privacyStatement),
+                      ),
+                      const SizedBox(height: 15),
+                      CheckboxLine(
+                        text: "Ik ben ouder dan 16 jaar of heb toestemming \n van een ouder/voogd",
+                        value: olderThanSixteen,
+                        onChanged: (bool? value) => setState(() => olderThanSixteen = !olderThanSixteen),
+                      ),
+                      const SizedBox(height: 25),
+                      FormButton(
+                          text: "Volgende",
+                          color: app_theme.blue,
+                          onPressed: () => onPressedNextButton()),
+                      const SizedBox(height: 15),
+                      FormButton(
+                          text: "Ga Terug",
+                          color: app_theme.white,
+                          onPressed: () => Navigator.pop(context))
+                    ],
+                  ),
                 ),
               ),
             ),

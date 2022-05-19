@@ -17,10 +17,13 @@ class RegisterBasics extends StatefulWidget {
 }
 
 class _RegisterBasicsState extends State<RegisterBasics> {
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmationController = TextEditingController();
+
+  bool submitted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +31,16 @@ class _RegisterBasicsState extends State<RegisterBasics> {
     sharedPreferencesService.getSharedPreferenceInstance();
 
     onPressedNextButton() {
-      final user = User(emailController.text, passwordController.text);
-      sharedPreferencesService.setObject("user", user);
-      Navigator.pushNamed(context, "/register_details");
+      setState(() => submitted = true);
+      if (formKey.currentState!.validate()) {
+        final user = User(emailController.text, passwordController.text);
+        sharedPreferencesService.setObject("user", user);
+        Navigator.pushNamed(context, "/register_details");
+      }
     }
 
     return Scaffold(
       backgroundColor: app_theme.blue,
-      key: _globalKey,
       drawer: const SideBar(),
       body: Container(
         decoration: const BoxDecoration(
@@ -70,34 +75,42 @@ class _RegisterBasicsState extends State<RegisterBasics> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(30),
-                child: Column(
-                  children: [
-                    InputField(
-                        controller: emailController,
-                        text: "E-mailadres",
-                        hint: "Voer hier uw e-mailadres in"),
-                    const SizedBox(height: 20),
-                    InputField(
-                        controller: passwordController,
-                        text: "Wachtwoord",
-                        hint: "Voer hier uw wachtwoord in",
-                        private: true),
-                    const SizedBox(height: 20),
-                    InputField(
-                        controller: passwordConfirmationController,
-                        mustBeTheSame: passwordController,
-                        text: "Bevestig wachtwoord",
-                        hint: "Herhaal het wachtwoord",
-                        private: true),
-                    const SizedBox(height: 25),
-                    FormButton(text: "Volgende", color: app_theme.blue, onPressed: () => onPressedNextButton()),
-                    const SizedBox(height: 15),
-                    FormButton(
-                        text: "Ga Terug",
-                        color: app_theme.white,
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, "/"))
-                  ],
+                child: Form(
+                  key: formKey,
+                  autovalidateMode: submitted
+                      ? AutovalidateMode.onUserInteraction
+                      : AutovalidateMode.disabled,
+                  child: Column(
+                    children: [
+                      InputField(
+                          controller: emailController,
+                          text: "E-mailadres",
+                          hint: "Voer hier uw e-mailadres in"),
+                      const SizedBox(height: 20),
+                      InputField(
+                          controller: passwordController,
+                          text: "Wachtwoord",
+                          hint: "Voer hier uw wachtwoord in",
+                          private: true),
+                      const SizedBox(height: 20),
+                      InputField(
+                          controller: passwordConfirmationController,
+                          mustBeTheSame: passwordController,
+                          text: "Bevestig wachtwoord",
+                          hint: "Herhaal het wachtwoord",
+                          private: true),
+                      const SizedBox(height: 25),
+                      FormButton(
+                          text: "Volgende",
+                          color: app_theme.blue,
+                          onPressed: () => onPressedNextButton()),
+                      const SizedBox(height: 15),
+                      FormButton(
+                          text: "Ga Terug",
+                          color: app_theme.white,
+                          onPressed: () => Navigator.pop(context))
+                    ],
+                  ),
                 ),
               ),
             ),
