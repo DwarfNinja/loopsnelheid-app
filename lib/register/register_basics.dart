@@ -34,7 +34,7 @@ class _RegisterBasicsState extends State<RegisterBasics> {
       setState(() => submitted = true);
       if (formKey.currentState!.validate()) {
         final user = User(emailController.text, passwordController.text);
-        sharedPreferencesService.setObject("user", user);
+        sharedPreferencesService.setObject("registerUser", user);
         Navigator.pushNamed(context, "/register_details");
       }
     }

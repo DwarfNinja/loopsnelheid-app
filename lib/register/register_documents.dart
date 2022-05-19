@@ -35,17 +35,16 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
       user.privacyStatement = privacyStatement;
       user.olderThanSixteen = olderThanSixteen;
 
-      sharedPreferencesService.setObject('user', user);
+      sharedPreferencesService.setObject("registerUser", user);
       RegisterService registerService = RegisterService();
       registerService.registerUser(user);
     }
 
     onPressedNextButton() {
-        setState(() => submitted = true);
-        if (formKey.currentState!.validate()) {
-                sharedPreferencesService.getObject("user").then((user) => (assignUserValues(User.fromJson(user))));
-          Navigator.pushNamed(context, "/");
-        }
+      setState(() => submitted = true);
+      if (formKey.currentState!.validate()) {
+        sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
+      }
     }
 
     return Scaffold(

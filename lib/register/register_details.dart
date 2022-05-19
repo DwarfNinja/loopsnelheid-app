@@ -44,11 +44,11 @@ class _RegisterDetailsState extends State<RegisterDetails> {
       user.weight = int.parse(weightController.text);
       user.dateOfBirth = formattedDate;
       user.sex = isFemale ? "FEMALE" : "MALE";
-      sharedPreferencesService.setObject('user', user);
+      sharedPreferencesService.setObject("registerUser", user);
     }
 
     onPressedNextButton() {
-      sharedPreferencesService.getObject("user").then((user) => (assignUserValues(User.fromJson(user))));
+      sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
       Navigator.pushNamed(context, "/register_documents");
     }
 
