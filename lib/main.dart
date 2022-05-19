@@ -45,10 +45,13 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
+  Map<String, dynamic> weeklyMeasures = {};
+  Map<String, dynamic> monthlyMeasures = {};
   double currentSpeedMs = 0;
   double weeklySpeedMs = 0;
   double monthlySpeedMs = 0;
 
+  List<Measure> weeklyGraphMeasures = [];
   List<Measure> measureList = [];
 
   static const LocationSettings locationSettings = LocationSettings(
@@ -63,17 +66,26 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         currentSpeedMs = position?.speed ?? 0.0;
 
-        Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs.toString());
+        Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs);
         measureList.add(measure);
-
-        if (measureList.length > 10) {
-          MeasureService measureService = MeasureService();
+        MeasureService measureService = MeasureService();
+        if (measureList.length > 1) {
           measureService.storeMeasures(measureList);
           measureList.clear();
 
-          measureService.getAverageWeeklyMeasure().then((value) => weeklySpeedMs = value.averageSpeed);
-          measureService.getAverageMonthlyMeasure().then((value) => monthlySpeedMs = value.averageSpeed);
+          measureService.getAverageWeeklyMeasure().then((value) => {
+            weeklySpeedMs = value.averageSpeed,
+            weeklyMeasures = value.measures
+          });
+
+          measureService.getAverageMonthlyMeasure().then((value) => {
+            monthlySpeedMs = value.averageSpeed,
+            monthlyMeasures = value.measures
+          });
         }
+        measureService.getGraphMeasures(weeklyMeasures);
+
+
       });
     });
     setState(() {});
@@ -151,9 +163,9 @@ class _DashboardState extends State<Dashboard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AverageSpeedCard(header: "GEM WEEK", speed: weeklySpeedMs),
+                        AverageSpeedCard(header: "GEM WEEK", speed: weeklySpeedMs.toStringAsFixed(1)),
                         SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM MAAND", speed: monthlySpeedMs)
+                        AverageSpeedCard(header: "GEM MAAND", speed: monthlySpeedMs.toStringAsFixed(1))
                       ],
                     ),
                   ],

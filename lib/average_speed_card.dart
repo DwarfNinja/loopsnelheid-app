@@ -4,7 +4,7 @@ import 'app_theme.dart' as app_theme;
 
 class AverageSpeedCard extends StatefulWidget {
   final String header;
-  final double speed;
+  final String speed;
 
   const AverageSpeedCard({Key? key, required this.header, required this.speed})
       : super(key: key);
@@ -40,7 +40,7 @@ class _AverageSpeedCardState extends State<AverageSpeedCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(widget.speed.toStringAsFixed(1),
+                Text(widget.speed.toString(),
                     style: app_theme.textTheme.headline4,
                     textAlign: TextAlign.center),
                 Text("km/h",
