@@ -113,6 +113,21 @@ class _DashboardState extends State<Dashboard> {
     return prefs.get(key);
   }
 
+  bool isRandomTijd() {
+    List times = setRandomTimes();
+
+    TimeOfDay now = TimeOfDay.now();
+    double rightNow(TimeOfDay now) => now.hour + now.minute / 60.0;
+
+    if (rightNow(now) >= times[0][0] && rightNow(now) <= times[0][1]) {
+      return true;
+    } else if (rightNow(now) >= times[1][0] && rightNow(now) <= times[1][1]) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void initState() {
     var measureSetting = false;
@@ -121,23 +136,10 @@ class _DashboardState extends State<Dashboard> {
       if(measureSetting){
         initPositionStream();
         super.initState();
+      } else {
+        return 0.0;
       }
     });
-
-    // List times = setRandomTimes();
-
-    // TimeOfDay now = TimeOfDay.now();
-    // double rightNow(TimeOfDay now) => now.hour + now.minute/60.0;
-    //
-    // if (rightNow(now) >= times[0][0] && rightNow(now) <= times[0][1]) {
-    //   initPositionStream();
-    //   super.initState();
-    // } else if (rightNow(now) >= times[1][0] && rightNow(now) <= times[1][1]) {
-    //   initPositionStream();
-    //   super.initState();
-    // } else {
-    //   0.0;
-    // }
   }
 
   @override
