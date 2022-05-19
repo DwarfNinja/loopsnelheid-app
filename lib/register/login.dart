@@ -8,20 +8,22 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 import 'checkbox_line.dart';
 
-class RegisterBasics extends StatefulWidget {
+class Login extends StatefulWidget {
 
-  const RegisterBasics({Key? key})
+  const Login({Key? key})
       : super(key: key);
 
   @override
-  State<RegisterBasics> createState() => _RegisterBasicsState();
+  State<Login> createState() => _LoginState();
 }
 
-class _RegisterBasicsState extends State<RegisterBasics> {
+class _LoginState extends State<Login> {
 
   final formKey = GlobalKey<FormState>();
 
   bool submitted = false;
+
+  bool stayLoggedIn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,24 +68,27 @@ class _RegisterBasicsState extends State<RegisterBasics> {
                   autovalidateMode: submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                   child: Column(
                     children: [
+                      const SizedBox(height: 30),
                       const InputField(text: "E-mailadres", hint: "Voer hier uw e-mailadres in"),
                       const SizedBox(height: 20),
-                      const InputField(text: "Wachtwoord", hint: "Voer hier een wachtwoord in", private: true),
-                      const SizedBox(height: 20),
-                      const InputField(text: "Bevestig wachtwoord", hint: "Herhaal het wachtwoord", private: true),
-
+                      const InputField(text: "Wachtwoord", hint: "Voer hier uw wachtwoord in", private: true),
                       const SizedBox(height: 25),
+                      CheckboxLine(
+                          text: "Ingelogd blijven",
+                          value: stayLoggedIn,
+                          onChanged: (bool? value) => setState(() => stayLoggedIn = !stayLoggedIn)),
+                      const SizedBox(height: 50),
                       FormButton(
                           text: "Volgende",
                           color: app_theme.blue,
                           onPressed: () {
                             setState(() => submitted = true);
                             if (formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, "/register_documents");
+                              Navigator.pushNamed(context, "/");
                             }
                           }),
                       const SizedBox(height: 15),
-                      FormButton(text: "Ga Terug", color: app_theme.white, onPressed: () => Navigator.pop(context))
+                      FormButton(text: "Registreren", color: app_theme.white, onPressed: () => Navigator.pushNamed(context, "/register_basics"))
                     ],
                   ),
                 ),

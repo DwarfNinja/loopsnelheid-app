@@ -70,7 +70,7 @@ class _SideBarState extends State<SideBar> {
                   SideBarButton(
                     iconData: Icons.support,
                     text: "Help",
-                    onPressed: () => executeRoute(context, "/"),
+                    onPressed: () => executeRoute(context, "/login"),
                   ),
                   const SizedBox(height: 50),
                   SideBarButton(
