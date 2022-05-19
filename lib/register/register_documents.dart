@@ -29,6 +29,15 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     sharedPreferencesService.getSharedPreferenceInstance();
 
+    handleRegisterResponse(response) {
+      if (response.statusCode == 200) {
+        // Push to confirmation view
+        // Navigator.pushNamed(context, "/");
+      } else if (response.statusCode == 400) {
+        // Repeat the proces
+      }
+    }
+
     assignUserValues(User user) {
       user.termsAndConditions = termsAndConditions;
       user.privacyStatement = privacyStatement;
@@ -36,7 +45,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
       sharedPreferencesService.setObject("registerUser", user);
       RegisterService registerService = RegisterService();
-      registerService.registerUser(user);
+      registerService.registerUser(user).then((response) => handleRegisterResponse(response));
     }
 
     onPressedNextButton() {
