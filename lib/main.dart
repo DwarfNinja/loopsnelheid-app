@@ -105,7 +105,6 @@ class _DashboardState extends State<Dashboard> {
         }
       });
     });
-    setState(() {});
   }
 
   Future<Object?> getSetting(String key) async {
@@ -113,7 +112,7 @@ class _DashboardState extends State<Dashboard> {
     return prefs.get(key);
   }
 
-  bool isRandomTijd() {
+  bool setRandomTime() {
     List times = setRandomTimes();
 
     TimeOfDay now = TimeOfDay.now();
