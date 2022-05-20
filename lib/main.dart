@@ -132,7 +132,7 @@ class _DashboardState extends State<Dashboard> {
     var measureSetting = false;
     getSetting("measure").then((value) {
       measureSetting = value as bool;
-      if(measureSetting){
+      if(measureSetting && setRandomTime()){
         initPositionStream();
         super.initState();
       } else {
