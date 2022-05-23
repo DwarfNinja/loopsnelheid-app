@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class DateInput extends StatefulWidget {
-
-  const DateInput({Key? key}) : super(key: key);
+  final TextEditingController controller;
+  const DateInput({Key? key, required this.controller}) : super(key: key);
 
   @override
   State<DateInput> createState() => _DateInputState();
@@ -14,30 +14,24 @@ class DateInput extends StatefulWidget {
 
 class _DateInputState extends State<DateInput> {
 
-  TextEditingController dateInputController = TextEditingController();
   bool empty = true;
 
   @override
   void initState() {
-    dateInputController.text = "";
-    dateInputController.addListener(onDateInputControllerChanged);
+    widget.controller.text = "";
+    widget.controller.addListener(onDateInputControllerChanged);
     super.initState();
   }
 
   @override
   void dispose() {
-    dateInputController.dispose();
+    widget.controller.dispose();
     super.dispose();
   }
 
   void onDateInputControllerChanged() {
     setState(() {
-      if (dateInputController.text == "") {
-        empty = true;
-      }
-      else {
-        empty = false;
-      }
+      empty = (widget.controller.text == "") ? true : false;
     });
   }
 
@@ -54,7 +48,7 @@ class _DateInputState extends State<DateInput> {
         ),
         const SizedBox(height: 10),
         TextFormField(
-          controller: dateInputController,
+          controller: widget.controller,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(16.0),
             border: const OutlineInputBorder(
@@ -107,13 +101,14 @@ class _DateInputState extends State<DateInput> {
               String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
 
               setState(() {
-                dateInputController.text = formattedDate;
+                widget.controller.text = formattedDate;
+                // widget.pickedDate = pickedDate
               });
             }
             WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
           },
           validator: (String? value) {
-            if (dateInputController.text.isEmpty) {
+            if (widget.controller.text.isEmpty) {
               return "Geboortedatum mag niet leeg zijn";
             }
             return null;
