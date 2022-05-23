@@ -11,7 +11,9 @@ class MeasureService {
   final String averageMonthlyEndpoint = "http://192.168.1.160:8080/stats/month";
   final String storeMeasureEndpoint = "http://192.168.1.160:8080/measures";
 
-
+  static double convertMsToKmh(double speed) {
+    return speed * 3.6;
+  }
 
   Future<AverageMeasure> getAverageDailyMeasure() async {
     final response = await http.get(Uri.parse(averageDailyEndpoint));

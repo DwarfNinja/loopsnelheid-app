@@ -1,8 +1,4 @@
-
 import 'dart:core';
-
-import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/models/measure.dart';
 
 class AverageMeasure {
   String type;

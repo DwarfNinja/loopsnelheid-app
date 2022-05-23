@@ -88,8 +88,6 @@ class _DashboardState extends State<Dashboard> {
           });
         }
 
-        print(measureService.getGraphMeasures(weeklyMeasures));
-
       });
     });
     setState(() {});
@@ -162,14 +160,14 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    CurrentSpeedCard(speedMs: dailySpeedMs),
+                    CurrentSpeedCard(speed: MeasureService.convertMsToKmh(dailySpeedMs)),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AverageSpeedCard(header: "GEM WEEK", speed: weeklySpeedMs.toStringAsFixed(1)),
-                        SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM MAAND", speed: monthlySpeedMs.toStringAsFixed(1))
+                        AverageSpeedCard(header: "GEM WEEK", speed: MeasureService.convertMsToKmh(weeklySpeedMs)),
+                        const SizedBox(width: 50),
+                        AverageSpeedCard(header: "GEM MAAND", speed: MeasureService.convertMsToKmh(monthlySpeedMs))
                       ],
                     ),
                   ],
