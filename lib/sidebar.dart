@@ -76,7 +76,7 @@ class _SideBarState extends State<SideBar> {
                   SideBarButton(
                     iconData: Icons.info,
                     text: "Over",
-                    onPressed: () => executeRoute(context, "/register_basics"),
+                    onPressed: () => executeRoute(context, "/login"),
                   ),
                 ],
               ),

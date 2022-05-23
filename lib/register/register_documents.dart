@@ -1,33 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/register/form_button.dart';
-
+import 'package:loopsnelheidapp/services/register_service.dart';
 import 'package:loopsnelheidapp/sidebar.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-
+import '../models/user.dart';
+import '../services/shared_preferences_service.dart';
 import 'checkbox_line.dart';
 
 class RegisterDocuments extends StatefulWidget {
-
-  const RegisterDocuments({Key? key})
-      : super(key: key);
+  const RegisterDocuments({Key? key}) : super(key: key);
 
   @override
   State<RegisterDocuments> createState() => _RegisterDocumentsState();
 }
 
 class _RegisterDocumentsState extends State<RegisterDocuments> {
-
   final formKey = GlobalKey<FormState>();
-
-  bool submitted = false;
 
   bool termsAndConditions = false;
   bool privacyStatement = false;
   bool olderThanSixteen = false;
 
+  bool submitted = false;
+
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    sharedPreferencesService.getSharedPreferenceInstance();
+
+    handleRegisterResponse(response) {
+      if (response.statusCode == 200) {
+        // Push to confirmation view
+        // Navigator.pushNamed(context, "/");
+      } else if (response.statusCode == 400) {
+        // Repeat the proces
+      }
+    }
+
+    assignUserValues(User user) {
+      user.termsAndConditions = termsAndConditions;
+      user.privacyStatement = privacyStatement;
+      user.olderThanSixteen = olderThanSixteen;
+
+      sharedPreferencesService.setObject("registerUser", user);
+      RegisterService registerService = RegisterService();
+      registerService.registerUser(user).then((response) => handleRegisterResponse(response));
+    }
+
+    onPressedNextButton() {
+      setState(() => submitted = true);
+      if (formKey.currentState!.validate()) {
+        sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
+      }
+    }
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       drawer: const SideBar(),
@@ -41,8 +68,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
             const SizedBox(height: 25),
             Text(
               "Loopsnelheid",
-              style: app_theme.textTheme.headline3!
-                  .copyWith(color: Colors.white),
+              style: app_theme.textTheme.headline3!.copyWith(color: Colors.white),
             ),
             const Icon(
               Icons.directions_walk,
@@ -50,7 +76,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
               size: 60,
             ),
             const SizedBox(height: 10),
-            Container (
+            Container(
               width: double.infinity,
               height: 650,
               decoration: const BoxDecoration(
@@ -97,12 +123,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
                       FormButton(
                           text: "Volgende",
                           color: app_theme.blue,
-                          onPressed: () {
-                            setState(() => submitted = true);
-                            if (formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, "/register_details");
-                            }
-                          }),
+                          onPressed: () => onPressedNextButton()),
                       const SizedBox(height: 15),
                       FormButton(
                           text: "Ga Terug",
@@ -121,11 +142,11 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 }
 
 class Document extends StatelessWidget {
-
   final String text;
   final ImageProvider image;
 
-  const Document({Key? key, required this.text, required this.image}) : super(key: key);
+  const Document({Key? key, required this.text, required this.image})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -138,26 +159,23 @@ class Document extends StatelessWidget {
           TextButton(
             onPressed: () => showDialog(
                 context: context,
-                builder: (widget) => const ImageDialog(image: AssetImage('assets/images/lorem_ipsum_document.png'))),
+                builder: (widget) => const ImageDialog(
+                    image:
+                        AssetImage('assets/images/lorem_ipsum_document.png'))),
             child: Container(
               width: 140,
               height: 180,
               decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: image,
-                      fit: BoxFit.cover
-                  ),
+                  image: DecorationImage(image: image, fit: BoxFit.cover),
                   boxShadow: const [
                     app_theme.bottomBoxShadow,
                   ],
                   border: Border.all(color: app_theme.grey, width: 2),
-                  borderRadius: BorderRadius.circular(15)
-              ),
+                  borderRadius: BorderRadius.circular(15)),
             ),
           ),
           const SizedBox(height: 10),
-          Text(
-              text,
+          Text(text,
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 14))
         ],
       ),
@@ -177,11 +195,7 @@ class ImageDialog extends StatelessWidget {
         width: 500,
         height: 500,
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: image,
-                fit: BoxFit.contain
-            )
-        ),
+            image: DecorationImage(image: image, fit: BoxFit.contain)),
       ),
     );
   }

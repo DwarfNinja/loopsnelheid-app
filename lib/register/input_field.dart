@@ -4,7 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class InputField extends StatefulWidget {
-
+  final TextEditingController? controller;
+  final TextEditingController? mustBeTheSame;
   final String text;
   final String hint;
   final bool private;
@@ -15,6 +16,8 @@ class InputField extends StatefulWidget {
   const InputField({Key? key,
     required this.text,
     required this.hint,
+    this.mustBeTheSame,
+    this.controller,
     this.private = false,
     this.icon,
     this.keyboardType,
@@ -26,20 +29,20 @@ class InputField extends StatefulWidget {
 }
 
 class _InputFieldState extends State<InputField> {
-
-  bool passwordVisible = false;
+  bool textVisible = false;
   bool empty = true;
+  bool textTheSame = true;
 
   Widget? getIcon() {
     if (widget.private) {
       return IconButton(
         icon: Icon(
-          passwordVisible ? Icons.visibility : Icons.visibility_off,
+          textVisible ? Icons.visibility : Icons.visibility_off,
           color: app_theme.grey,
         ),
         onPressed: () {
           setState(() {
-            passwordVisible = !passwordVisible;
+            textVisible = !textVisible;
           });
         },
       );
@@ -56,7 +59,6 @@ class _InputFieldState extends State<InputField> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Align(
@@ -68,10 +70,11 @@ class _InputFieldState extends State<InputField> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          controller: widget.controller,
           inputFormatters: widget.inputFormatters,
           keyboardType: widget.keyboardType ?? TextInputType.text,
           maxLines: 1,
-          obscureText: !widget.private ? false : !passwordVisible,
+          obscureText: !widget.private ? false : !textVisible,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(16.0),
             border: const OutlineInputBorder(
@@ -83,7 +86,7 @@ class _InputFieldState extends State<InputField> {
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2, color: empty ? app_theme.grey : app_theme.green),
+              borderSide: BorderSide(width: 2, color: empty || (widget.mustBeTheSame != null && textTheSame) ? app_theme.grey : app_theme.green),
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             errorBorder: const OutlineInputBorder(
@@ -101,10 +104,14 @@ class _InputFieldState extends State<InputField> {
             if (value == null || value.isEmpty) {
               return widget.text + " mag niet leeg zijn";
             }
+            if (widget.mustBeTheSame != null && !textTheSame) {
+                return "De wachtwoorden moeten hetzelfde zijn";
+            }
             return null;
           },
           onChanged: (String? value) => setState(() {
               empty = (value == null || value.isEmpty) ? true : false;
+              textTheSame = widget.mustBeTheSame != null && widget.mustBeTheSame!.text == value;
           }),
         ),
       ],
