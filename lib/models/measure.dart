@@ -1,6 +1,6 @@
 class Measure {
   String registeredAt;
-  String speed;
+  double speed;
 
   Measure(this.registeredAt, this.speed) {
     registeredAt = registeredAt;

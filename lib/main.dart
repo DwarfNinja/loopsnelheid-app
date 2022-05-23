@@ -75,7 +75,10 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
+  Map<String, dynamic> weeklyMeasures = {};
+  Map<String, dynamic> monthlyMeasures = {};
   double currentSpeedMs = 0;
+  double dailySpeedMs = 0;
   double weeklySpeedMs = 0;
   double monthlySpeedMs = 0;
 
@@ -93,17 +96,28 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         currentSpeedMs = position?.speed ?? 0.0;
 
-        Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs.toString());
+        Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs);
         measureList.add(measure);
-
-        if (measureList.length > 10) {
-          MeasureService measureService = MeasureService();
+        MeasureService measureService = MeasureService();
+        if (measureList.length > 1) {
           measureService.storeMeasures(measureList);
           measureList.clear();
 
-          measureService.getAverageWeeklyMeasure().then((value) => weeklySpeedMs = value.averageSpeed);
-          measureService.getAverageMonthlyMeasure().then((value) => monthlySpeedMs = value.averageSpeed);
+          measureService.getAverageDailyMeasure().then((value) => {
+            dailySpeedMs = value.averageSpeed,
+          });
+
+          measureService.getAverageWeeklyMeasure().then((value) => {
+            weeklySpeedMs = value.averageSpeed,
+            weeklyMeasures = value.measures
+          });
+
+          measureService.getAverageMonthlyMeasure().then((value) => {
+            monthlySpeedMs = value.averageSpeed,
+            monthlyMeasures = value.measures
+          });
         }
+
       });
     });
     setState(() {});
@@ -184,14 +198,14 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    CurrentSpeedCard(speedMs: currentSpeedMs),
+                    CurrentSpeedCard(speed: MeasureService.convertMsToKmh(dailySpeedMs)),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AverageSpeedCard(header: "GEM WEEK", speed: weeklySpeedMs),
-                        SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM MAAND", speed: monthlySpeedMs)
+                        AverageSpeedCard(header: "GEM WEEK", speed: MeasureService.convertMsToKmh(weeklySpeedMs)),
+                        const SizedBox(width: 50),
+                        AverageSpeedCard(header: "GEM MAAND", speed: MeasureService.convertMsToKmh(monthlySpeedMs))
                       ],
                     ),
                   ],
