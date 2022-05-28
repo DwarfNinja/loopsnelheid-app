@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/settings/toggle_setting.dart';
-
 import 'package:loopsnelheidapp/sidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import '../sidebar_button.dart';
+
+String currentRoute = "/";
 
 class Settings extends StatefulWidget {
 
@@ -48,7 +49,7 @@ class _SettingsState extends State<Settings> {
             Center(
               child: Column(
                 children: [
-                  const SizedBox(height: 70),
+                   SizedBox(height: 70),
                   Text(
                     "Instellingen",
                     style: app_theme.textTheme.headline3!
@@ -70,15 +71,21 @@ class _SettingsState extends State<Settings> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 45, right: 45),
                       child: Column(
-                        children: const [
+                        children:  [
                           SizedBox(height: 50),
-                          ToggleSetting(
+                          const ToggleSetting(
                               text: "Meten",
                               setting: "measure"),
                           SizedBox(height: 20),
-                          ToggleSetting(
+                          const ToggleSetting(
                               text: "Meldingen",
                               setting: "notifications"),
+                          SizedBox(height: 50),
+                          SideBarButton(
+                            iconData: Icons.next_plan_rounded,
+                            text: "Export my data",
+                            onPressed: () => executeRoute(context, "/export_view"),
+                          ),
                         ],
                       ),
                     ),
@@ -91,6 +98,16 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
+  void executeRoute(BuildContext context, String name) {
+    if (currentRoute != name) {
+      Navigator.pushReplacementNamed(context, name);
+    }
+    else {
+      Navigator.pop(context);
+    }
+    currentRoute = name;
+  }
+
 }
 
 // hier komt de save data
