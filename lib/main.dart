@@ -5,27 +5,27 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:loopsnelheidapp/custom_page_route.dart';
-import 'package:loopsnelheidapp/register/login.dart';
-import 'package:loopsnelheidapp/register/register_basics.dart';
-import 'package:loopsnelheidapp/register/register_details.dart';
-import 'package:loopsnelheidapp/register/register_documents.dart';
-import 'package:loopsnelheidapp/settings/settings.dart';
-import 'package:loopsnelheidapp/sidebar.dart';
+import 'package:loopsnelheidapp/views/register/login.dart';
+import 'package:loopsnelheidapp/views/register/register_basics.dart';
+import 'package:loopsnelheidapp/views/register/register_details.dart';
+import 'package:loopsnelheidapp/views/register/register_documents.dart';
+import 'package:loopsnelheidapp/views/settings/settings.dart';
+import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'package:loopsnelheidapp/current_speed_card.dart';
-import 'package:loopsnelheidapp/average_speed_card.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 
-import 'package:loopsnelheidapp/settings/time_scheduler.dart';
+import 'package:loopsnelheidapp/utils/time_scheduler.dart';
 
-import 'package:loopsnelheidapp/services/measure_service.dart';
+import 'package:loopsnelheidapp/services/api/measure_service.dart';
 import 'package:loopsnelheidapp/models/measure.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
-import 'register/login.dart';
+import 'views/register/login.dart';
 
 
 void main() async {

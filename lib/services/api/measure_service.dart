@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopsnelheidapp/models/average_measure.dart';
 
-import '../models/measure.dart';
+import '../../models/measure.dart';
 
 class MeasureService {
   final String averageDailyEndpoint = dotenv.env['BACKEND_API_URL']! + "/stats/today";
