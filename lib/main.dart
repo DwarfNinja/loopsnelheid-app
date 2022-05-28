@@ -2,29 +2,35 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:loopsnelheidapp/custom_page_route.dart';
-import 'package:loopsnelheidapp/register/register_basics.dart';
-import 'package:loopsnelheidapp/register/register_details.dart';
-import 'package:loopsnelheidapp/register/register_documents.dart';
-import 'package:loopsnelheidapp/settings/settings.dart';
-import 'package:loopsnelheidapp/sidebar.dart';
+import 'package:loopsnelheidapp/views/register/login.dart';
+import 'package:loopsnelheidapp/views/register/register_basics.dart';
+import 'package:loopsnelheidapp/views/register/register_details.dart';
+import 'package:loopsnelheidapp/views/register/register_documents.dart';
+import 'package:loopsnelheidapp/views/settings/settings.dart';
+import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'package:loopsnelheidapp/current_speed_card.dart';
-import 'package:loopsnelheidapp/average_speed_card.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 
-import 'package:loopsnelheidapp/settings/time_scheduler.dart';
+import 'package:loopsnelheidapp/utils/time_scheduler.dart';
 
-import 'package:loopsnelheidapp/services/measure_service.dart';
+import 'package:loopsnelheidapp/services/api/measure_service.dart';
 import 'package:loopsnelheidapp/models/measure.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
+import 'views/register/login.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -47,6 +53,8 @@ class MyApp extends StatelessWidget {
         return CustomPageRoute(child: const Dashboard());
       case "/settings":
         return CustomPageRoute(child: const Settings());
+      case "/login":
+        return CustomPageRoute(child: const Login());
       case "/register_basics":
         return CustomPageRoute(child: const RegisterBasics());
       case "/register_details":
@@ -68,11 +76,16 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
+  Map<String, dynamic> weeklyMeasures = {};
+  Map<String, dynamic> monthlyMeasures = {};
   double currentSpeedMs = 0;
+  double dailySpeedMs = 0;
   double weeklySpeedMs = 0;
   double monthlySpeedMs = 0;
 
   List<Measure> measureList = [];
+
+  var settings = {};
 
   static const LocationSettings locationSettings = LocationSettings(
     accuracy: LocationAccuracy.high,
@@ -86,38 +99,64 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         currentSpeedMs = position?.speed ?? 0.0;
 
-        Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs.toString());
+        Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs);
         measureList.add(measure);
-
-        if (measureList.length > 10) {
-          MeasureService measureService = MeasureService();
+        MeasureService measureService = MeasureService();
+        if (measureList.length > 1) {
           measureService.storeMeasures(measureList);
           measureList.clear();
 
-          measureService.getAverageWeeklyMeasure().then((value) => weeklySpeedMs = value.averageSpeed);
-          measureService.getAverageMonthlyMeasure().then((value) => monthlySpeedMs = value.averageSpeed);
+          measureService.getAverageDailyMeasure().then((value) => {
+            dailySpeedMs = value.averageSpeed,
+          });
+
+          measureService.getAverageWeeklyMeasure().then((value) => {
+            weeklySpeedMs = value.averageSpeed,
+            weeklyMeasures = value.measures
+          });
+
+          measureService.getAverageMonthlyMeasure().then((value) => {
+            monthlySpeedMs = value.averageSpeed,
+            monthlyMeasures = value.measures
+          });
         }
+
       });
     });
-    setState(() {});
+  }
+
+  Future<Object?> getSetting(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.get(key);
+  }
+
+  bool setRandomTime() {
+    List times = setRandomTimes();
+
+    TimeOfDay now = TimeOfDay.now();
+    double rightNow(TimeOfDay now) => now.hour + now.minute / 60.0;
+
+    if (rightNow(now) >= times[0][0] && rightNow(now) <= times[0][1]) {
+      return true;
+    } else if (rightNow(now) >= times[1][0] && rightNow(now) <= times[1][1]) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
   void initState() {
-    List times = setRandomTimes();
-
-    TimeOfDay now = TimeOfDay.now();
-    double rightNow(TimeOfDay now) => now.hour + now.minute/60.0;
-
-    if (rightNow(now) >= times[0][0] && rightNow(now) <= times[0][1]) {
-      initPositionStream();
-      super.initState();
-    } else if (rightNow(now) >= times[1][0] && rightNow(now) <= times[1][1]) {
-      initPositionStream();
-      super.initState();
-    } else {
-      0.0;
-    }
+    var measureSetting = false;
+    getSetting("measure").then((value) {
+      measureSetting = value as bool;
+      if(measureSetting && setRandomTime()){
+        initPositionStream();
+        super.initState();
+      } else {
+        return 0.0;
+      }
+    });
   }
 
   @override
@@ -177,14 +216,14 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    CurrentSpeedCard(speedMs: currentSpeedMs),
+                    CurrentSpeedCard(speed: MeasureService.convertMsToKmh(dailySpeedMs)),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AverageSpeedCard(header: "GEM WEEK", speed: weeklySpeedMs),
-                        SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM MAAND", speed: monthlySpeedMs)
+                        AverageSpeedCard(header: "GEM WEEK", speed: MeasureService.convertMsToKmh(weeklySpeedMs)),
+                        const SizedBox(width: 50),
+                        AverageSpeedCard(header: "GEM MAAND", speed: MeasureService.convertMsToKmh(monthlySpeedMs))
                       ],
                     ),
                   ],

@@ -30,6 +30,13 @@ List<double> setTimeSpan(randomHour){
     end.minute - 60;
   }
 
+  // TimeOfDay start = TimeOfDay(hour: 8, minute: 00);
+  // TimeOfDay end = TimeOfDay(hour: 8, minute: 59);
+
+  // TimeOfDay random = TimeOfDay(hour: 15, minute: 30);
+  // TimeOfDay now = TimeOfDay.now();
+  // double randomTime(TimeOfDay random) => random.hour + random.minute/60;
+
   double startTime(TimeOfDay start) => start.hour + start.minute/60;
   double endTime(TimeOfDay end) => end.hour + end.minute/60;
 

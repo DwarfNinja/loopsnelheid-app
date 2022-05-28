@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/sidebar_button.dart';
+import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 String currentRoute = "/";
 
@@ -70,13 +70,13 @@ class _SideBarState extends State<SideBar> {
                   SideBarButton(
                     iconData: Icons.support,
                     text: "Help",
-                    onPressed: () => executeRoute(context, "/"),
+                    onPressed: () => executeRoute(context, "/login"),
                   ),
                   const SizedBox(height: 50),
                   SideBarButton(
                     iconData: Icons.info,
                     text: "Over",
-                    onPressed: () => executeRoute(context, "/register_basics"),
+                    onPressed: () => executeRoute(context, "/login"),
                   ),
                 ],
               ),

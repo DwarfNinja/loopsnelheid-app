@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/settings/toggle_setting.dart';
+import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 
-import 'package:loopsnelheidapp/sidebar.dart';
+import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -17,6 +18,11 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
 
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+
+  Future<bool> _getBoolFromSharedPref() async{
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.setBool('Meten', true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +72,13 @@ class _SettingsState extends State<Settings> {
                       child: Column(
                         children: const [
                           SizedBox(height: 50),
-                          ToggleSetting(text: "Meten"),
+                          ToggleSetting(
+                              text: "Meten",
+                              setting: "measure"),
                           SizedBox(height: 20),
-                          ToggleSetting(text: "Meldingen"),
+                          ToggleSetting(
+                              text: "Meldingen",
+                              setting: "notifications"),
                         ],
                       ),
                     ),
@@ -82,3 +92,5 @@ class _SettingsState extends State<Settings> {
     );
   }
 }
+
+// hier komt de save data
