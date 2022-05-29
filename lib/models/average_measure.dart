@@ -16,7 +16,7 @@ class AverageMeasure {
 
   AverageMeasure.fromJson(Map<String, dynamic> json)
       : type = json['type'],
-        averageSpeed = json['averageSpeed'],
-        amountOfMeasures = json['amountOfMeasures'],
-        measures = json['averageMeasure'];
+        averageSpeed = json['average_speed'],
+        amountOfMeasures = json['amount_of_measures'],
+        measures = json['average_measure'];
 }
