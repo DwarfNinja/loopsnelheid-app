@@ -3,10 +3,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/sidebar.dart';
+import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
-import '../../sidebar_button.dart';
-import '../toggle_setting.dart';
+import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
+
+
 
 class ExportView extends StatefulWidget{
   const ExportView({Key? key}) : super(key: key);

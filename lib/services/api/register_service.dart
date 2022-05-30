@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/user.dart';
-import '../models/verify_token.dart';
+import '../../models/user.dart';
+import '../../models/verify_token.dart';
 
 class RegisterService {
   final String registerUserEndpoint =

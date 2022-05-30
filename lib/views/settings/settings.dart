@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/settings/toggle_setting.dart';
-import 'package:loopsnelheidapp/sidebar.dart';
+import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
+import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import '../sidebar_button.dart';
+import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 String currentRoute = "/";
 

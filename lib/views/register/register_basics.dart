@@ -1,13 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/register/form_button.dart';
-import 'package:loopsnelheidapp/register/input_field.dart';
-import 'package:loopsnelheidapp/sidebar.dart';
 
-import '../models/user.dart';
-import '../services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+
+import 'package:loopsnelheidapp/widgets/register/form_button.dart';
+import 'package:loopsnelheidapp/widgets/register/input_field.dart';
+import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+import 'package:loopsnelheidapp/utils/shared_preferences_service.dart';
+
+import 'package:loopsnelheidapp/models/user.dart';
 
 class RegisterBasics extends StatefulWidget {
   const RegisterBasics({Key? key}) : super(key: key);
