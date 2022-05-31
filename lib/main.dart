@@ -11,6 +11,9 @@ import 'package:loopsnelheidapp/views/register/register_details.dart';
 import 'package:loopsnelheidapp/views/register/register_documents.dart';
 import 'package:loopsnelheidapp/views/settings/settings.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/graph.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/legend_text.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/toggle_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -76,8 +79,10 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
-  Map<String, dynamic> weeklyMeasures = {};
-  Map<String, dynamic> monthlyMeasures = {};
+  MeasureService measureService = MeasureService();
+
+  Map<String, dynamic> weeklyMeasures = {'2022-05-25': 1.6, '2022-05-26': 2.3, '2022-05-27': 2.6, '2022-05-28': 3.1, '2022-05-29': 3.5, '2022-05-30': 4.0, '2022-05-31': 3.8};
+  Map<String, dynamic> monthlyMeasures = {'2022-05-01': 3.5, '2022-05-08': 4, '2022-05-16': 4.8, '2022-05-25': 5.6};
   double currentSpeedMs = 0;
   double dailySpeedMs = 0;
   double weeklySpeedMs = 0;
@@ -86,6 +91,8 @@ class _DashboardState extends State<Dashboard> {
   List<Measure> measureList = [];
 
   var settings = {};
+
+  bool weekGraphView = true;
 
   static const LocationSettings locationSettings = LocationSettings(
     accuracy: LocationAccuracy.high,
@@ -101,7 +108,7 @@ class _DashboardState extends State<Dashboard> {
 
         Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs);
         measureList.add(measure);
-        MeasureService measureService = MeasureService();
+
         if (measureList.length > 1) {
           measureService.storeMeasures(measureList);
           measureList.clear();
@@ -120,7 +127,6 @@ class _DashboardState extends State<Dashboard> {
             monthlyMeasures = value.measures
           });
         }
-
       });
     });
   }
@@ -167,15 +173,31 @@ class _DashboardState extends State<Dashboard> {
       drawer: const SideBar(),
       body: SlidingUpPanel(
         panel: Column(
-          children: const [
-            SizedBox(height: 10),
-            RotatedBox(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 10),
+            const RotatedBox(
               quarterTurns: 1,
               child: Icon(
                 Icons.arrow_back_ios_new,
                 size: 30,
               ),
             ),
+            Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView),
+            const SizedBox(height: 15),
+            const LegendText(text: "Gemiddelde loopsnelheid", color: app_theme.blue),
+            const SizedBox(height: 3),
+            const LegendText(text: "Aanbevolen Loopsnelheid", color: app_theme.red),
+            const SizedBox(height: 15),
+            ToggleButton(
+                activeText: "Week",
+                inactiveText: "Maand",
+                onToggle: (bool value) {
+                  setState(() {
+                    weekGraphView = value;
+                  });
+                },
+                value: weekGraphView)
           ],
         ),
         minHeight: 100,
