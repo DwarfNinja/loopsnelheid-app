@@ -44,9 +44,11 @@ class _LoginState extends State<Login> {
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setString("token", body['access_token']);
 
+        print("iets anders");
         Navigator.pushNamed(context, "/");
       } else if (response.statusCode == 401) {
         alertDialog(context);
+        print("loging");
       }
     }
 

@@ -19,7 +19,7 @@ class MeasureService {
 
   Future<AverageMeasure> getAverageDailyMeasure() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
-    sharedPreferencesService.getSharedPreferenceInstance();
+    await sharedPreferencesService.getSharedPreferenceInstance();
 
     final response = await http.get(Uri.parse(averageDailyEndpoint), headers: {
       'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ class MeasureService {
 
   Future<AverageMeasure> getAverageWeeklyMeasure() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
-    sharedPreferencesService.getSharedPreferenceInstance();
+    await sharedPreferencesService.getSharedPreferenceInstance();
 
     final response = await http.get(Uri.parse(averageWeeklyEndpoint), headers: {
       'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ class MeasureService {
 
   Future<AverageMeasure> getAverageMonthlyMeasure() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
-    sharedPreferencesService.getSharedPreferenceInstance();
+    await sharedPreferencesService.getSharedPreferenceInstance();
 
     final response = await http.get(Uri.parse(averageMonthlyEndpoint), headers: {
       'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ class MeasureService {
 
   void storeMeasures(List<Measure> measures) async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
-    sharedPreferencesService.getSharedPreferenceInstance();
+    await sharedPreferencesService.getSharedPreferenceInstance();
 
     await http.post(
       Uri.parse(storeMeasureEndpoint),

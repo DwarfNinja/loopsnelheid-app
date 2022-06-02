@@ -60,6 +60,7 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         currentSpeedMs = position?.speed ?? 0.0;
 
+        print(currentSpeedMs);
         Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs);
         measureList.add(measure);
 
@@ -110,7 +111,7 @@ class _DashboardState extends State<Dashboard> {
     var measureSetting = false;
     getSetting("measure").then((value) {
       measureSetting = value as bool;
-      if(measureSetting && setRandomTime()){
+      if(measureSetting){
         initPositionStream();
         super.initState();
       } else {

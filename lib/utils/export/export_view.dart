@@ -1,11 +1,18 @@
 
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/services/api/export_service.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
 import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
+
+import '../../services/api/login_service.dart';
+import '../../views/register/login.dart';
+import '../shared_preferences_service.dart';
 
 
 
@@ -17,8 +24,26 @@ class ExportView extends StatefulWidget{
 }
 
 class _ExportView extends State<ExportView>{
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
+
+
+
+    exportData() {
+      ExportService exportService = ExportService();
+      exportService.requestExportData();
+    }
+
+    exportDataButtonOnPressed(){
+      exportData();
+
+    }
+    
+    
     return Scaffold(
       backgroundColor: app_theme.blue,
       drawer: const SideBar(),
@@ -61,7 +86,9 @@ class _ExportView extends State<ExportView>{
                       SideBarButton(
                         iconData: Icons.import_export_rounded,
                         text: "Export Data",
-                        onPressed: () {},
+                        onPressed: () {
+                          exportDataButtonOnPressed();
+                        },
                       ),
                     ],
                   ),
