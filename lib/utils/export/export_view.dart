@@ -31,17 +31,46 @@ class _ExportView extends State<ExportView>{
   @override
   Widget build(BuildContext context) {
 
+    showAlertDialog(BuildContext context) {
+
+      // set up the button
+      Widget okButton = TextButton(
+        child: const Text("OK"),
+        onPressed: () {
+          Navigator.pushNamed(context, "/");
+        },
+      );
+
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: const Text("Data Exporteren..."),
+        content: const Text("Uw data is aan het exporteren, u zult het binnen 2 minuten via uw mail ontvangen."),
+        actions: [
+          okButton,
+        ],
+      );
+
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
 
 
     exportData() {
       ExportService exportService = ExportService();
       exportService.requestExportData();
+      showAlertDialog(context);
     }
 
     exportDataButtonOnPressed(){
       exportData();
-
     }
+
+
     
     
     return Scaffold(
@@ -101,3 +130,5 @@ class _ExportView extends State<ExportView>{
     );
   }
 }
+
+

@@ -10,7 +10,7 @@ import '../../utils/shared_preferences_service.dart';
 class MeasureService {
   final String averageDailyEndpoint = dotenv.env['BACKEND_API_URL']! + "/stats/today";
   final String averageWeeklyEndpoint =  dotenv.env['BACKEND_API_URL']! + "/stats/week";
-  final String averageMonthlyEndpoint = dotenv.env['BACKEND_API_URL']! + "stats/month";
+  final String averageMonthlyEndpoint = dotenv.env['BACKEND_API_URL']! + "/stats/month";
   final String storeMeasureEndpoint = dotenv.env['BACKEND_API_URL']! + "/measures";
 
   static double convertMsToKmh(double speed) {
@@ -58,14 +58,12 @@ class MeasureService {
     List<Measure> graphMeasures = [];
     measures.forEach((date, speed) => graphMeasures.add(Measure(date, speed)));
 
-
     return graphMeasures;
   }
 
   void storeMeasures(List<Measure> measures) async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
-
     await http.post(
       Uri.parse(storeMeasureEndpoint),
       headers: {
@@ -75,5 +73,6 @@ class MeasureService {
       },
       body: jsonEncode(measures),
     );
+     measures.clear();
   }
 }

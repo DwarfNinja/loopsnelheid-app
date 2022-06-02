@@ -60,13 +60,11 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         currentSpeedMs = position?.speed ?? 0.0;
 
-        print(currentSpeedMs);
         Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs);
         measureList.add(measure);
 
-        if (measureList.length > 1) {
+        if (measureList.length > 5) {
           measureService.storeMeasures(measureList);
-          measureList.clear();
 
           measureService.getAverageDailyMeasure().then((value) => {
             dailySpeedMs = value.averageSpeed,
@@ -81,6 +79,7 @@ class _DashboardState extends State<Dashboard> {
             monthlySpeedMs = value.averageSpeed,
             monthlyMeasures = value.measures
           });
+
         }
       });
     });
