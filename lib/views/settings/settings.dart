@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
+import '../../services/api/export_service.dart';
+
 String currentRoute = "/";
 
 class Settings extends StatefulWidget {
@@ -20,6 +22,8 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
 
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  ExportService exportService = ExportService();
+
 
   Future<bool> _getBoolFromSharedPref() async{
     final prefs = await SharedPreferences.getInstance();
@@ -28,6 +32,35 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+
+    showAlertDialog(BuildContext context) {
+      Widget okButton = TextButton(
+        child: const Text("OK"),
+        onPressed: () => executeRoute(context, "/"),
+      );
+      AlertDialog alert = AlertDialog(
+        title: const Text("Data Exporteren..."),
+        content: const Text("Uw data is aan het exporteren, u zult het binnen 2 minuten via uw mail ontvangen."),
+        actions: [
+          okButton,
+        ],
+      );
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+    exportData() {
+      exportService.requestExportData();
+      showAlertDialog(context);
+    }
+
+    exportDataButtonOnPressed(){
+      exportData();
+    }
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
@@ -85,7 +118,9 @@ class _SettingsState extends State<Settings> {
                           SideBarButton(
                             iconData: Icons.next_plan_rounded,
                             text: "Export my data",
-                            onPressed: () => executeRoute(context, "/export_view"),
+                            onPressed: (){
+                              exportDataButtonOnPressed();
+                            },
                           ),
                         ],
                       ),
@@ -99,6 +134,9 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
+
+
+
   void executeRoute(BuildContext context, String name) {
     if (currentRoute != name) {
       Navigator.pushReplacementNamed(context, name);
@@ -108,6 +146,8 @@ class _SettingsState extends State<Settings> {
     }
     currentRoute = name;
   }
+
+
 
 }
 
