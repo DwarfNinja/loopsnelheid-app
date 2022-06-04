@@ -117,7 +117,7 @@ class _SettingsState extends State<Settings> {
                           SizedBox(height: 50),
                           SideBarButton(
                             iconData: Icons.next_plan_rounded,
-                            text: "Export my data",
+                            text: "Exporteer Gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
                             },
