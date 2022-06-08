@@ -63,9 +63,8 @@ class _DashboardState extends State<Dashboard> {
         Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs);
         measureList.add(measure);
 
-        if (measureList.length > 1) {
+        if (measureList.length > 5) {
           measureService.storeMeasures(measureList);
-          measureList.clear();
 
           measureService.getAverageDailyMeasure().then((value) => {
             dailySpeedMs = value.averageSpeed,
@@ -80,6 +79,7 @@ class _DashboardState extends State<Dashboard> {
             monthlySpeedMs = value.averageSpeed,
             monthlyMeasures = value.measures
           });
+
         }
       });
     });
@@ -110,7 +110,7 @@ class _DashboardState extends State<Dashboard> {
     var measureSetting = false;
     getSetting("measure").then((value) {
       measureSetting = value as bool;
-      if(measureSetting && setRandomTime()){
+      if(measureSetting){
         initPositionStream();
         super.initState();
       } else {
