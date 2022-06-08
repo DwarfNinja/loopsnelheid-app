@@ -30,6 +30,23 @@ dependencies:
   flutter:
     sdk: flutter
 
+  google_fonts: ^2.1.0
+
+  sliding_up_panel: ^2.0.0+1
+
+  geolocator: ^8.1.0
+
+  flutter_switch: ^0.3.2
+
+  http: ^0.13.3
+  
+  intl: ^0.17.0
+
+  flutter_dotenv: ^5.0.2
+
+  shared_preferences: ^2.0.15
+
+  fl_chart: ^0.50.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -56,6 +73,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/
+    - .env
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -87,3 +108,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+
