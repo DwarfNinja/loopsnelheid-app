@@ -70,6 +70,7 @@ class MeasureService {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer ${sharedPreferencesService.getString("token")}',
+        'session': sharedPreferencesService.getString("device_session")
       },
       body: jsonEncode(measures),
     );
