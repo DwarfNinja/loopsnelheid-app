@@ -14,6 +14,7 @@ import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
 import 'package:loopsnelheidapp/models/measure.dart';
+import '../../utils/shared_preferences_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -83,22 +84,31 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  Future<Object?> getSetting(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.get(key);
+  Future<Object?> getSetting() async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    await sharedPreferencesService.getSharedPreferenceInstance();
+
+    return sharedPreferencesService.getObject("measure");
+  }
+
+  Future<bool> isMeasureDevice() async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    await sharedPreferencesService.getSharedPreferenceInstance();
+
+    return sharedPreferencesService.getString("device_type") == 'MEASURE_DEVICE';
   }
 
   @override
   void initState() {
     super.initState();
     var measureSetting = false;
-    getSetting("measure").then((value) {
+    var measurePermitted = false;
+    getSetting().then((value) {
       measureSetting = value as bool;
-      if(measureSetting) {
+      measurePermitted = isMeasureDevice as bool;
+
+      if(measureSetting && measurePermitted) {
         initPositionStream();
-      }
-      else {
-        return 0.0;
       }
     });
   }
