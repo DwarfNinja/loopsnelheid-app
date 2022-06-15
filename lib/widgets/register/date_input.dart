@@ -81,7 +81,7 @@ class _DateInputState extends State<DateInput> {
                   data: Theme.of(context).copyWith(
                     colorScheme: const ColorScheme.light(
                       primary: app_theme.blue,
-                      onPrimary: app_theme.white
+                      onPrimary: app_theme.white,
                       onSurface: app_theme.black,
                     ),
                     textButtonTheme: TextButtonThemeData(
