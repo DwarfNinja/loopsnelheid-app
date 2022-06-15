@@ -12,8 +12,6 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 
-import 'package:loopsnelheidapp/utils/time_scheduler.dart';
-
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
 import 'package:loopsnelheidapp/models/measure.dart';
 
@@ -63,9 +61,8 @@ class _DashboardState extends State<Dashboard> {
         Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs);
         measureList.add(measure);
 
-        if (measureList.length > 1) {
+        if (measureList.length > 5) {
           measureService.storeMeasures(measureList);
-          measureList.clear();
 
           measureService.getAverageDailyMeasure().then((value) => {
             dailySpeedMs = value.averageSpeed,
@@ -80,6 +77,7 @@ class _DashboardState extends State<Dashboard> {
             monthlySpeedMs = value.averageSpeed,
             monthlyMeasures = value.measures
           });
+
         }
       });
     });
@@ -90,30 +88,16 @@ class _DashboardState extends State<Dashboard> {
     return prefs.get(key);
   }
 
-  bool setRandomTime() {
-    List times = setRandomTimes();
-
-    TimeOfDay now = TimeOfDay.now();
-    double rightNow(TimeOfDay now) => now.hour + now.minute / 60.0;
-
-    if (rightNow(now) >= times[0][0] && rightNow(now) <= times[0][1]) {
-      return true;
-    } else if (rightNow(now) >= times[1][0] && rightNow(now) <= times[1][1]) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   @override
   void initState() {
+    super.initState();
     var measureSetting = false;
     getSetting("measure").then((value) {
       measureSetting = value as bool;
-      if(measureSetting && setRandomTime()){
+      if(measureSetting) {
         initPositionStream();
-        super.initState();
-      } else {
+      }
+      else {
         return 0.0;
       }
     });

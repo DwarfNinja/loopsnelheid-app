@@ -15,8 +15,9 @@ class RegisterService {
 
   Future<http.Response?> registerUser(User user) {
     return http.post(Uri.parse(registerUserEndpoint),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: jsonEncode(user));
   }

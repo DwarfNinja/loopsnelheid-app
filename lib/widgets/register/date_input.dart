@@ -105,7 +105,7 @@ class _DateInputState extends State<DateInput> {
                 // widget.pickedDate = pickedDate
               });
             }
-            WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
+            // WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
           },
           validator: (String? value) {
             if (widget.controller.text.isEmpty) {
