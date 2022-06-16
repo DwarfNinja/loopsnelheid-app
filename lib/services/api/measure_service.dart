@@ -12,6 +12,7 @@ class MeasureService {
   final String averageWeeklyEndpoint =  dotenv.env['BACKEND_API_URL']! + "/stats/week";
   final String averageMonthlyEndpoint = dotenv.env['BACKEND_API_URL']! + "/stats/month";
   final String storeMeasureEndpoint = dotenv.env['BACKEND_API_URL']! + "/measures";
+  final String defaultMeasuresEndpoint = dotenv.env['BACKEND_API_URL']! + "/measures/default";
 
   static double convertMsToKmh(double speed) {
     return speed * 3.6;
@@ -74,5 +75,19 @@ class MeasureService {
       body: jsonEncode(measures),
     );
      measures.clear();
+  }
+
+  Future<http.Response> getDefaultMeasures() async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    await sharedPreferencesService.getSharedPreferenceInstance();
+
+    final response =  http.get(Uri.parse(defaultMeasuresEndpoint), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${sharedPreferencesService.getString("token")}',
+    });
+    print(response);
+    return response;
+
   }
 }
