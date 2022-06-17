@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopsnelheidapp/models/average_measure.dart';
+import 'package:loopsnelheidapp/models/default_measure.dart';
 
 import '../../models/measure.dart';
 import '../../utils/shared_preferences_service.dart';
@@ -29,6 +30,23 @@ class MeasureService {
     });
     return AverageMeasure.fromJson(jsonDecode(response.body));
   }
+
+  //DEFAULT MEASURES ---> START
+  Future<String> getDefaultMeasures() async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    await sharedPreferencesService.getSharedPreferenceInstance();
+
+    final response = await http.get(Uri.parse(defaultMeasuresEndpoint), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${sharedPreferencesService.getString("token")}',
+    });
+    return response.body;
+    // return DefaultMeasure.fromJson(jsonDecode(response.body));
+  }
+
+  //DEFAULT MEASURES ---> END
+
 
   Future<AverageMeasure> getAverageWeeklyMeasure() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
@@ -75,19 +93,5 @@ class MeasureService {
       body: jsonEncode(measures),
     );
      measures.clear();
-  }
-
-  Future<http.Response> getDefaultMeasures() async {
-    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
-    await sharedPreferencesService.getSharedPreferenceInstance();
-
-    final response =  http.get(Uri.parse(defaultMeasuresEndpoint), headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ${sharedPreferencesService.getString("token")}',
-    });
-    print(response);
-    return response;
-
   }
 }
