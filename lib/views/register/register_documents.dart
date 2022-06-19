@@ -52,6 +52,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
       setState(() => submitted = true);
       if (formKey.currentState!.validate()) {
         sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
+        Navigator.pushNamed(context, "/register_verification");
       }
     }
 
