@@ -7,6 +7,8 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 import '../../services/api/export_service.dart';
+import '../../services/api/reasearch_service.dart';
+import '../../utils/shared_preferences_service.dart';
 
 String currentRoute = "/";
 
@@ -23,11 +25,19 @@ class _SettingsState extends State<Settings> {
 
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   ExportService exportService = ExportService();
+  ResearchService researchService = ResearchService();
 
 
-  Future<bool> _getBoolFromSharedPref() async{
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.setBool('Meten', true);
+  Future<bool> isAdministrator() async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    await sharedPreferencesService.getSharedPreferenceInstance();
+
+    var isAdministrator = false;
+    await sharedPreferencesService.getObject("roles").then((value) => {
+      isAdministrator = value.contains("ROLE_ADMIN")
+    });
+
+    return isAdministrator;
   }
 
   @override
@@ -53,12 +63,29 @@ class _SettingsState extends State<Settings> {
       );
     }
     exportData() {
+
       exportService.requestExportData();
       showAlertDialog(context);
     }
 
+    exportAllData() {
+
+      isAdministrator().then((value) => {
+        if (value) {
+          researchService.getStatistics().then((value) => {
+            if (value == 200) {
+              showAlertDialog(context)
+            }
+          })
+        }
+      });
+    }
     exportDataButtonOnPressed(){
       exportData();
+    }
+
+    exportAllDataButtonOnPressed(){
+      exportAllData();
     }
 
     return Scaffold(
@@ -122,6 +149,14 @@ class _SettingsState extends State<Settings> {
                               exportDataButtonOnPressed();
                             },
                           ),
+                          SizedBox(height: 50),
+                          SideBarButton(
+                            iconData: Icons.next_plan_rounded,
+                            text: "Export All",
+                            onPressed: (){
+                              exportAllDataButtonOnPressed();
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -146,9 +181,6 @@ class _SettingsState extends State<Settings> {
     }
     currentRoute = name;
   }
-
-
-
 }
 
 
