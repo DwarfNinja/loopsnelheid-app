@@ -1,16 +1,15 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/register/form_button.dart';
-import 'package:loopsnelheidapp/register/input_field.dart';
+import 'package:loopsnelheidapp/widgets/register/form_button.dart';
+import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 
-import 'package:loopsnelheidapp/sidebar.dart';
+import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
-import '../services/login_service.dart';
-import '../services/shared_preferences_service.dart';
+import '../../services/api/login_service.dart';
+import '../../utils/shared_preferences_service.dart';
 
 class Login extends StatefulWidget {
 
@@ -44,6 +43,8 @@ class _LoginState extends State<Login> {
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setString("token", body['access_token']);
+        sharedPreferencesService.setString("device_session", body['device']['session']);
+        sharedPreferencesService.setString("device_type", body['device']['type']);
 
         Navigator.pushNamed(context, "/");
       } else if (response.statusCode == 401) {

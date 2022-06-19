@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/user.dart';
-import '../models/verify_token.dart';
+import '../../models/user.dart';
+import '../../models/verify_token.dart';
 
 class RegisterService {
   final String registerUserEndpoint =
@@ -15,8 +15,9 @@ class RegisterService {
 
   Future<http.Response?> registerUser(User user) {
     return http.post(Uri.parse(registerUserEndpoint),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: jsonEncode(user));
   }

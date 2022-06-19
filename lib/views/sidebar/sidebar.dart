@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/sidebar_button.dart';
+import 'package:loopsnelheidapp/services/api/login_service.dart';
+import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 String currentRoute = "/";
 
@@ -78,6 +79,12 @@ class _SideBarState extends State<SideBar> {
                     text: "Over",
                     onPressed: () => executeRoute(context, "/login"),
                   ),
+                  const SizedBox(height: 50),
+                  SideBarButton(
+                    iconData: Icons.logout,
+                    text: "Afmelden",
+                    onPressed: () => logoutUser(),
+                  ),
                 ],
               ),
             ),
@@ -95,5 +102,15 @@ class _SideBarState extends State<SideBar> {
       Navigator.pop(context);
     }
     currentRoute = name;
+  }
+
+  void logoutUser()
+  {
+    LoginService loginService = LoginService();
+    loginService.logout().then((value) => {
+      if (value) {
+        executeRoute(context, "/login")
+      }
+    });
   }
 }

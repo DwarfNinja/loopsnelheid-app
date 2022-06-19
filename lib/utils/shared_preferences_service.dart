@@ -22,9 +22,13 @@ class SharedPreferencesService {
     sharedPreferences.setString(name, value);
   }
 
-  getString(String name) async {
+  getString(String name) {
     final String? string = sharedPreferences.getString(name);
 
     return string;
+  }
+
+  removeString(String name) {
+    return sharedPreferences.remove(name);
   }
 }
