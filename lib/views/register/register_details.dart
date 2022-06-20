@@ -52,83 +52,11 @@ class _RegisterDetailsState extends State<RegisterDetails> {
       Navigator.pushNamed(context, "/register_documents");
     }
 
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: app_theme.blue,
-      drawer: const SideBar(),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: app_theme.mainLinearGradient,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(height: 25),
-            Text(
-              "Loopsnelheid",
-              style: app_theme.textTheme.headline3!
-                  .copyWith(color: Colors.white),
-            ),
-            const Icon(
-              Icons.directions_walk,
-              color: Colors.white,
-              size: 60,
-            ),
-            const SizedBox(height: 10),
-            Container (
-              width: double.infinity,
-              height: 650,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
-                ),
-                boxShadow: [
-                  app_theme.bottomBoxShadow,
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: Form(
-                  key: formKey,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  child: Column(
-                    children: [
-                      GenderToggle(
-                        value: isFemale,
-                        onToggle: (val) {
-                          setState(() {
-                            isFemale = val;
-                          });
-                        }),
-                      const SizedBox(height: 25),
-                      DateInput(controller: dateOfBirthController),
-                      const SizedBox(height: 20),
-                      InputField(
-                        controller: weightController,
-                        text: "Gewicht",
-                        hint: "Voer uw gewicht in kilogram",
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}'), allow: true)
-                        ],
-                      ),
-                      const SizedBox(height: 25),
-                      FormButton(
-                          text: "Volgende",
-                          color: app_theme.blue,
-                          onPressed: () => onPressedNextButton()),
-                      const SizedBox(height: 15),
-                      FormButton(
-                          text: "Ga Terug",
-                          color: app_theme.white,
-                          onPressed: () => Navigator.pop(context))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+      drawer: SideBar(),
+      body: Center(
+       child: Text('Hello World'),
       ),
     );
   }

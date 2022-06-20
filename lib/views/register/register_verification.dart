@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'package:loopsnelheidapp/models/verify_token.dart';
 import 'package:loopsnelheidapp/services/api/register_service.dart';
 
@@ -70,7 +71,7 @@ class _RegisterVerificationState extends State<RegisterVerification> {
         }
       });
     }
-
+    
     return Scaffold(
       backgroundColor: app_theme.blue,
       body: Container(
