@@ -8,17 +8,17 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 
-class RegisterlVerification extends StatefulWidget {
+class RegisterVerification extends StatefulWidget {
 
-  const RegisterlVerification({Key? key})
+  const RegisterVerification({Key? key})
       : super(key: key);
 
   @override
-  _RegisterlVerificationState createState() =>
-      _RegisterlVerificationState();
+  _RegisterVerificationState createState() =>
+      _RegisterVerificationState();
 }
 
-class _RegisterlVerificationState extends State<RegisterlVerification> {
+class _RegisterVerificationState extends State<RegisterVerification> {
   TextEditingController textEditingController = TextEditingController();
   StreamController<ErrorAnimationType>? errorController;
 
