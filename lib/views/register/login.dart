@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setString("token", body['access_token']);
+        sharedPreferencesService.setObject("roles", body['roles']);
         sharedPreferencesService.setString("device_session", body['device']['session']);
         sharedPreferencesService.setString("device_type", body['device']['type']);
 
