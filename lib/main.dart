@@ -16,8 +16,8 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'views/register/login.dart';
 
 void main() async {
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
       case "/register_documents":
         return CustomPageRoute(child: const RegisterDocuments());
       case "/register_verification":
-        return CustomPageRoute(child: const RegisterlVerification());
+        return CustomPageRoute(child: const RegisterVerification());
 
     }
     throw UnsupportedError('Unknown route: ${settings.name}');

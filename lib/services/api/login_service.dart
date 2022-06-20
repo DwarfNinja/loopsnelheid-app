@@ -12,7 +12,6 @@ class LoginService {
       dotenv.env['BACKEND_API_URL']! + "/auth/logout";
 
   Future<http.Response> authenticate(String email, String password)  {
-
      return http.post(Uri.parse(loginUserEndpoint),
          headers: {
            'Content-Type': 'application/json',

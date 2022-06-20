@@ -53,8 +53,12 @@ class _LoginState extends State<Login> {
       }
     }
 
+    handleAuthenticateError(error) {
+      alertDialog(context);
+    }
+
     onPressedLoginButton() {
-      userAuthenticate().then((response) => handleAuthenticateResponse(response));
+      userAuthenticate().then((response) => handleAuthenticateResponse(response)).catchError((error) => handleAuthenticateError(error));
     }
 
     return Scaffold(
