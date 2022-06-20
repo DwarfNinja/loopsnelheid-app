@@ -10,6 +10,8 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 
+import '../../utils/shared_preferences_service.dart';
+
 class RegisterVerification extends StatefulWidget {
 
   const RegisterVerification({Key? key})
@@ -42,6 +44,9 @@ class _RegisterVerificationState extends State<RegisterVerification> {
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    sharedPreferencesService.getSharedPreferenceInstance();
+
     activationIsSuccess() {
       setState(() => hasError = false);
       Navigator.pushNamed(context, "/login");
@@ -55,7 +60,7 @@ class _RegisterVerificationState extends State<RegisterVerification> {
     activateAccount() {
       formKey.currentState!.validate();
 
-      VerifyToken verifyToken = VerifyToken(1, currentText);
+      VerifyToken verifyToken = VerifyToken(sharedPreferencesService.getInteger("register_id"), currentText);
       RegisterService registerService = RegisterService();
       registerService.verifyEmailByDigitalCode(verifyToken).then((success) => {
         if (!success) {
