@@ -8,6 +8,7 @@ import 'package:loopsnelheidapp/views/register/login.dart';
 import 'package:loopsnelheidapp/views/register/register_basics.dart';
 import 'package:loopsnelheidapp/views/register/register_details.dart';
 import 'package:loopsnelheidapp/views/register/register_documents.dart';
+import 'package:loopsnelheidapp/views/register/register_verification.dart';
 import 'package:loopsnelheidapp/views/settings/settings.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
@@ -47,6 +48,8 @@ class MyApp extends StatelessWidget {
         return CustomPageRoute(child: const RegisterDetails());
       case "/register_documents":
         return CustomPageRoute(child: const RegisterDocuments());
+      case "/register_verification":
+        return CustomPageRoute(child: const RegisterlVerification());
 
     }
     throw UnsupportedError('Unknown route: ${settings.name}');
