@@ -9,7 +9,6 @@ const Color lightBlue = Color(0xFF2BBFFE);
 const Color blue = Color(0xFF1D58EF);
 const Color darkBlue = Color(0xFF2215C2);
 const Color red = Color(0xFFD81E4B);
-const Color lightRed = Color(0xFFE43A64);
 const Color yellowOrange = Color(0xFFFFBE16);
 const Color green = Color(0xFF8CE137);
 const Color lightGreen = Color(0xFFC8E70F);
@@ -56,29 +55,29 @@ final TextTheme textTheme = TextTheme(
   headline2: GoogleFonts.montserrat(
       fontSize: 60,
       color: Colors.black,
-      fontWeight: FontWeight.w500),
+      fontWeight: FontWeight.w600),
   headline3: GoogleFonts.montserrat(
       fontSize: 40,
       color: Colors.black,
-      fontWeight: FontWeight.w500),
+      fontWeight: FontWeight.w600),
   headline4: GoogleFonts.montserrat(
       fontSize: 34,
       color: Colors.black,
-      fontWeight: FontWeight.w500),
+      fontWeight: FontWeight.w600),
   headline5: GoogleFonts.montserrat(
       fontSize: 24,
       color: Colors.black,
-      fontWeight: FontWeight.w500),
+      fontWeight: FontWeight.w600),
   headline6: GoogleFonts.montserrat(
       fontSize: 20,
       color: Colors.black,
-      fontWeight: FontWeight.w500),
+      fontWeight: FontWeight.w600),
   bodyText1: GoogleFonts.montserrat(
       fontSize: 18,
       color: Colors.black,
-      fontWeight: FontWeight.w500),
+      fontWeight: FontWeight.w600),
   bodyText2: GoogleFonts.montserrat(
       fontSize: 16,
       color: Colors.black,
-      fontWeight: FontWeight.w500),
+      fontWeight: FontWeight.w600),
 );
