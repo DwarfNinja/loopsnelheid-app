@@ -5,8 +5,6 @@ import 'package:loopsnelheidapp/widgets/dashboard/toggle_button.dart';
 
 import 'dart:async';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';

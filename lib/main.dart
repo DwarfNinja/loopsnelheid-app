@@ -16,8 +16,8 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'views/register/login.dart';
 
 void main() async {
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
