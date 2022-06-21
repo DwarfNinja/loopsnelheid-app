@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
-
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
+
+import '../../services/api/export_service.dart';
+import '../../services/api/reasearch_service.dart';
+import '../../utils/shared_preferences_service.dart';
+
+String currentRoute = "/";
 
 class Settings extends StatefulWidget {
 
@@ -18,14 +24,70 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
 
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  ExportService exportService = ExportService();
+  ResearchService researchService = ResearchService();
 
-  Future<bool> _getBoolFromSharedPref() async{
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.setBool('Meten', true);
+
+  Future<bool> isAdministrator() async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    await sharedPreferencesService.getSharedPreferenceInstance();
+
+    var isAdministrator = false;
+    await sharedPreferencesService.getObject("roles").then((value) => {
+      isAdministrator = value.contains("ROLE_ADMIN")
+    });
+
+    return isAdministrator;
   }
 
   @override
   Widget build(BuildContext context) {
+
+    showAlertDialog(BuildContext context) {
+      Widget okButton = TextButton(
+        child: const Text("OK"),
+        onPressed: () => executeRoute(context, "/"),
+      );
+      AlertDialog alert = AlertDialog(
+        title: const Text("Data Exporteren..."),
+        content: const Text("Uw data is aan het exporteren, u zult het binnen 2 minuten via uw mail ontvangen."),
+        actions: [
+          okButton,
+        ],
+      );
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+    exportData() {
+
+      exportService.requestExportData();
+      showAlertDialog(context);
+    }
+
+    exportAllData() {
+
+      isAdministrator().then((value) => {
+        if (value) {
+          researchService.getStatistics().then((value) => {
+            if (value == 200) {
+              showAlertDialog(context)
+            }
+          })
+        }
+      });
+    }
+    exportDataButtonOnPressed(){
+      exportData();
+    }
+
+    exportAllDataButtonOnPressed(){
+      exportAllData();
+    }
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
@@ -48,7 +110,7 @@ class _SettingsState extends State<Settings> {
             Center(
               child: Column(
                 children: [
-                  const SizedBox(height: 70),
+                   SizedBox(height: 70),
                   Text(
                     "Instellingen",
                     style: app_theme.textTheme.headline3!
@@ -70,15 +132,31 @@ class _SettingsState extends State<Settings> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 45, right: 45),
                       child: Column(
-                        children: const [
+                        children:  [
                           SizedBox(height: 50),
-                          ToggleSetting(
+                          const ToggleSetting(
                               text: "Meten",
                               setting: "measure"),
                           SizedBox(height: 20),
-                          ToggleSetting(
+                          const ToggleSetting(
                               text: "Meldingen",
                               setting: "notifications"),
+                          SizedBox(height: 50),
+                          SideBarButton(
+                            iconData: Icons.next_plan_rounded,
+                            text: "Exporteer Gegevens",
+                            onPressed: (){
+                              exportDataButtonOnPressed();
+                            },
+                          ),
+                          SizedBox(height: 50),
+                          SideBarButton(
+                            iconData: Icons.next_plan_rounded,
+                            text: "Export All",
+                            onPressed: (){
+                              exportAllDataButtonOnPressed();
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -91,6 +169,19 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
+
+
+
+  void executeRoute(BuildContext context, String name) {
+    if (currentRoute != name) {
+      Navigator.pushReplacementNamed(context, name);
+    }
+    else {
+      Navigator.pop(context);
+    }
+    currentRoute = name;
+  }
 }
+
 
 // hier komt de save data
