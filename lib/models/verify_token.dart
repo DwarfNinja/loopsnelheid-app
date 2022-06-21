@@ -1,5 +1,5 @@
 class VerifyToken {
-  String userId;
+  int userId;
   String digitalCode;
 
   VerifyToken(this.userId, this.digitalCode);
