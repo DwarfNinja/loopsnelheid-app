@@ -32,7 +32,7 @@ class SideBarButton extends StatelessWidget {
         child: Row(
           children: [
             Icon(iconData, color: app_theme.white, size: 40),
-            const SizedBox(width: 20),
+            const SizedBox(width: 10),
             Text(text, style: app_theme.textTheme.headline6!.copyWith(color: app_theme.white))
           ],
         ),

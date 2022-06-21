@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
@@ -144,7 +143,15 @@ class _SettingsState extends State<Settings> {
                           SizedBox(height: 50),
                           SideBarButton(
                             iconData: Icons.next_plan_rounded,
-                            text: "Exporteer Gegevens",
+                            text: "Mijn apparaten",
+                            onPressed: (){
+                              executeRoute(context, "/devices");
+                            },
+                          ),
+                          SizedBox(height: 50),
+                          SideBarButton(
+                            iconData: Icons.next_plan_rounded,
+                            text: "Exporteer gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
                             },
@@ -152,7 +159,7 @@ class _SettingsState extends State<Settings> {
                           SizedBox(height: 50),
                           SideBarButton(
                             iconData: Icons.next_plan_rounded,
-                            text: "Export All",
+                            text: "Exporteer onderzoek",
                             onPressed: (){
                               exportAllDataButtonOnPressed();
                             },
