@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/models/device.dart';
+import 'package:loopsnelheidapp/services/api/device_service.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
@@ -13,8 +15,21 @@ class Devices extends StatefulWidget {
 }
 
 class _DevicesState extends State<Devices> {
-
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  Future<List<Device>>? _listDevicesFuture;
+  DeviceService deviceService = DeviceService();
+
+  @override
+  void initState() {
+    super.initState();
+    _listDevicesFuture = deviceService.getDevices();
+  }
+
+  void refreshList() {
+    setState(() {
+      _listDevicesFuture = deviceService.getDevices();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,62 +78,66 @@ class _DevicesState extends State<Devices> {
                     ),
                     child: Stack(
                       children: [
-                        DataTable(
-                          columns: [
-                            DataColumn(
-                              label: Container(
-                                width: 60,
-                                child: Text('Apparaat'),
-                              )
-                            ),
-                            DataColumn(
-                                label: Container(
-                                  width: 30,
-                                  child: Text('Type'),
-                                )
-                            ),
-                            DataColumn(
-                              label: Container(
-                                width: 50,
-                                child: Text('Actie'),
-                              ),
-                            )
-                          ],
-                          rows: [
-                            DataRow(
-                              cells: <DataCell>[
-                                const DataCell(
-                                    Text('Android')
-                                ),
-                                const DataCell(
-                                    Text('Meetapparaat')
-                                ),
-                                DataCell(
-                                  TextButton(
-                                    child: Icon(Icons.check),
-                                    onPressed: () {},
+                        FutureBuilder<List<Device>>(
+                          initialData: const <Device>[],
+                          future: _listDevicesFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            return DataTable(
+                                columns: [
+                                  DataColumn(
+                                      label: Container(
+                                        width: 60,
+                                        child: Text('Apparaat'),
+                                      )
                                   ),
-                                ),
-                              ],
-                            ),
-                            DataRow(
-                              cells: <DataCell>[
-                                const DataCell(
-                                    Text('Android')
-                                ),
-                                const DataCell(
-                                    Text('Meetapparaat')
-                                ),
-                                DataCell(
-                                  TextButton(
-                                    child: Icon(Icons.check),
-                                    onPressed: () {},
+                                  DataColumn(
+                                      label: Container(
+                                        width: 30,
+                                        child: Text('Type'),
+                                      )
                                   ),
-                                ),
-                              ],
-                            )
-                          ]
-                        ),
+                                  DataColumn(
+                                    label: Container(
+                                      width: 50,
+                                      child: Text('Actie'),
+                                    ),
+                                  )
+                                ],
+                                rows: List.generate(
+                                  snapshot.data!.length,
+                                  (index) {
+                                    var device = snapshot.data![index];
+                                    return DataRow(
+                                      cells: <DataCell>[
+                                        DataCell(
+                                            Text('Android (${device.id})')
+                                        ),
+                                        DataCell(
+                                            Text(device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat")
+                                        ),
+                                        DataCell(
+                                          TextButton(
+                                            child: Icon(Icons.check),
+                                            onPressed: () {
+                                              deviceService.markDeviceAsMeasureDevice(device.session).then((success) => {
+                                                if (success) {
+                                                  refreshList()
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ).toList(),
+                            );
+                          },
+                        )
                       ],
                     ),
                   ),
