@@ -22,10 +22,10 @@ class RegisterService {
         body: jsonEncode(user));
   }
 
-  Future<void> verifyEmailByDigitalCode(VerifyToken verifyToken) async {
-    await http.post(Uri.parse(verifyMailEndpoint +
-        verifyToken.userId +
-        "/" +
-        verifyToken.digitalCode));
+  Future<bool> verifyEmailByDigitalCode(VerifyToken verifyToken) async {
+    final response = await http.post(Uri.parse(verifyMailEndpoint +
+        verifyToken.userId.toString() + "/" + verifyToken.digitalCode));
+
+    return response.statusCode == 200;
   }
 }

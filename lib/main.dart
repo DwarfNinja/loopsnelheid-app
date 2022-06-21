@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
       case "/register_documents":
         return CustomPageRoute(child: const RegisterDocuments());
       case "/register_verification":
-        return CustomPageRoute(child: const RegisterlVerification());
+        return CustomPageRoute(child: const RegisterVerification());
 
     }
     throw UnsupportedError('Unknown route: ${settings.name}');
