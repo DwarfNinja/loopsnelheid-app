@@ -31,4 +31,14 @@ class SharedPreferencesService {
   removeString(String name) {
     return sharedPreferences.remove(name);
   }
+
+  getInteger(String name) {
+    final int? value = sharedPreferences.getInt(name);
+
+    return value;
+  }
+
+  setInteger(String name, int value) async {
+    sharedPreferences.setInt(name, value);
+  }
 }
