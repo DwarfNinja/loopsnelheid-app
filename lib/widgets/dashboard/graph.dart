@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/services/api/measure_service.dart';
 
 class Graph extends StatefulWidget {
   final Map<String, dynamic>? data;
@@ -54,7 +55,7 @@ class _GraphState extends State<Graph> {
       DateTime dateTimeNow = DateTime.now();
       DateTime dateTimeKey = DateTime.parse("$e 00:00:00.000");
       double differenceInDays = dateTimeNow.difference(dateTimeKey).inDays.toDouble();
-      return FlSpot(getOffset() - differenceInDays, double.parse(widget.data![e].toString()));
+      return FlSpot(getOffset() - differenceInDays, double.parse(MeasureService.convertMsToKmh(widget.data![e]).toString()));
     }).toList();
 
     return flSpotList;

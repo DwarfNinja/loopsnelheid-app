@@ -32,8 +32,8 @@ class _DashboardState extends State<Dashboard> {
 
   MeasureService measureService = MeasureService();
 
-  Map<String, dynamic> weeklyMeasures = {'2022-05-25': 1.6, '2022-05-26': 2.3, '2022-05-27': 2.6, '2022-05-28': 3.1, '2022-05-29': 3.5, '2022-05-30': 4.0, '2022-05-31': 3.8};
-  Map<String, dynamic> monthlyMeasures = {'2022-05-01': 3.5, '2022-05-08': 4, '2022-05-16': 4.8, '2022-05-25': 5.6};
+  Map<String, dynamic> weeklyMeasures = {};
+  Map<String, dynamic> monthlyMeasures = {};
   double currentSpeedMs = 0;
   double dailySpeedMs = 0;
   double dailyLimitSpeed = 0;
@@ -80,7 +80,6 @@ class _DashboardState extends State<Dashboard> {
 
         if (measureList.length > 5) {
           measureService.storeMeasures(measureList);
-          getAllMeasureValues();
         }
       });
     });
@@ -109,12 +108,11 @@ class _DashboardState extends State<Dashboard> {
     var measureSetting = false;
     var measurePermitted = false;
 
-    //getAllMeasureValues();
+    getAllMeasureValues();
 
     getMeasureSetting().then((value) {
       measureSetting = value as bool;
       measurePermitted = isMeasureDevice as bool;
-
       if(measureSetting && measurePermitted) {
         initPositionStream();
       }
