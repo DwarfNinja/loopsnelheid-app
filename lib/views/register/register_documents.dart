@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
@@ -31,8 +33,8 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
     handleRegisterResponse(response) {
       if (response.statusCode == 200) {
-        // Push to confirmation view
-        // Navigator.pushNamed(context, "/");
+        final body = jsonDecode(response.body!);
+        sharedPreferencesService.setInteger("register_id", body['id']);
       } else if (response.statusCode == 400) {
         // Repeat the proces
       }
