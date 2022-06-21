@@ -9,8 +9,10 @@ const Color lightBlue = Color(0xFF2BBFFE);
 const Color blue = Color(0xFF1D58EF);
 const Color darkBlue = Color(0xFF2215C2);
 const Color red = Color(0xFFD81E4B);
+const Color lightRed = Color(0xFFE43A64);
 const Color yellowOrange = Color(0xFFFFBE16);
 const Color green = Color(0xFF8CE137);
+const Color lightGreen = Color(0xFFC8E70F);
 
 
 const LinearGradient mainLinearGradient = LinearGradient(
@@ -19,6 +21,17 @@ const LinearGradient mainLinearGradient = LinearGradient(
     colors: [blue, darkBlue]
 );
 
+const LinearGradient greenLightLinearGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [lightGreen, green]
+);
+
+const LinearGradient yellowRedLinearGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [yellowOrange, red]
+);
 
  const BoxShadow topBoxShadow = BoxShadow(
     color: Color(0x40000000),

@@ -24,8 +24,15 @@ class SharedPreferencesService {
 
   getString(String name) {
     final String? string = sharedPreferences.getString(name);
-
     return string;
+  }
+
+  setBool(String name, bool value) async {
+    sharedPreferences.setBool(name, value);
+  }
+
+  getBool(String name) {
+    return sharedPreferences.getBool(name);
   }
 
   removeString(String name) {

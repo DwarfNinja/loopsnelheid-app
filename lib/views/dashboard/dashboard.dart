@@ -36,6 +36,7 @@ class _DashboardState extends State<Dashboard> {
   Map<String, dynamic> monthlyMeasures = {'2022-05-01': 3.5, '2022-05-08': 4, '2022-05-16': 4.8, '2022-05-25': 5.6};
   double currentSpeedMs = 0;
   double dailySpeedMs = 0;
+  double dailyLimitSpeed = 0;
   double weeklySpeedMs = 0;
   double monthlySpeedMs = 0;
 
@@ -50,6 +51,23 @@ class _DashboardState extends State<Dashboard> {
       distanceFilter: 5
   );
 
+  void getAllMeasureValues() {
+    measureService.getAverageDailyMeasure().then((value) => {
+      dailySpeedMs = value.averageSpeed,
+      dailyLimitSpeed = value.defaultMeasureBasedOnProfile.speed,
+    });
+
+    measureService.getAverageWeeklyMeasure().then((value) => {
+      weeklySpeedMs = value.averageSpeed,
+      weeklyMeasures = value.measures
+    });
+
+    measureService.getAverageMonthlyMeasure().then((value) => {
+      monthlySpeedMs = value.averageSpeed,
+      monthlyMeasures = value.measures
+    });
+  }
+
   void initPositionStream() async {
     Stream<Position> positionStream =
     Geolocator.getPositionStream(locationSettings: locationSettings);
@@ -62,36 +80,25 @@ class _DashboardState extends State<Dashboard> {
 
         if (measureList.length > 5) {
           measureService.storeMeasures(measureList);
-
-          measureService.getAverageDailyMeasure().then((value) => {
-            dailySpeedMs = value.averageSpeed,
-          });
-
-          measureService.getAverageWeeklyMeasure().then((value) => {
-            weeklySpeedMs = value.averageSpeed,
-            weeklyMeasures = value.measures
-          });
-
-          measureService.getAverageMonthlyMeasure().then((value) => {
-            monthlySpeedMs = value.averageSpeed,
-            monthlyMeasures = value.measures
-          });
-
+          getAllMeasureValues();
         }
       });
     });
   }
 
-  Future<Object?> getSetting() async {
+  Future<Object?> getMeasureSetting() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
-    return sharedPreferencesService.getObject("measure");
+    return sharedPreferencesService.getBool("measure");
   }
 
   Future<bool> isMeasureDevice() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
+
+    final measureDeviceType = sharedPreferencesService.getString("device_type");
+    if(!measureDeviceType) return false;
 
     return sharedPreferencesService.getString("device_type") == 'MEASURE_DEVICE';
   }
@@ -101,7 +108,10 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     var measureSetting = false;
     var measurePermitted = false;
-    getSetting().then((value) {
+
+    //getAllMeasureValues();
+
+    getMeasureSetting().then((value) {
       measureSetting = value as bool;
       measurePermitted = isMeasureDevice as bool;
 
@@ -184,7 +194,10 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    CurrentSpeedCard(speed: MeasureService.convertMsToKmh(dailySpeedMs)),
+                    CurrentSpeedCard(
+                        speed: MeasureService.convertMsToKmh(dailySpeedMs),
+                        limitSpeed: dailyLimitSpeed
+                    ),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
