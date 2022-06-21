@@ -1,12 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/models/verify_token.dart';
+import 'package:loopsnelheidapp/services/api/register_service.dart';
 
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
+
+import '../../utils/shared_preferences_service.dart';
 
 class RegisterVerification extends StatefulWidget {
 
@@ -40,6 +44,33 @@ class _RegisterVerificationState extends State<RegisterVerification> {
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    sharedPreferencesService.getSharedPreferenceInstance();
+
+    activationIsSuccess() {
+      setState(() => hasError = false);
+      Navigator.pushNamed(context, "/login");
+    }
+
+    activationIsIncorrect() {
+      errorController!.add(ErrorAnimationType.shake);
+      setState(() => hasError = true);
+    }
+
+    activateAccount() {
+      formKey.currentState!.validate();
+
+      VerifyToken verifyToken = VerifyToken(sharedPreferencesService.getInteger("register_id"), currentText);
+      RegisterService registerService = RegisterService();
+      registerService.verifyEmailByDigitalCode(verifyToken).then((success) => {
+        if (!success) {
+          activationIsIncorrect()
+        } else {
+          activationIsSuccess()
+        }
+      });
+    }
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       body: Container(
@@ -188,6 +219,7 @@ class _RegisterVerificationState extends State<RegisterVerification> {
                                 },
                               );
                             }
+                            activateAccount();
                           },
                         ),
                         const SizedBox(height: 15),
