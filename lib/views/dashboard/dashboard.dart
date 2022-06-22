@@ -51,21 +51,23 @@ class _DashboardState extends State<Dashboard> {
       distanceFilter: 5
   );
 
-  void getAllMeasureValues() {
-    measureService.getAverageDailyMeasure().then((value) => {
+  void getAllMeasureValues() async {
+    await measureService.getAverageDailyMeasure().then((value) => {
       dailySpeedMs = value.averageSpeed,
       dailyLimitSpeed = value.defaultMeasureBasedOnProfile.speed,
     });
 
-    measureService.getAverageWeeklyMeasure().then((value) => {
+    await measureService.getAverageWeeklyMeasure().then((value) => {
       weeklySpeedMs = value.averageSpeed,
       weeklyMeasures = value.measures
     });
 
-    measureService.getAverageMonthlyMeasure().then((value) => {
+    await measureService.getAverageMonthlyMeasure().then((value) => {
       monthlySpeedMs = value.averageSpeed,
       monthlyMeasures = value.measures
     });
+
+    setState(() {});
   }
 
   void initPositionStream() async {
