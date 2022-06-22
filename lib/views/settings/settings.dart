@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 import '../../services/api/export_service.dart';
 import '../../services/api/research_service.dart';
+import '../../services/router/navigation_service.dart';
 import '../../utils/shared_preferences_service.dart';
-
-String currentRoute = "/";
+import '../../widgets/settings/settings_button.dart';
 
 class Settings extends StatefulWidget {
 
@@ -45,7 +43,7 @@ class _SettingsState extends State<Settings> {
     showAlertDialog(BuildContext context) {
       Widget okButton = TextButton(
         child: const Text("OK"),
-        onPressed: () => executeRoute(context, "/"),
+        onPressed: () => NavigationService.executeRoute(context, "/"),
       );
       AlertDialog alert = AlertDialog(
         title: const Text("Data Exporteren..."),
@@ -137,12 +135,12 @@ class _SettingsState extends State<Settings> {
                           const ToggleSetting(
                               text: "Meten",
                               setting: "measure"),
-                          const SizedBox(height: 100),
+                          const SizedBox(height: 50),
                           SettingsButton(
-                            iconData: Icons.phone_android,
+                            iconData: Icons.devices,
                             text: "Mijn apparaten",
                             onPressed: (){
-                              executeRoute(context, "/devices");
+                              NavigationService.executeRoute(context, "/devices");
                             },
                           ),
                           const SizedBox(height: 20),
@@ -182,15 +180,5 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
-  }
-
-  void executeRoute(BuildContext context, String name) {
-    if (currentRoute != name) {
-      Navigator.pushReplacementNamed(context, name);
-    }
-    else {
-      Navigator.pop(context);
-    }
-    currentRoute = name;
   }
 }
