@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/models/verify_token.dart';
+import 'package:loopsnelheidapp/services/api/register_service.dart';
 
 import 'package:loopsnelheidapp/models/verify_token.dart';
 import 'package:loopsnelheidapp/services/api/register_service.dart';
@@ -71,7 +73,7 @@ class _RegisterVerificationState extends State<RegisterVerification> {
         }
       });
     }
-    
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       body: Container(
@@ -209,13 +211,13 @@ class _RegisterVerificationState extends State<RegisterVerification> {
                           color: app_theme.blue,
                           onPressed: () {
                             activateAccount();
-                          },
+                          }
                         ),
                         const SizedBox(height: 15),
                         FormButton(
                             text: "Ga Terug",
                             color: app_theme.white,
-                            onPressed: () => null
+                            onPressed: () => Navigator.pop(context)
                         ),
                       ],
                     ),

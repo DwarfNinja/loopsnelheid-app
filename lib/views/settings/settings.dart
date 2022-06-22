@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 import '../../services/api/export_service.dart';
-import '../../services/api/reasearch_service.dart';
+import '../../services/api/research_service.dart';
+import '../../services/router/navigation_service.dart';
 import '../../utils/shared_preferences_service.dart';
-
-String currentRoute = "/";
+import '../../widgets/settings/settings_button.dart';
 
 class Settings extends StatefulWidget {
 
@@ -42,11 +40,10 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-
     showAlertDialog(BuildContext context) {
       Widget okButton = TextButton(
         child: const Text("OK"),
-        onPressed: () => executeRoute(context, "/"),
+        onPressed: () => NavigationService.executeRoute(context, "/"),
       );
       AlertDialog alert = AlertDialog(
         title: const Text("Data Exporteren..."),
@@ -62,6 +59,7 @@ class _SettingsState extends State<Settings> {
         },
       );
     }
+
     exportData() {
 
       exportService.requestExportData();
@@ -69,7 +67,6 @@ class _SettingsState extends State<Settings> {
     }
 
     exportAllData() {
-
       isAdministrator().then((value) => {
         if (value) {
           researchService.getStatistics().then((value) => {
@@ -80,6 +77,7 @@ class _SettingsState extends State<Settings> {
         }
       });
     }
+
     exportDataButtonOnPressed(){
       exportData();
     }
@@ -110,7 +108,7 @@ class _SettingsState extends State<Settings> {
             Center(
               child: Column(
                 children: [
-                   SizedBox(height: 70),
+                   const SizedBox(height: 70),
                   Text(
                     "Instellingen",
                     style: app_theme.textTheme.headline3!
@@ -133,28 +131,42 @@ class _SettingsState extends State<Settings> {
                       padding: const EdgeInsets.only(left: 45, right: 45),
                       child: Column(
                         children:  [
-                          SizedBox(height: 50),
+                          const SizedBox(height: 50),
                           const ToggleSetting(
                               text: "Meten",
                               setting: "measure"),
-                          SizedBox(height: 20),
-                          const ToggleSetting(
-                              text: "Meldingen",
-                              setting: "notifications"),
-                          SizedBox(height: 50),
-                          SideBarButton(
-                            iconData: Icons.next_plan_rounded,
-                            text: "Exporteer Gegevens",
+                          const SizedBox(height: 50),
+                          SettingsButton(
+                            iconData: Icons.devices,
+                            text: "Mijn apparaten",
+                            onPressed: (){
+                              NavigationService.executeRoute(context, "/devices");
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          SettingsButton(
+                            iconData: Icons.output,
+                            text: "Exporteer gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
                             },
                           ),
-                          SizedBox(height: 50),
-                          SideBarButton(
-                            iconData: Icons.next_plan_rounded,
-                            text: "Export All",
-                            onPressed: (){
-                              exportAllDataButtonOnPressed();
+                          const SizedBox(height: 20),
+                          FutureBuilder<bool>(
+                            future: isAdministrator(),
+                            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                              if(snapshot.data != null && snapshot.data == true) {
+                                return
+                                  SettingsButton(
+                                    iconData: Icons.next_plan_rounded,
+                                    text: "Exporteer onderzoek",
+                                    onPressed: (){
+                                      exportAllDataButtonOnPressed();
+                                    },
+                                  );
+                              }
+
+                              return Container();
                             },
                           ),
                         ],
@@ -169,19 +181,4 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
-
-
-
-  void executeRoute(BuildContext context, String name) {
-    if (currentRoute != name) {
-      Navigator.pushReplacementNamed(context, name);
-    }
-    else {
-      Navigator.pop(context);
-    }
-    currentRoute = name;
-  }
 }
-
-
-// hier komt de save data

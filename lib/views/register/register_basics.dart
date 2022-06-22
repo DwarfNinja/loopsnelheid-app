@@ -41,7 +41,6 @@ class _RegisterBasicsState extends State<RegisterBasics> {
 
     return Scaffold(
       backgroundColor: app_theme.blue,
-      drawer: const SideBar(),
       body: Container(
         decoration: const BoxDecoration(
           gradient: app_theme.mainLinearGradient,

@@ -11,11 +11,6 @@ import '../../utils/shared_preferences_service.dart';
 class ResearchService {
   final String statisticsEndpoint = dotenv.env['BACKEND_API_URL']! + "/stats/research";
 
-
-  static double convertMsToKmh(double speed) {
-    return speed * 3.6;
-  }
-
   Future<int> getStatistics() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
