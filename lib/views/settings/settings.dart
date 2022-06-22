@@ -7,9 +7,8 @@ import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 import '../../services/api/export_service.dart';
 import '../../services/api/research_service.dart';
+import '../../services/router/navigation_service.dart';
 import '../../utils/shared_preferences_service.dart';
-
-String currentRoute = "/";
 
 class Settings extends StatefulWidget {
 
@@ -44,7 +43,7 @@ class _SettingsState extends State<Settings> {
     showAlertDialog(BuildContext context) {
       Widget okButton = TextButton(
         child: const Text("OK"),
-        onPressed: () => executeRoute(context, "/"),
+        onPressed: () => NavigationService.executeRoute(context, "/"),
       );
       AlertDialog alert = AlertDialog(
         title: const Text("Data Exporteren..."),
@@ -136,16 +135,12 @@ class _SettingsState extends State<Settings> {
                           const ToggleSetting(
                               text: "Meten",
                               setting: "measure"),
-                          const SizedBox(height: 20),
-                          const ToggleSetting(
-                              text: "Meldingen",
-                              setting: "notifications"),
                           const SizedBox(height: 50),
                           SideBarButton(
                             iconData: Icons.next_plan_rounded,
                             text: "Mijn apparaten",
                             onPressed: (){
-                              executeRoute(context, "/devices");
+                              NavigationService.executeRoute(context, "/devices");
                             },
                           ),
                           const SizedBox(height: 50),
@@ -185,15 +180,5 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
-  }
-
-  void executeRoute(BuildContext context, String name) {
-    if (currentRoute != name) {
-      Navigator.pushReplacementNamed(context, name);
-    }
-    else {
-      Navigator.pop(context);
-    }
-    currentRoute = name;
   }
 }

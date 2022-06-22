@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/services/api/register_service.dart';
-import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+import 'package:native_pdf_view/native_pdf_view.dart';
 
 import '../../models/user.dart';
 import '../../utils/shared_preferences_service.dart';
 import '../../widgets/register/checkbox_line.dart';
+import '../../widgets/register/form_button.dart';
 
 class RegisterDocuments extends StatefulWidget {
   const RegisterDocuments({Key? key}) : super(key: key);
@@ -60,7 +60,6 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
     return Scaffold(
       backgroundColor: app_theme.blue,
-      drawer: const SideBar(),
       body: Container(
         decoration: const BoxDecoration(
           gradient: app_theme.mainLinearGradient,
@@ -92,7 +91,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.all(30),
+                padding: const EdgeInsets.all(10),
                 child: Form(
                   key: formKey,
                   autovalidateMode: AutovalidateMode.disabled,
@@ -100,8 +99,8 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
                     children: [
                       Row(
                         children: const [
-                          Document(text: "Algemene Voorwaarden", image: AssetImage('assets/images/lorem_ipsum_document.png')),
-                          Document(text: "Privacy Verklaring", image: AssetImage('assets/images/lorem_ipsum_document.png'))
+                          Document(text: "Algemene Voorwaarden", documentAsset: 'assets/privacy_verklaring.pdf'),
+                          Document(text: "Privacy Verklaring", documentAsset: 'assets/privacy_verklaring.pdf')
                         ],
                       ),
                       const SizedBox(height: 25),
@@ -146,15 +145,15 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
 class Document extends StatelessWidget {
   final String text;
-  final ImageProvider image;
+  final String documentAsset;
 
-  const Document({Key? key, required this.text, required this.image})
+  const Document({Key? key, required this.text, required this.documentAsset})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 175,
+      width: 180,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,14 +161,13 @@ class Document extends StatelessWidget {
           TextButton(
             onPressed: () => showDialog(
                 context: context,
-                builder: (widget) => const ImageDialog(
-                    image:
-                        AssetImage('assets/images/lorem_ipsum_document.png'))),
+                builder: (widget) => DocumentDialog(
+                    documentAsset: documentAsset)),
             child: Container(
               width: 140,
               height: 180,
               decoration: BoxDecoration(
-                  image: DecorationImage(image: image, fit: BoxFit.cover),
+                  image: const DecorationImage(image: AssetImage('assets/images/lorem_ipsum_document.png'), fit: BoxFit.cover),
                   boxShadow: const [
                     app_theme.bottomBoxShadow,
                   ],
@@ -186,19 +184,25 @@ class Document extends StatelessWidget {
   }
 }
 
-class ImageDialog extends StatelessWidget {
-  final ImageProvider image;
+class DocumentDialog extends StatelessWidget {
+  final String documentAsset;
 
-  const ImageDialog({Key? key, required this.image}) : super(key: key);
+  const DocumentDialog({Key? key, required this.documentAsset}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final pdfController = PdfController(
+      document: PdfDocument.openAsset(documentAsset),
+    );
+
     return Dialog(
-      child: Container(
+      child: SizedBox(
         width: 500,
         height: 500,
-        decoration: BoxDecoration(
-            image: DecorationImage(image: image, fit: BoxFit.contain)),
+        child: PdfView(
+          controller: pdfController,
+          scrollDirection: Axis.vertical,
+        ),
       ),
     );
   }
