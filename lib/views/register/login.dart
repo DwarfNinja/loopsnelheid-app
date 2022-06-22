@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/utils/device_info_service.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 
@@ -34,9 +35,14 @@ class _LoginState extends State<Login> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     sharedPreferencesService.getSharedPreferenceInstance();
 
-    userAuthenticate() {
+    userAuthenticate() async {
       LoginService loginService = LoginService();
-      return loginService.authenticate(emailController.text, passwordController.text);
+      DeviceInfoService deviceInfoService = DeviceInfoService();
+
+      String deviceInfo = "";
+      await deviceInfoService.initPlatform().then((value) => deviceInfo = deviceInfoService.deviceData.toString());
+
+      return loginService.authenticate(emailController.text, passwordController.text, deviceInfo);
     }
 
     handleAuthenticateResponse(response) {
