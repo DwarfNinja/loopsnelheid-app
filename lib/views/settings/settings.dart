@@ -41,7 +41,6 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-
     showAlertDialog(BuildContext context) {
       Widget okButton = TextButton(
         child: const Text("OK"),
@@ -61,6 +60,7 @@ class _SettingsState extends State<Settings> {
         },
       );
     }
+
     exportData() {
 
       exportService.requestExportData();
@@ -68,7 +68,6 @@ class _SettingsState extends State<Settings> {
     }
 
     exportAllData() {
-
       isAdministrator().then((value) => {
         if (value) {
           researchService.getStatistics().then((value) => {
@@ -79,6 +78,7 @@ class _SettingsState extends State<Settings> {
         }
       });
     }
+
     exportDataButtonOnPressed(){
       exportData();
     }
@@ -179,8 +179,6 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-
-
   void executeRoute(BuildContext context, String name) {
     if (currentRoute != name) {
       Navigator.pushReplacementNamed(context, name);
@@ -191,6 +189,3 @@ class _SettingsState extends State<Settings> {
     currentRoute = name;
   }
 }
-
-
-// hier komt de save data
