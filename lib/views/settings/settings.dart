@@ -137,7 +137,7 @@ class _SettingsState extends State<Settings> {
                               setting: "measure"),
                           const SizedBox(height: 50),
                           SideBarButton(
-                            iconData: Icons.next_plan_rounded,
+                            iconData: Icons.devices,
                             text: "Mijn apparaten",
                             onPressed: (){
                               NavigationService.executeRoute(context, "/devices");
