@@ -90,19 +90,16 @@ class _DevicesState extends State<Devices> {
                                 columns: [
                                   DataColumn(
                                       label: Container(
-                                        width: 60,
                                         child: Text('Apparaat'),
                                       )
                                   ),
                                   DataColumn(
                                       label: Container(
-                                        width: 30,
                                         child: Text('Type'),
                                       )
                                   ),
                                   DataColumn(
                                     label: Container(
-                                      width: 50,
                                       child: Text('Actie'),
                                     ),
                                   )
@@ -114,7 +111,7 @@ class _DevicesState extends State<Devices> {
                                     return DataRow(
                                       cells: <DataCell>[
                                         DataCell(
-                                            Text('Android (${device.id})')
+                                            Text(device.os)
                                         ),
                                         DataCell(
                                             Text(device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat")

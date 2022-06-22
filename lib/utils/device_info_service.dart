@@ -6,13 +6,16 @@ import 'package:flutter/services.dart';
 class DeviceInfoService {
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   late Map<String, dynamic> deviceData;
+  String? os;
 
   Future<void> initPlatform() async {
     try {
       if (Platform.isAndroid) {
         deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+        os = "ANDROID";
       } else if (Platform.isIOS) {
         deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+        os = "IOS";
       }
     } on PlatformException {
       deviceData = <String, dynamic>{
