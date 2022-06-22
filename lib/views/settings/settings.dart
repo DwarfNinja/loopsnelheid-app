@@ -150,8 +150,8 @@ class _SettingsState extends State<Settings> {
                           ),
                           const SizedBox(height: 50),
                           FutureBuilder<bool>(
-                            future: isAdministrator(), // function where you call your api
-                            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {  // AsyncSnapshot<Your object type>
+                            future: isAdministrator(),
+                            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                               if(snapshot.data != null && snapshot.data == true) {
                                 return
                                   SideBarButton(
