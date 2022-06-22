@@ -206,15 +206,13 @@ class _RegisterVerificationState extends State<RegisterVerification> {
                         FormButton(
                           text: "Verifieer",
                           color: app_theme.blue,
-                          onPressed: () {
-                            activateAccount();
-                          },
+                          onPressed: () => activateAccount()
                         ),
                         const SizedBox(height: 15),
                         FormButton(
                             text: "Ga Terug",
                             color: app_theme.white,
-                            onPressed: () => null
+                            onPressed: () => Navigator.pop(context)
                         ),
                       ],
                     ),

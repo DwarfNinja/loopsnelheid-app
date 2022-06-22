@@ -40,8 +40,7 @@ class MeasureService {
     });
     return AverageMeasure.fromJson(jsonDecode(response.body));
   }
-
-
+  
   Future<AverageMeasure> getAverageMonthlyMeasure() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();

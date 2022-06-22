@@ -54,7 +54,6 @@ class _RegisterDetailsState extends State<RegisterDetails> {
 
     return Scaffold(
       backgroundColor: app_theme.blue,
-      drawer: const SideBar(),
       body: Container(
         decoration: const BoxDecoration(
           gradient: app_theme.mainLinearGradient,
@@ -94,12 +93,12 @@ class _RegisterDetailsState extends State<RegisterDetails> {
                   child: Column(
                     children: [
                       GenderToggle(
-                        value: isFemale,
-                        onToggle: (val) {
-                          setState(() {
-                            isFemale = val;
-                          });
-                        }),
+                          value: isFemale,
+                          onToggle: (val) {
+                            setState(() {
+                              isFemale = val;
+                            });
+                          }),
                       const SizedBox(height: 25),
                       DateInput(controller: dateOfBirthController),
                       const SizedBox(height: 20),

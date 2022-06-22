@@ -5,8 +5,6 @@ import 'package:loopsnelheidapp/widgets/dashboard/toggle_button.dart';
 
 import 'dart:async';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
@@ -34,10 +32,11 @@ class _DashboardState extends State<Dashboard> {
 
   MeasureService measureService = MeasureService();
 
-  Map<String, dynamic> weeklyMeasures = {'2022-05-25': 1.6, '2022-05-26': 2.3, '2022-05-27': 2.6, '2022-05-28': 3.1, '2022-05-29': 3.5, '2022-05-30': 4.0, '2022-05-31': 3.8};
-  Map<String, dynamic> monthlyMeasures = {'2022-05-01': 3.5, '2022-05-08': 4, '2022-05-16': 4.8, '2022-05-25': 5.6};
+  Map<String, dynamic> weeklyMeasures = {};
+  Map<String, dynamic> monthlyMeasures = {};
   double currentSpeedMs = 0;
   double dailySpeedMs = 0;
+  double dailyLimitSpeed = 0;
   double weeklySpeedMs = 0;
   double monthlySpeedMs = 0;
 
@@ -52,6 +51,25 @@ class _DashboardState extends State<Dashboard> {
       distanceFilter: 5
   );
 
+  void getAllMeasureValues() async {
+    await measureService.getAverageDailyMeasure().then((value) => {
+      dailySpeedMs = value.averageSpeed,
+      dailyLimitSpeed = value.defaultMeasureBasedOnProfile.speed,
+    });
+
+    await measureService.getAverageWeeklyMeasure().then((value) => {
+      weeklySpeedMs = value.averageSpeed,
+      weeklyMeasures = value.measures
+    });
+
+    await measureService.getAverageMonthlyMeasure().then((value) => {
+      monthlySpeedMs = value.averageSpeed,
+      monthlyMeasures = value.measures
+    });
+
+    setState(() {});
+  }
+
   void initPositionStream() async {
     Stream<Position> positionStream =
     Geolocator.getPositionStream(locationSettings: locationSettings);
@@ -64,36 +82,24 @@ class _DashboardState extends State<Dashboard> {
 
         if (measureList.length > 5) {
           measureService.storeMeasures(measureList);
-
-          measureService.getAverageDailyMeasure().then((value) => {
-            dailySpeedMs = value.averageSpeed,
-          });
-
-          measureService.getAverageWeeklyMeasure().then((value) => {
-            weeklySpeedMs = value.averageSpeed,
-            weeklyMeasures = value.measures
-          });
-
-          measureService.getAverageMonthlyMeasure().then((value) => {
-            monthlySpeedMs = value.averageSpeed,
-            monthlyMeasures = value.measures
-          });
-
         }
       });
     });
   }
 
-  Future<Object?> getSetting() async {
+  Future<Object?> getMeasureSetting() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
-    return sharedPreferencesService.getObject("measure");
+    return sharedPreferencesService.getBool("measure");
   }
 
   Future<bool> isMeasureDevice() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
+
+    final measureDeviceType = sharedPreferencesService.getString("device_type");
+    if(!measureDeviceType) return false;
 
     return sharedPreferencesService.getString("device_type") == 'MEASURE_DEVICE';
   }
@@ -103,10 +109,12 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     var measureSetting = false;
     var measurePermitted = false;
-    getSetting().then((value) {
+
+    getAllMeasureValues();
+
+    getMeasureSetting().then((value) {
       measureSetting = value as bool;
       measurePermitted = isMeasureDevice as bool;
-
       if(measureSetting && measurePermitted) {
         initPositionStream();
       }
@@ -131,11 +139,11 @@ class _DashboardState extends State<Dashboard> {
                 size: 30,
               ),
             ),
-            Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView),
+            Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView, limitSpeed: dailyLimitSpeed),
             const SizedBox(height: 15),
             const LegendText(text: "Gemiddelde loopsnelheid", color: app_theme.blue),
             const SizedBox(height: 3),
-            const LegendText(text: "Aanbevolen Loopsnelheid", color: app_theme.red),
+            LegendText(text: "Aanbevolen Loopsnelheid ($dailyLimitSpeed km/h)", color: app_theme.red),
             const SizedBox(height: 15),
             ToggleButton(
                 activeText: "Week",
@@ -186,14 +194,17 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 20),
-                    CurrentSpeedCard(speed: MeasureService.convertMsToKmh(dailySpeedMs)),
+                    CurrentSpeedCard(
+                        speed: MeasureService.convertMsToKmh(dailySpeedMs),
+                        limitSpeed: dailyLimitSpeed
+                    ),
                     const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AverageSpeedCard(header: "GEM WEEK", speed: MeasureService.convertMsToKmh(weeklySpeedMs)),
+                        AverageSpeedCard(header: "GEM. WEEK", speed: MeasureService.convertMsToKmh(weeklySpeedMs)),
                         const SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM MAAND", speed: MeasureService.convertMsToKmh(monthlySpeedMs))
+                        AverageSpeedCard(header: "GEM. MAAND", speed: MeasureService.convertMsToKmh(monthlySpeedMs))
                       ],
                     ),
                   ],

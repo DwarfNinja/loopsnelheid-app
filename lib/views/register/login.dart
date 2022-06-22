@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/utils/device_info_service.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 
@@ -34,15 +35,21 @@ class _LoginState extends State<Login> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     sharedPreferencesService.getSharedPreferenceInstance();
 
-    userAuthenticate() {
+    userAuthenticate() async {
       LoginService loginService = LoginService();
-      return loginService.authenticate(emailController.text, passwordController.text);
+      DeviceInfoService deviceInfoService = DeviceInfoService();
+
+      String deviceInfo = "";
+      await deviceInfoService.initPlatform().then((value) => deviceInfo = deviceInfoService.deviceData.toString());
+
+      return loginService.authenticate(emailController.text, passwordController.text, deviceInfoService.os!, deviceInfo);
     }
 
     handleAuthenticateResponse(response) {
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setString("token", body['access_token']);
+        sharedPreferencesService.setObject("roles", body['roles']);
         sharedPreferencesService.setString("device_session", body['device']['session']);
         sharedPreferencesService.setString("device_type", body['device']['type']);
 
@@ -52,8 +59,12 @@ class _LoginState extends State<Login> {
       }
     }
 
+    handleAuthenticateError(error) {
+      alertDialog(context);
+    }
+
     onPressedLoginButton() {
-      userAuthenticate().then((response) => handleAuthenticateResponse(response));
+      userAuthenticate().then((response) => handleAuthenticateResponse(response)).catchError((error) => handleAuthenticateError(error));
     }
 
     return Scaffold(
