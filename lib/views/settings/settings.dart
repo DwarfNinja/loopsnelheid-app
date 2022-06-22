@@ -3,12 +3,12 @@ import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 import '../../services/api/export_service.dart';
 import '../../services/api/research_service.dart';
 import '../../services/router/navigation_service.dart';
 import '../../utils/shared_preferences_service.dart';
+import '../../widgets/settings/settings_button.dart';
 
 class Settings extends StatefulWidget {
 
@@ -136,28 +136,28 @@ class _SettingsState extends State<Settings> {
                               text: "Meten",
                               setting: "measure"),
                           const SizedBox(height: 50),
-                          SideBarButton(
+                          SettingsButton(
                             iconData: Icons.devices,
                             text: "Mijn apparaten",
                             onPressed: (){
                               NavigationService.executeRoute(context, "/devices");
                             },
                           ),
-                          const SizedBox(height: 50),
-                          SideBarButton(
-                            iconData: Icons.next_plan_rounded,
+                          const SizedBox(height: 20),
+                          SettingsButton(
+                            iconData: Icons.output,
                             text: "Exporteer gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
                             },
                           ),
-                          const SizedBox(height: 50),
+                          const SizedBox(height: 20),
                           FutureBuilder<bool>(
                             future: isAdministrator(),
                             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                               if(snapshot.data != null && snapshot.data == true) {
                                 return
-                                  SideBarButton(
+                                  SettingsButton(
                                     iconData: Icons.next_plan_rounded,
                                     text: "Exporteer onderzoek",
                                     onPressed: (){
