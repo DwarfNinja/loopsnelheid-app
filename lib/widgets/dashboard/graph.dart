@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/services/api/measure_service.dart';
 
 class Graph extends StatefulWidget {
   final Map<String, dynamic>? data;
   final bool status;
+  final double limitSpeed;
 
-  const Graph({Key? key, required this.data, required this.status})
+  const Graph({Key? key, required this.data, required this.status, required this.limitSpeed})
       : super(key: key);
 
   @override
@@ -51,10 +53,10 @@ class _GraphState extends State<Graph> {
 
   List<FlSpot> createFlSpotListFromData() {
     List<FlSpot> flSpotList =  widget.data!.keys.map((e) {
-      DateTime dateTimeNow = DateTime.now();
-      DateTime dateTimeKey = DateTime.parse("$e 00:00:00.000");
-      double differenceInDays = dateTimeNow.difference(dateTimeKey).inDays.toDouble();
-      return FlSpot(getOffset() - differenceInDays, double.parse(widget.data![e].toString()));
+    DateTime dateTimeNow = DateTime.now();
+    DateTime dateTimeKey = DateTime.parse("$e 00:00:00.000");
+    double differenceInDays = dateTimeNow.difference(dateTimeKey).inDays.toDouble();
+    return FlSpot(getOffset() - differenceInDays, double.parse(MeasureService.convertMsToKmh(widget.data![e]).toString()));
     }).toList();
 
     return flSpotList;
@@ -138,7 +140,7 @@ class _GraphState extends State<Graph> {
               extraLinesOnTop: false,
               horizontalLines: [
                 HorizontalLine(
-                    y: 5, //TODO: replace with average walkingspeed data by age
+                    y: widget.limitSpeed,
                     color:
                     app_theme.red,
                     strokeWidth: 4,

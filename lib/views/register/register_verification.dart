@@ -226,7 +226,7 @@ class _RegisterVerificationState extends State<RegisterVerification> {
                         FormButton(
                             text: "Ga Terug",
                             color: app_theme.white,
-                            onPressed: () => null
+                            onPressed: () => Navigator.pop(context)
                         ),
                       ],
                     ),
