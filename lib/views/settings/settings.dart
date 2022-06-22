@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 import '../../services/api/export_service.dart';
-import '../../services/api/reasearch_service.dart';
+import '../../services/api/research_service.dart';
 import '../../utils/shared_preferences_service.dart';
 
 String currentRoute = "/";

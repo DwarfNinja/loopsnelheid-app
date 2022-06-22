@@ -137,11 +137,11 @@ class _DashboardState extends State<Dashboard> {
                 size: 30,
               ),
             ),
-            Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView),
+            Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView, limitSpeed: dailyLimitSpeed),
             const SizedBox(height: 15),
             const LegendText(text: "Gemiddelde loopsnelheid", color: app_theme.blue),
             const SizedBox(height: 3),
-            const LegendText(text: "Aanbevolen Loopsnelheid", color: app_theme.red),
+            LegendText(text: "Aanbevolen Loopsnelheid ($dailyLimitSpeed km/h)", color: app_theme.red),
             const SizedBox(height: 15),
             ToggleButton(
                 activeText: "Week",
