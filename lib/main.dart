@@ -10,6 +10,7 @@ import 'package:loopsnelheidapp/views/register/register_basics.dart';
 import 'package:loopsnelheidapp/views/register/register_details.dart';
 import 'package:loopsnelheidapp/views/register/register_documents.dart';
 import 'package:loopsnelheidapp/views/register/register_verification.dart';
+import 'package:loopsnelheidapp/views/settings/devices.dart';
 import 'package:loopsnelheidapp/views/settings/settings.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
@@ -36,6 +37,14 @@ class MyApp extends StatelessWidget {
   }
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case "/":
+        return CustomPageRoute(child: const Dashboard());
+      case "/settings":
+        return CustomPageRoute(child: const Settings());
+      case "/devices":
+        return CustomPageRoute(child: const Devices());
+
     AuthService authService = AuthService();
     return CustomPageRoute(child:
         FutureBuilder<bool>(

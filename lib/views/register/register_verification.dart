@@ -207,6 +207,18 @@ class _RegisterVerificationState extends State<RegisterVerification> {
                           text: "Verifieer",
                           color: app_theme.blue,
                           onPressed: () {
+                            formKey.currentState!.validate();
+                            if (currentText.length != 6 || currentText != "123456") { //TODO: Verify code, send to API
+                              errorController!.add(ErrorAnimationType
+                                  .shake);
+                              setState(() => hasError = true);
+                            } else {
+                              setState(
+                                    () {
+                                  hasError = false;
+                                },
+                              );
+                            }
                             activateAccount();
                           },
                         ),

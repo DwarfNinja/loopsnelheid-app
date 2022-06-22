@@ -143,11 +143,25 @@ class _SettingsState extends State<Settings> {
                           const SizedBox(height: 50),
                           SideBarButton(
                             iconData: Icons.next_plan_rounded,
-                            text: "Exporteer Gegevens",
+                            text: "Mijn apparaten",
+                            onPressed: (){
+                              executeRoute(context, "/devices");
+                            },
+                          ),
+                          SizedBox(height: 50),
+                          SideBarButton(
+                            iconData: Icons.next_plan_rounded,
+                            text: "Exporteer gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
                             },
                           ),
+                          SizedBox(height: 50),
+                          SideBarButton(
+                            iconData: Icons.next_plan_rounded,
+                            text: "Exporteer onderzoek",
+                            onPressed: (){
+                              exportAllDataButtonOnPressed();
                           const SizedBox(height: 50),
                           FutureBuilder<bool>(
                             future: isAdministrator(),
