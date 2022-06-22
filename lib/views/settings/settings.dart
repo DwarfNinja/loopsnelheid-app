@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
@@ -136,33 +137,29 @@ class _SettingsState extends State<Settings> {
                           const ToggleSetting(
                               text: "Meten",
                               setting: "measure"),
-                          const SizedBox(height: 20),
-                          const ToggleSetting(
-                              text: "Meldingen",
-                              setting: "notifications"),
-                          const SizedBox(height: 50),
-                          SideBarButton(
-                            iconData: Icons.next_plan_rounded,
+                          const SizedBox(height: 100),
+                          SettingsButton(
+                            iconData: Icons.phone_android,
                             text: "Mijn apparaten",
                             onPressed: (){
                               executeRoute(context, "/devices");
                             },
                           ),
-                          const SizedBox(height: 50),
-                          SideBarButton(
-                            iconData: Icons.next_plan_rounded,
+                          const SizedBox(height: 20),
+                          SettingsButton(
+                            iconData: Icons.output,
                             text: "Exporteer gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
                             },
                           ),
-                          const SizedBox(height: 50),
+                          const SizedBox(height: 20),
                           FutureBuilder<bool>(
                             future: isAdministrator(),
                             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                               if(snapshot.data != null && snapshot.data == true) {
                                 return
-                                  SideBarButton(
+                                  SettingsButton(
                                     iconData: Icons.next_plan_rounded,
                                     text: "Exporteer onderzoek",
                                     onPressed: (){
