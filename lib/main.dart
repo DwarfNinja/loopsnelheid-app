@@ -37,19 +37,11 @@ class MyApp extends StatelessWidget {
   }
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case "/":
-        return CustomPageRoute(child: const Dashboard());
-      case "/settings":
-        return CustomPageRoute(child: const Settings());
-      case "/devices":
-        return CustomPageRoute(child: const Devices());
-
     AuthService authService = AuthService();
     return CustomPageRoute(child:
         FutureBuilder<bool>(
-          future: authService.isUserAuthenticated(), // function where you call your api
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {  // AsyncSnapshot<Your object type>
+          future: authService.isUserAuthenticated(),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             return generateRouteBasedOnAuthentication(settings.name, snapshot.data);
           },
         ),
@@ -65,6 +57,8 @@ class MyApp extends StatelessWidget {
           return const Dashboard();
         case "/settings":
           return  const Settings();
+        case "/devices":
+          return const Devices();
         default:
           return const Dashboard();
       }
