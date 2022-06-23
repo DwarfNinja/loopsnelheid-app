@@ -145,7 +145,7 @@ class _SettingsState extends State<Settings> {
                           ),
                           const SizedBox(height: 20),
                           SettingsButton(
-                            iconData: Icons.output,
+                            iconData: Icons.cloud_download,
                             text: "Exporteer gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
@@ -158,7 +158,7 @@ class _SettingsState extends State<Settings> {
                               if(snapshot.data != null && snapshot.data == true) {
                                 return
                                   SettingsButton(
-                                    iconData: Icons.next_plan_rounded,
+                                    iconData: Icons.download,
                                     text: "Exporteer onderzoek",
                                     onPressed: (){
                                       exportAllDataButtonOnPressed();
