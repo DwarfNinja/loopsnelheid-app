@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
+
 import 'package:loopsnelheidapp/utils/device_info_service.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
@@ -8,6 +10,7 @@ import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+
 
 import '../../services/api/login_service.dart';
 import '../../utils/shared_preferences_service.dart';
@@ -45,7 +48,7 @@ class _LoginState extends State<Login> {
       return loginService.authenticate(emailController.text, passwordController.text, deviceInfoService.os!, deviceInfo);
     }
 
-    handleAuthenticateResponse(response) {
+    handleAuthenticateResponse(response) async {
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setString("token", body['access_token']);
