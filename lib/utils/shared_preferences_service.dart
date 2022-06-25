@@ -48,8 +48,4 @@ class SharedPreferencesService {
   setInteger(String name, int value) async {
     sharedPreferences.setInt(name, value);
   }
-
-  clearPreferences() {
-    sharedPreferences.clear();
-  }
 }

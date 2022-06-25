@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/models/device.dart';
 import 'package:loopsnelheidapp/services/api/device_service.dart';
-import 'package:loopsnelheidapp/utils/shared_preferences_service.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
@@ -102,13 +101,11 @@ class _DevicesState extends State<Devices> {
                                 rows: List.generate(
                                   snapshot.data!.length,
                                   (index) {
-                                    SharedPreferencesService service = SharedPreferencesService();
-                                    service.getSharedPreferenceInstance();
                                     var device = snapshot.data![index];
                                     return DataRow(
                                       cells: <DataCell>[
                                         DataCell(
-                                            Text(device.os + device.session == service.getString("device_session") ? "(*)" : "")
+                                            Text(device.os)
                                         ),
                                         DataCell(
                                             Text(device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat")

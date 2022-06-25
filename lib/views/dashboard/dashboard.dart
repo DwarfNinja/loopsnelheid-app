@@ -16,7 +16,7 @@ import '../../utils/shared_preferences_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_background/flutter_background.dart';
+
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -104,26 +104,9 @@ class _DashboardState extends State<Dashboard> {
     return sharedPreferencesService.getString("device_type") == 'MEASURE_DEVICE';
   }
 
-  loadBackgroundProcess() async {
-    const androidConfig = FlutterBackgroundAndroidConfig(
-      notificationTitle: "Loopsnelheid",
-      notificationText: "We houden momenteel je loopsnelheid in de gaten.",
-      notificationImportance: AndroidNotificationImportance.Default,
-      notificationIcon: AndroidResource(name: 'background_icon', defType: 'drawable'), // Default is ic_launcher from folder mipmap
-    );
-
-    bool initialized = await FlutterBackground.initialize(androidConfig: androidConfig);
-    bool hasPermissions = await FlutterBackground.hasPermissions;
-
-    if (hasPermissions && initialized) {
-      await FlutterBackground.enableBackgroundExecution();
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    loadBackgroundProcess();
     var measureSetting = false;
     var measurePermitted = false;
 

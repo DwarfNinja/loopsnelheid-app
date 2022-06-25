@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_background/flutter_background.dart';
 
 import '../../utils/shared_preferences_service.dart';
 
@@ -39,8 +38,9 @@ class LoginService {
         });
 
     if (response.statusCode == 200) {
-      sharedPreferencesService.clearPreferences();
-      await FlutterBackground.disableBackgroundExecution();
+      sharedPreferencesService.removeString("token");
+      sharedPreferencesService.removeString("device_session");
+      sharedPreferencesService.removeString("device_type");
     }
 
     return response.statusCode == 200;
