@@ -24,7 +24,7 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
 
   @override
   Widget build(BuildContext context) {
-    final isGoodSpeed = widget.speed <= widget.limitSpeed;
+    final isGoodSpeed = widget.speed >= widget.limitSpeed;
     final colorGradient = isGoodSpeed ?  app_theme.greenLightLinearGradient : app_theme.yellowRedLinearGradient;
 
     return Container(
