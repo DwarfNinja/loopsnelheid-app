@@ -6,9 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ToggleSetting extends StatefulWidget {
 
-  const ToggleSetting({Key? key, required this.text, required this.setting}) : super(key: key);
+  const ToggleSetting({Key? key, required this.text, required this.setting, this.onToggle}) : super(key: key);
   final String text;
   final String setting;
+  final Function(bool)? onToggle;
 
   @override
   State<ToggleSetting> createState() => _ToggleSettingState();
@@ -35,6 +36,7 @@ class _ToggleSettingState extends State<ToggleSetting> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       prefs.setBool(widget.setting, status);
+      widget.onToggle!(status);
     });
   }
 

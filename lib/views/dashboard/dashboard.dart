@@ -1,9 +1,8 @@
+import 'package:loopsnelheidapp/services/location/location_service.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/graph.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/legend_text.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/toggle_button.dart';
-
-import 'dart:async';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -12,7 +11,7 @@ import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
 import 'package:loopsnelheidapp/models/measure.dart';
-import '../../utils/shared_preferences_service.dart';
+import '../../services/setting/setting_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -30,8 +29,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
-  MeasureService measureService = MeasureService();
-
   Map<String, dynamic> weeklyMeasures = {};
   Map<String, dynamic> monthlyMeasures = {};
   double currentSpeedMs = 0;
@@ -40,68 +37,25 @@ class _DashboardState extends State<Dashboard> {
   double weeklySpeedMs = 0;
   double monthlySpeedMs = 0;
 
-  List<Measure> measureList = [];
-
-  var settings = {};
-
   bool weekGraphView = true;
 
-  static const LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.best,
-      distanceFilter: 5
-  );
-
   void getAllMeasureValues() async {
-    await measureService.getAverageDailyMeasure().then((value) => {
+    await MeasureService.getAverageDailyMeasure().then((value) => {
       dailySpeedMs = value.averageSpeed,
       dailyLimitSpeed = value.defaultMeasureBasedOnProfile.speed,
     });
 
-    await measureService.getAverageWeeklyMeasure().then((value) => {
+    await MeasureService.getAverageWeeklyMeasure().then((value) => {
       weeklySpeedMs = value.averageSpeed,
       weeklyMeasures = value.measures
     });
 
-    await measureService.getAverageMonthlyMeasure().then((value) => {
+    await MeasureService.getAverageMonthlyMeasure().then((value) => {
       monthlySpeedMs = value.averageSpeed,
       monthlyMeasures = value.measures
     });
 
     setState(() {});
-  }
-
-  void initPositionStream() async {
-    Stream<Position> positionStream =
-    Geolocator.getPositionStream(locationSettings: locationSettings);
-    positionStream.listen((Position? position) {
-      setState(() {
-        currentSpeedMs = position?.speed ?? 0.0;
-
-        Measure measure = Measure(DateTime.now().toIso8601String(), currentSpeedMs);
-        measureList.add(measure);
-
-        if (measureList.length > 5) {
-          measureService.storeMeasures(measureList);
-        }
-      });
-    });
-  }
-
-  Future<Object?> getMeasureSetting() async {
-    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
-    await sharedPreferencesService.getSharedPreferenceInstance();
-
-    return sharedPreferencesService.getBool("measure");
-  }
-
-  Future<bool> isMeasureDevice() async {
-    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
-    await sharedPreferencesService.getSharedPreferenceInstance();
-
-    final measureDeviceType = sharedPreferencesService.getString("device_type");
-    if(!measureDeviceType) return false;
-
-    return sharedPreferencesService.getString("device_type") == 'MEASURE_DEVICE';
   }
 
   @override
@@ -112,11 +66,11 @@ class _DashboardState extends State<Dashboard> {
 
     getAllMeasureValues();
 
-    getMeasureSetting().then((value) {
+    SettingService.getMeasureSetting().then((value) async {
       measureSetting = value as bool;
-      measurePermitted = isMeasureDevice as bool;
+      measurePermitted = await SettingService.isMeasureDevice();
       if(measureSetting && measurePermitted) {
-        initPositionStream();
+        LocationService.startLocationService();
       }
     });
   }
