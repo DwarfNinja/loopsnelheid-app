@@ -58,7 +58,7 @@ class _GraphState extends State<Graph> {
     DateTime dateTimeNow = DateTime.now();
     DateTime dateTimeKey = DateTime.parse("$e 00:00:00.000");
     double differenceInDays = dateTimeNow.difference(dateTimeKey).inDays.toDouble();
-    return FlSpot(getOffset() - differenceInDays, double.parse(MeasureService.convertMsToKmh(widget.data![e]).toString()));
+    return FlSpot(getOffset() - differenceInDays, double.parse(widget.data![e].toString()));
     }).toList();
 
     return flSpotList;
