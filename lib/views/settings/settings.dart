@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
+
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
+import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 
-import '../../services/api/export_service.dart';
-import '../../services/api/research_service.dart';
-import '../../services/router/navigation_service.dart';
-import '../../utils/shared_preferences_service.dart';
-import '../../widgets/settings/settings_button.dart';
+import 'package:loopsnelheidapp/services/location/location_service.dart';
+import 'package:loopsnelheidapp/services/router/navigation_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/services/api/export_service.dart';
+import 'package:loopsnelheidapp/services/api/research_service.dart';
+
+
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class Settings extends StatefulWidget {
 
@@ -96,14 +100,21 @@ class _SettingsState extends State<Settings> {
         ),
         child: Stack(
           children: [
-            IconButton(
-              padding: const EdgeInsets.all(20),
-              icon: const Icon(Icons.menu),
-              color: Colors.white,
-              iconSize: 38,
-              onPressed: () {
-                _globalKey.currentState?.openDrawer();
-              },
+            Column(
+              children: [
+                IconButton(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  icon: const Icon(Icons.menu),
+                  color: Colors.white,
+                  iconSize: 38,
+                  onPressed: () {
+                    _globalKey.currentState?.openDrawer();
+                  },
+                ),
+                Text("Menu",
+                    style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
+                ),
+              ],
             ),
             Center(
               child: Column(
@@ -114,10 +125,16 @@ class _SettingsState extends State<Settings> {
                     style: app_theme.textTheme.headline3!
                         .copyWith(color: Colors.white),
                   ),
+                  const SizedBox(height: 15),
+                  const Icon(
+                    Icons.settings,
+                    color: Colors.white,
+                    size: 50,
+                  ),
                   const SizedBox(height: 20),
                   Container (
                     width: 375,
-                    height: 700,
+                    height: 645,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(
@@ -132,9 +149,12 @@ class _SettingsState extends State<Settings> {
                       child: Column(
                         children:  [
                           const SizedBox(height: 50),
-                          const ToggleSetting(
+                          ToggleSetting(
                               text: "Meten",
-                              setting: "measure"),
+                              setting: "measure",
+                              onToggle: (bool status) {
+                               status ? LocationService.startLocationService() : LocationService.stopLocationService();
+                              }),
                           const SizedBox(height: 50),
                           SettingsButton(
                             iconData: Icons.devices,
@@ -145,7 +165,7 @@ class _SettingsState extends State<Settings> {
                           ),
                           const SizedBox(height: 20),
                           SettingsButton(
-                            iconData: Icons.output,
+                            iconData: Icons.cloud_download,
                             text: "Exporteer gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
@@ -158,7 +178,7 @@ class _SettingsState extends State<Settings> {
                               if(snapshot.data != null && snapshot.data == true) {
                                 return
                                   SettingsButton(
-                                    iconData: Icons.next_plan_rounded,
+                                    iconData: Icons.download,
                                     text: "Exporteer onderzoek",
                                     onPressed: (){
                                       exportAllDataButtonOnPressed();

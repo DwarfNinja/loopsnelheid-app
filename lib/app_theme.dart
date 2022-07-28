@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
+import 'package:google_fonts/google_fonts.dart';
 
 const Color white = Color(0xFFFFFFFF);
 const Color black = Color(0xFF000000);
@@ -57,7 +57,7 @@ final TextTheme textTheme = TextTheme(
       color: Colors.black,
       fontWeight: FontWeight.w600),
   headline3: GoogleFonts.montserrat(
-      fontSize: 40,
+      fontSize: 38,
       color: Colors.black,
       fontWeight: FontWeight.w600),
   headline4: GoogleFonts.montserrat(

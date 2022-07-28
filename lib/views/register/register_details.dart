@@ -5,12 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 
-import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 import '../../models/user.dart';
-import '../../utils/shared_preferences_service.dart';
+import '../../services/shared_preferences_service.dart';
 import '../../widgets/register/date_input.dart';
 
 class RegisterDetails extends StatefulWidget {

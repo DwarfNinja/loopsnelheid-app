@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/services/api/login_service.dart';
+
 import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
-import '../../services/router/navigation_service.dart';
+import 'package:loopsnelheidapp/services/api/login_service.dart';
+import 'package:loopsnelheidapp/services/router/navigation_service.dart';
+
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class SideBar extends StatefulWidget {
 

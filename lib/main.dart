@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:loopsnelheidapp/custom_page_route.dart';
-import 'package:loopsnelheidapp/services/api/auth_service.dart';
+
 import 'package:loopsnelheidapp/views/dashboard/dashboard.dart';
 import 'package:loopsnelheidapp/views/register/login.dart';
 import 'package:loopsnelheidapp/views/register/register_basics.dart';
@@ -13,9 +14,9 @@ import 'package:loopsnelheidapp/views/register/register_verification.dart';
 import 'package:loopsnelheidapp/views/settings/devices.dart';
 import 'package:loopsnelheidapp/views/settings/settings.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/services/api/auth_service.dart';
 
-import 'views/register/login.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 void main() async {
   await dotenv.load();
