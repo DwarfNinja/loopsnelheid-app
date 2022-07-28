@@ -6,7 +6,7 @@ import 'package:loopsnelheidapp/services/api/register_service.dart';
 import 'package:native_pdf_view/native_pdf_view.dart';
 
 import '../../models/user.dart';
-import '../../utils/shared_preferences_service.dart';
+import '../../services/shared_preferences_service.dart';
 import '../../widgets/register/checkbox_line.dart';
 import '../../widgets/register/form_button.dart';
 

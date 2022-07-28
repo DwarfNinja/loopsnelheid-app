@@ -7,7 +7,7 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import '../../services/api/export_service.dart';
 import '../../services/api/research_service.dart';
 import '../../services/router/navigation_service.dart';
-import '../../utils/shared_preferences_service.dart';
+import '../../services/shared_preferences_service.dart';
 import '../../widgets/settings/settings_button.dart';
 
 class Settings extends StatefulWidget {

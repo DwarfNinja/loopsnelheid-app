@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopsnelheidapp/models/average_measure.dart';
 
-import '../../utils/shared_preferences_service.dart';
+import '../shared_preferences_service.dart';
 
 
 class ResearchService {

@@ -10,7 +10,7 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 
-import '../../utils/shared_preferences_service.dart';
+import '../../services/shared_preferences_service.dart';
 
 class RegisterVerification extends StatefulWidget {
 

@@ -12,7 +12,7 @@ import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
 import 'package:loopsnelheidapp/models/measure.dart';
-import '../../utils/shared_preferences_service.dart';
+import '../../services/shared_preferences_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
