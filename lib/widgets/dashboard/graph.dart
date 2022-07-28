@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 
-import 'package:loopsnelheidapp/services/api/measure_service.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class Graph extends StatefulWidget {
@@ -29,10 +27,10 @@ class _GraphState extends State<Graph> {
     "Friday": "Vr",
     "Saturday": "Za",
     "Sunday": "Zo"
-};
+  };
 
   double getOffset() {
-    return widget.status ? 6 : 31;
+    return widget.status ? 6 : 32;
   }
 
   DateTime getDateTimeOfFlSpot(double x) {
@@ -41,10 +39,14 @@ class _GraphState extends State<Graph> {
     return dateTimeOfFlSpot;
   }
 
+  String reverseXGraphTitle(String xTitle) {
+    return (int.parse(xTitle) - getOffset()).abs().toStringAsFixed(0);
+  }
+
   Widget getXGraphTitle(double x, TitleMeta meta) {
     DateTime dateTimeOfFlSpot = getDateTimeOfFlSpot(x);
     final String formatter = DateFormat('EEEE').format(dateTimeOfFlSpot);
-    return Text(widget.status ? enToNlDays[formatter] ?? 'NaN' : meta.formattedValue);
+    return Text(widget.status ? enToNlDays[formatter] ?? 'NaN' : reverseXGraphTitle(meta.formattedValue));
   }
 
   String formatDateFlSpot(double x, double y) {
