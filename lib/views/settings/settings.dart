@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/services/location/location_service.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
@@ -132,9 +133,12 @@ class _SettingsState extends State<Settings> {
                       child: Column(
                         children:  [
                           const SizedBox(height: 50),
-                          const ToggleSetting(
+                          ToggleSetting(
                               text: "Meten",
-                              setting: "measure"),
+                              setting: "measure",
+                              onToggle: (bool status) {
+                               status ? LocationService.startLocationService() : LocationService.stopLocationService();
+                              }),
                           const SizedBox(height: 50),
                           SettingsButton(
                             iconData: Icons.devices,

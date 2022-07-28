@@ -38,9 +38,7 @@ class LoginService {
         });
 
     if (response.statusCode == 200) {
-      sharedPreferencesService.removeString("token");
-      sharedPreferencesService.removeString("device_session");
-      sharedPreferencesService.removeString("device_type");
+      sharedPreferencesService.clearPreferences();
     }
 
     return response.statusCode == 200;
