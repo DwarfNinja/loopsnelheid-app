@@ -28,27 +28,27 @@ class _DashboardState extends State<Dashboard> {
 
   Map<String, dynamic> weeklyMeasures = {};
   Map<String, dynamic> monthlyMeasures = {};
-  double currentSpeedMs = 0;
-  double dailySpeedMs = 0;
-  double dailyLimitSpeed = 0;
-  double weeklySpeedMs = 0;
-  double monthlySpeedMs = 0;
+  double currentSpeed = 0;
+  double dailySpeed = 0;
+  double dailyRecSpeed = 0;
+  double weeklySpeed = 0;
+  double monthlySpeed = 0;
 
   bool weekGraphView = true;
 
   void getAllMeasureValues() async {
     await MeasureService.getAverageDailyMeasure().then((value) => {
-      dailySpeedMs = value.averageSpeed,
-      dailyLimitSpeed = value.defaultMeasureBasedOnProfile.speed,
+      dailySpeed = value.averageSpeed,
+      dailyRecSpeed = value.defaultMeasureBasedOnProfile.speed,
     });
 
     await MeasureService.getAverageWeeklyMeasure().then((value) => {
-      weeklySpeedMs = value.averageSpeed,
+      weeklySpeed = value.averageSpeed,
       weeklyMeasures = value.measures
     });
 
     await MeasureService.getAverageMonthlyMeasure().then((value) => {
-      monthlySpeedMs = value.averageSpeed,
+      monthlySpeed = value.averageSpeed,
       monthlyMeasures = value.measures
     });
 
@@ -80,7 +80,7 @@ class _DashboardState extends State<Dashboard> {
       drawer: const SideBar(),
       body: SlidingUpPanel(
         minHeight: 125,
-        maxHeight: 500,
+        maxHeight: 550,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -100,12 +100,12 @@ class _DashboardState extends State<Dashboard> {
             Text("Open",
                 style: app_theme.textTheme.bodyText2),
             const SizedBox(height: 7),
-            Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView, limitSpeed: dailyLimitSpeed),
+            Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView, limitSpeed: dailyRecSpeed),
             const SizedBox(height: 15),
             const LegendText(text: "Gemiddelde loopsnelheid", color: app_theme.blue),
             const SizedBox(height: 3),
-            LegendText(text: "Aanbevolen Loopsnelheid ($dailyLimitSpeed km/h)", color: app_theme.red),
-            const SizedBox(height: 15),
+            LegendText(text: "Aanbevolen Loopsnelheid ($dailyRecSpeed km/h)", color: app_theme.red),
+            const SizedBox(height: 20),
             ToggleButton(
                 activeText: "Week",
                 inactiveText: "Maand",
@@ -156,16 +156,16 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     const SizedBox(height: 25),
                     CurrentSpeedCard(
-                        speed: MeasureService.convertMsToKmh(dailySpeedMs),
-                        limitSpeed: dailyLimitSpeed
+                        speed: dailySpeed,
+                        recSpeed: dailyRecSpeed
                     ),
                     const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AverageSpeedCard(header: "GEM. WEEK", speed: MeasureService.convertMsToKmh(weeklySpeedMs)),
+                        AverageSpeedCard(header: "GEM. WEEK", speed: weeklySpeed),
                         const SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM. MAAND", speed: MeasureService.convertMsToKmh(monthlySpeedMs))
+                        AverageSpeedCard(header: "GEM. MAAND", speed: monthlySpeed)
                       ],
                     ),
                   ],

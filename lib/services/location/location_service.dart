@@ -79,12 +79,12 @@ class LocationService {
       Geolocator.getPositionStream(locationSettings: locationSettings);
       positionStream.listen((Position? position) {
         var speed = position?.speed ?? 0.0;
-
-        Measure measure = Measure(DateTime.now().toIso8601String(), speed);
+        var convertedSpeed = MeasureService.convertMsToKmh(speed);
+        Measure measure = Measure(DateTime.now().toIso8601String(), convertedSpeed);
         measureList.add(measure);
 
-        if(latestSpeedSend == speed) return;
-        latestSpeedSend = speed;
+        if(latestSpeedSend == convertedSpeed) return;
+        latestSpeedSend = convertedSpeed;
 
         MeasureService.storeMeasures(measureList);
       });
