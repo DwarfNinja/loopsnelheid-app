@@ -57,7 +57,7 @@ final TextTheme textTheme = TextTheme(
       color: Colors.black,
       fontWeight: FontWeight.w600),
   headline3: GoogleFonts.montserrat(
-      fontSize: 40,
+      fontSize: 38,
       color: Colors.black,
       fontWeight: FontWeight.w600),
   headline4: GoogleFonts.montserrat(

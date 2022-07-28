@@ -100,14 +100,21 @@ class _SettingsState extends State<Settings> {
         ),
         child: Stack(
           children: [
-            IconButton(
-              padding: const EdgeInsets.all(20),
-              icon: const Icon(Icons.menu),
-              color: Colors.white,
-              iconSize: 38,
-              onPressed: () {
-                _globalKey.currentState?.openDrawer();
-              },
+            Column(
+              children: [
+                IconButton(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  icon: const Icon(Icons.menu),
+                  color: Colors.white,
+                  iconSize: 38,
+                  onPressed: () {
+                    _globalKey.currentState?.openDrawer();
+                  },
+                ),
+                Text("Menu",
+                    style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
+                ),
+              ],
             ),
             Center(
               child: Column(
@@ -118,10 +125,16 @@ class _SettingsState extends State<Settings> {
                     style: app_theme.textTheme.headline3!
                         .copyWith(color: Colors.white),
                   ),
+                  const SizedBox(height: 15),
+                  const Icon(
+                    Icons.settings,
+                    color: Colors.white,
+                    size: 50,
+                  ),
                   const SizedBox(height: 20),
                   Container (
                     width: 375,
-                    height: 700,
+                    height: 645,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(

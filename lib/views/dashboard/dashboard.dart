@@ -79,10 +79,17 @@ class _DashboardState extends State<Dashboard> {
       key: _globalKey,
       drawer: const SideBar(),
       body: SlidingUpPanel(
+        minHeight: 125,
+        maxHeight: 500,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        margin: const EdgeInsets.only(left: 20, right: 20),
         panel: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
             const RotatedBox(
               quarterTurns: 1,
               child: Icon(
@@ -90,6 +97,9 @@ class _DashboardState extends State<Dashboard> {
                 size: 30,
               ),
             ),
+            Text("Open",
+                style: app_theme.textTheme.bodyText2),
+            const SizedBox(height: 7),
             Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView, limitSpeed: dailyLimitSpeed),
             const SizedBox(height: 15),
             const LegendText(text: "Gemiddelde loopsnelheid", color: app_theme.blue),
@@ -107,49 +117,49 @@ class _DashboardState extends State<Dashboard> {
                 value: weekGraphView)
           ],
         ),
-        minHeight: 100,
-        maxHeight: 500,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-        margin: const EdgeInsets.only(left: 20, right: 20),
         body: Container(
           decoration: const BoxDecoration(
             gradient: app_theme.mainLinearGradient,
           ),
           child: Stack(
             children: [
-              IconButton(
-                padding: const EdgeInsets.all(20),
-                icon: const Icon(Icons.menu),
-                color: Colors.white,
-                iconSize: 38,
-                onPressed: () {
-                  _globalKey.currentState?.openDrawer();
-                },
+              Column(
+                  children: [
+                    IconButton(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      icon: const Icon(Icons.menu),
+                      color: Colors.white,
+                      iconSize: 38,
+                      onPressed: () {
+                        _globalKey.currentState?.openDrawer();
+                        },
+                    ),
+                    Text("Menu",
+                        style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
+                    ),
+                  ],
               ),
               Center(
                 child: Column(
                   children: [
                     const SizedBox(height: 70),
                     Text(
-                      "Loopsnelheid",
+                      "Dashboard",
                       style: app_theme.textTheme.headline3!
                           .copyWith(color: Colors.white),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     const Icon(
                       Icons.directions_walk,
                       color: Colors.white,
                       size: 60,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 25),
                     CurrentSpeedCard(
                         speed: MeasureService.convertMsToKmh(dailySpeedMs),
                         limitSpeed: dailyLimitSpeed
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
