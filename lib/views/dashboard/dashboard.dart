@@ -105,7 +105,7 @@ class _DashboardState extends State<Dashboard> {
             const LegendText(text: "Gemiddelde loopsnelheid", color: app_theme.blue),
             const SizedBox(height: 3),
             LegendText(text: "Aanbevolen Loopsnelheid ($dailyRecSpeed km/h)", color: app_theme.red),
-            const SizedBox(height: 20),
+            const SizedBox(height: 22),
             ToggleButton(
                 activeText: "Week",
                 inactiveText: "Maand",
