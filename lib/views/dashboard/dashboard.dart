@@ -1,19 +1,18 @@
-import 'package:loopsnelheidapp/services/location/location_service.dart';
-import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
-import 'package:loopsnelheidapp/widgets/dashboard/graph.dart';
-import 'package:loopsnelheidapp/widgets/dashboard/legend_text.dart';
-import 'package:loopsnelheidapp/widgets/dashboard/toggle_button.dart';
+import 'package:flutter/material.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+
+import 'package:loopsnelheidapp/widgets/dashboard/graph.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/legend_text.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/toggle_button.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
-import '../../services/setting/setting_service.dart';
-
-import 'package:flutter/material.dart';
-
+import 'package:loopsnelheidapp/services/setting/setting_service.dart';
+import 'package:loopsnelheidapp/services/location/location_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 

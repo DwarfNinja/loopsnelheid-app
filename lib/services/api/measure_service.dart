@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:loopsnelheidapp/models/average_measure.dart';
-import 'package:loopsnelheidapp/services/env_service.dart';
 
-import '../../models/measure.dart';
-import '../shared_preferences_service.dart';
+import 'package:loopsnelheidapp/models/average_measure.dart';
+import 'package:loopsnelheidapp/models/measure.dart';
+
+import 'package:loopsnelheidapp/services/env_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 class MeasureService {
   static final String averageDailyEndpoint = EnvService().loadBackendApiFromEnvFile() + "/stats/today";

@@ -7,8 +7,9 @@ import 'package:flutter_background_service_android/flutter_background_service_an
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../../models/measure.dart';
-import '../api/measure_service.dart';
+import 'package:loopsnelheidapp/models/measure.dart';
+
+import 'package:loopsnelheidapp/services/api/measure_service.dart';
 
 class LocationService {
   static List<Measure> measureList = [];

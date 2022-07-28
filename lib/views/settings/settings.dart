@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/services/location/location_service.dart';
-import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
+
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
+import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 
-import '../../services/api/export_service.dart';
-import '../../services/api/research_service.dart';
-import '../../services/router/navigation_service.dart';
-import '../../services/shared_preferences_service.dart';
-import '../../widgets/settings/settings_button.dart';
+import 'package:loopsnelheidapp/services/location/location_service.dart';
+import 'package:loopsnelheidapp/services/router/navigation_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/services/api/export_service.dart';
+import 'package:loopsnelheidapp/services/api/research_service.dart';
+
+
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class Settings extends StatefulWidget {
 

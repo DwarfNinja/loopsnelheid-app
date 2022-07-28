@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
+
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class Graph extends StatefulWidget {
   final Map<String, dynamic>? data;
