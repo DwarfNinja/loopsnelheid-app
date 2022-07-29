@@ -35,6 +35,10 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     sharedPreferencesService.getSharedPreferenceInstance();
 
+    GlobalKey<CheckboxLineState> termsAndConditionsKey = GlobalKey();
+    GlobalKey<CheckboxLineState> privacyStatementKey = GlobalKey();
+    GlobalKey<CheckboxLineState> olderThanSixteenKey = GlobalKey();
+
     handleRegisterResponse(response) {
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body!);
@@ -54,9 +58,13 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
       registerService.registerUser(user).then((response) => handleRegisterResponse(response));
     }
 
+    bool agreedToAllField() {
+      return (termsAndConditions && privacyStatement && olderThanSixteen);
+    }
+
     onPressedNextButton() {
       setState(() => submitted = true);
-      if (formKey.currentState!.validate()) {
+      if (agreedToAllField() && formKey.currentState!.validate()) {
         sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
         Navigator.pushNamed(context, "/register_verification");
       }
@@ -109,21 +117,27 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
                       ),
                       const SizedBox(height: 25),
                       CheckboxLine(
-                        text: "Ik ga akkoord met de Algemene Voorwaarden",
-                        value: termsAndConditions,
-                        onChanged: (bool? value) => setState(() => termsAndConditions = !termsAndConditions),
+                          key: termsAndConditionsKey,
+                          text: "Ik ga akkoord met de Algemene Voorwaarden",
+                          value: termsAndConditions,
+                          onChanged: (bool? value) => setState(() => termsAndConditions = !termsAndConditions),
+                          submitted: submitted
                       ),
                       const SizedBox(height: 15),
                       CheckboxLine(
-                        text: "Ik ga akkoord met de Privacy Verklaring",
-                        value: privacyStatement,
-                        onChanged: (bool? value) => setState(() => privacyStatement = !privacyStatement),
+                          key: privacyStatementKey,
+                          text: "Ik ga akkoord met de Privacy Verklaring",
+                          value: privacyStatement,
+                          onChanged: (bool? value) => setState(() => privacyStatement = !privacyStatement),
+                          submitted: submitted
                       ),
                       const SizedBox(height: 15),
                       CheckboxLine(
-                        text: "Ik ben ouder dan 16 jaar of heb toestemming \n van een ouder/voogd",
-                        value: olderThanSixteen,
-                        onChanged: (bool? value) => setState(() => olderThanSixteen = !olderThanSixteen),
+                          key: olderThanSixteenKey,
+                          text: "Ik ben ouder dan 16 jaar of heb toestemming \n van een ouder/voogd",
+                          value: olderThanSixteen,
+                          onChanged: (bool? value) => setState(() => olderThanSixteen = !olderThanSixteen),
+                          submitted: submitted
                       ),
                       const SizedBox(height: 25),
                       FormButton(

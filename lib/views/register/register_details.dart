@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
+
+import 'package:loopsnelheidapp/models/user.dart';
+
+import 'package:loopsnelheidapp/widgets/register/date_input.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
-import '../../models/user.dart';
-import '../../services/shared_preferences_service.dart';
-import '../../widgets/register/date_input.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class RegisterDetails extends StatefulWidget {
 
