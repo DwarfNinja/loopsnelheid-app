@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
+
+import 'package:loopsnelheidapp/models/user.dart';
+
+import 'package:loopsnelheidapp/widgets/register/date_input.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 
-import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-
-import '../../models/user.dart';
-import '../../utils/shared_preferences_service.dart';
-import '../../widgets/register/date_input.dart';
 
 class RegisterDetails extends StatefulWidget {
 
@@ -54,7 +55,6 @@ class _RegisterDetailsState extends State<RegisterDetails> {
 
     return Scaffold(
       backgroundColor: app_theme.blue,
-      drawer: const SideBar(),
       body: Container(
         decoration: const BoxDecoration(
           gradient: app_theme.mainLinearGradient,

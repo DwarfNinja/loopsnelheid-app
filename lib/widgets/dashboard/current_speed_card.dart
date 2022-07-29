@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class CurrentSpeedCard extends StatefulWidget {
   final double speed;
-  final double limitSpeed;
+  final double recSpeed;
 
-  const CurrentSpeedCard({Key? key, required this.speed, required this.limitSpeed})
+  const CurrentSpeedCard({Key? key, required this.speed, required this.recSpeed})
       : super(key: key);
 
   @override
@@ -24,8 +25,8 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
 
   @override
   Widget build(BuildContext context) {
-    final isGoodSpeed = widget.speed <= widget.limitSpeed;
-    final colorGradient = isGoodSpeed ?  app_theme.greenLightLinearGradient : app_theme.yellowRedLinearGradient;
+    final aboveRecSpeed = widget.speed >= widget.recSpeed;
+    final colorGradient = aboveRecSpeed ? app_theme.greenLightLinearGradient : app_theme.yellowRedLinearGradient;
 
     return Container(
       width: 300,

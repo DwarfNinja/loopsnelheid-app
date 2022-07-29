@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/services/api/login_service.dart';
+
 import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
-String currentRoute = "/";
+import 'package:loopsnelheidapp/services/api/login_service.dart';
+import 'package:loopsnelheidapp/services/router/navigation_service.dart';
+
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class SideBar extends StatefulWidget {
 
@@ -34,7 +36,7 @@ class _SideBarState extends State<SideBar> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container( //TODO: To be replaced for app icon
+                      Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: app_theme.blue
@@ -59,31 +61,19 @@ class _SideBarState extends State<SideBar> {
                   SideBarButton(
                     iconData: Icons.home,
                     text: "Dashboard",
-                    onPressed: () => executeRoute(context, "/"),
+                    onPressed: () => NavigationService.executeRoute(context, "/"),
                   ),
                   const SizedBox(height: 50),
                   SideBarButton(
                     iconData: Icons.settings,
                     text: "Instellingen",
-                    onPressed: () => executeRoute(context, "/settings"),
-                  ),
-                  const SizedBox(height: 50),
-                  SideBarButton(
-                    iconData: Icons.support,
-                    text: "Help",
-                    onPressed: () => executeRoute(context, "/login"),
-                  ),
-                  const SizedBox(height: 50),
-                  SideBarButton(
-                    iconData: Icons.info,
-                    text: "Over",
-                    onPressed: () => executeRoute(context, "/login"),
+                    onPressed: () => NavigationService.executeRoute(context, "/settings"),
                   ),
                   const SizedBox(height: 50),
                   SideBarButton(
                     iconData: Icons.logout,
                     text: "Afmelden",
-                    onPressed: () => logoutUser(),
+                    onPressed: () => logoutUser(context),
                   ),
                 ],
               ),
@@ -94,22 +84,12 @@ class _SideBarState extends State<SideBar> {
     );
   }
 
-  void executeRoute(BuildContext context, String name) {
-    if (currentRoute != name) {
-      Navigator.pushReplacementNamed(context, name);
-    }
-    else {
-      Navigator.pop(context);
-    }
-    currentRoute = name;
-  }
-
-  void logoutUser()
+  void logoutUser(BuildContext context)
   {
     LoginService loginService = LoginService();
     loginService.logout().then((value) => {
       if (value) {
-        executeRoute(context, "/login")
+        NavigationService.executeRoute(context, "/login")
       }
     });
   }

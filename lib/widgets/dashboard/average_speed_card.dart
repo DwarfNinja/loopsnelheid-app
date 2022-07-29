@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class AverageSpeedCard extends StatefulWidget {
   final String header;

@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/models/verify_token.dart';
-import 'package:loopsnelheidapp/services/api/register_service.dart';
 
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/models/verify_token.dart';
 
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 
-import '../../utils/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/services/api/register_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class RegisterVerification extends StatefulWidget {
 
@@ -207,20 +208,8 @@ class _RegisterVerificationState extends State<RegisterVerification> {
                           text: "Verifieer",
                           color: app_theme.blue,
                           onPressed: () {
-                            formKey.currentState!.validate();
-                            if (currentText.length != 6 || currentText != "123456") { //TODO: Verify code, send to API
-                              errorController!.add(ErrorAnimationType
-                                  .shake);
-                              setState(() => hasError = true);
-                            } else {
-                              setState(
-                                    () {
-                                  hasError = false;
-                                },
-                              );
-                            }
                             activateAccount();
-                          },
+                          }
                         ),
                         const SizedBox(height: 15),
                         FormButton(

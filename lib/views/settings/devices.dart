@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:loopsnelheidapp/models/device.dart';
-import 'package:loopsnelheidapp/services/api/device_service.dart';
+
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+
+import 'package:loopsnelheidapp/services/api/device_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -57,7 +60,7 @@ class _DevicesState extends State<Devices> {
             Center(
               child: Column(
                 children: [
-                  SizedBox(height: 70),
+                  const SizedBox(height: 70),
                   Text(
                     "Mijn apparaten",
                     style: app_theme.textTheme.headline3!
@@ -87,21 +90,15 @@ class _DevicesState extends State<Devices> {
                             }
 
                             return DataTable(
-                                columns: [
+                                columns: const [
                                   DataColumn(
-                                      label: Container(
-                                        child: Text('Apparaat'),
-                                      )
+                                      label: Text('Apparaat')
                                   ),
                                   DataColumn(
-                                      label: Container(
-                                        child: Text('Type'),
-                                      )
+                                      label: Text('Type')
                                   ),
                                   DataColumn(
-                                    label: Container(
-                                      child: Text('Actie'),
-                                    ),
+                                    label: Text('Actie'),
                                   )
                                 ],
                                 rows: List.generate(
@@ -118,7 +115,7 @@ class _DevicesState extends State<Devices> {
                                         ),
                                         DataCell(
                                           TextButton(
-                                            child: Icon(Icons.check),
+                                            child: const Icon(Icons.check),
                                             onPressed: () {
                                               deviceService.markDeviceAsMeasureDevice(device.session).then((success) => {
                                                 if (success) {
@@ -146,19 +143,4 @@ class _DevicesState extends State<Devices> {
       ),
     );
   }
-
-
-
-  void executeRoute(BuildContext context, String name) {
-    if (currentRoute != name) {
-      Navigator.pushReplacementNamed(context, name);
-    }
-    else {
-      Navigator.pop(context);
-    }
-    currentRoute = name;
-  }
 }
-
-
-// hier komt de save data

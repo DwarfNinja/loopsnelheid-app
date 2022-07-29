@@ -4,8 +4,7 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
-import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
-import 'package:loopsnelheidapp/utils/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/models/user.dart';
 
@@ -41,7 +40,6 @@ class _RegisterBasicsState extends State<RegisterBasics> {
 
     return Scaffold(
       backgroundColor: app_theme.blue,
-      drawer: const SideBar(),
       body: Container(
         decoration: const BoxDecoration(
           gradient: app_theme.mainLinearGradient,
@@ -52,8 +50,7 @@ class _RegisterBasicsState extends State<RegisterBasics> {
             const SizedBox(height: 25),
             Text(
               "Loopsnelheid",
-              style:
-                  app_theme.textTheme.headline3!.copyWith(color: Colors.white),
+              style: app_theme.textTheme.headline3!.copyWith(color: Colors.white),
             ),
             const Icon(
               Icons.directions_walk,
@@ -85,20 +82,26 @@ class _RegisterBasicsState extends State<RegisterBasics> {
                       InputField(
                           controller: emailController,
                           text: "E-mailadres",
-                          hint: "Voer hier uw e-mailadres in"),
+                          hint: "Voer hier uw e-mailadres in",
+                          validatorFunction: ValidatorFunction(
+                              regex: RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'),
+                              function: null,
+                              message: "Moet een geldig e-mailadres zijn")),
                       const SizedBox(height: 20),
                       InputField(
                           controller: passwordController,
                           text: "Wachtwoord",
                           hint: "Voer hier uw wachtwoord in",
-                          private: true),
+                          private: true,
+                          minLength: 7),
                       const SizedBox(height: 20),
                       InputField(
                           controller: passwordConfirmationController,
-                          mustBeTheSame: passwordController,
+                          mustBeSameAsText: passwordController,
                           text: "Bevestig wachtwoord",
                           hint: "Herhaal het wachtwoord",
-                          private: true),
+                          private: true,
+                          minLength: 7),
                       const SizedBox(height: 25),
                       FormButton(
                           text: "Volgende",

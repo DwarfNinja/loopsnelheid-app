@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-import '../../utils/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 class LoginService {
   final String loginUserEndpoint =
@@ -38,9 +38,7 @@ class LoginService {
         });
 
     if (response.statusCode == 200) {
-      sharedPreferencesService.removeString("token");
-      sharedPreferencesService.removeString("device_session");
-      sharedPreferencesService.removeString("device_type");
+      sharedPreferencesService.clearPreferences();
     }
 
     return response.statusCode == 200;
