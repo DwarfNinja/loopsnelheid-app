@@ -82,7 +82,11 @@ class _RegisterBasicsState extends State<RegisterBasics> {
                       InputField(
                           controller: emailController,
                           text: "E-mailadres",
-                          hint: "Voer hier uw e-mailadres in"),
+                          hint: "Voer hier uw e-mailadres in",
+                          validatorFunction: ValidatorFunction(
+                              regex: RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'),
+                              function: null,
+                              message: "Moet een geldig e-mailadres zijn")),
                       const SizedBox(height: 20),
                       InputField(
                           controller: passwordController,

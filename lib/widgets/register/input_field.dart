@@ -16,6 +16,7 @@ class InputField extends StatefulWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final int? minLength;
+  final ValidatorFunction? validatorFunction;
 
   const InputField({Key? key,
     required this.text,
@@ -25,8 +26,9 @@ class InputField extends StatefulWidget {
     this.private = false,
     this.icon,
     this.keyboardType,
-    this.inputFormatters
+    this.inputFormatters,
     this.minLength,
+    this.validatorFunction
   }) : super(key: key);
 
   @override
@@ -122,6 +124,9 @@ class _InputFieldState extends State<InputField> {
             if (widget.mustBeSameAsText != null && !textTheSame) {
               return "De " + formattedWidgetText  + "en moeten hetzelfde zijn";
             }
+            if (widget.validatorFunction != null) {
+              return widget.validatorFunction!.build(value);
+            }
             return null;
           },
           onChanged: (String? value) => setState(() {
@@ -131,5 +136,23 @@ class _InputFieldState extends State<InputField> {
         ),
       ],
     );
+  }
+}
+
+class ValidatorFunction {
+  final RegExp? regex;
+  final Function? function;
+  final String message;
+
+  const ValidatorFunction({this.regex, this.function, required this.message});
+
+  String? build(String value) {
+    if (function != null) {
+      function!();
+    }
+    if (regex != null && !regex!.hasMatch(value)) {
+      return message;
+    }
+    return null;
   }
 }
