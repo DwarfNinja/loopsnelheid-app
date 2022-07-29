@@ -93,7 +93,7 @@ class _RegisterBasicsState extends State<RegisterBasics> {
                       const SizedBox(height: 20),
                       InputField(
                           controller: passwordConfirmationController,
-                          mustBeTheSame: passwordController,
+                          mustBeSameAsText: passwordController,
                           text: "Bevestig wachtwoord",
                           hint: "Herhaal het wachtwoord",
                           private: true),
