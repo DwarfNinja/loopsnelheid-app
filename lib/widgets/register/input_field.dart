@@ -15,6 +15,7 @@ class InputField extends StatefulWidget {
   final IconData? icon;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final int? minLength;
 
   const InputField({Key? key,
     required this.text,
@@ -25,6 +26,7 @@ class InputField extends StatefulWidget {
     this.icon,
     this.keyboardType,
     this.inputFormatters
+    this.minLength,
   }) : super(key: key);
 
   @override
@@ -114,8 +116,11 @@ class _InputFieldState extends State<InputField> {
             if (value == null || value.isEmpty) {
               return formattedWidgetText + " mag niet leeg zijn";
             }
-            if (widget.mustBeTheSame != null && !textTheSame) {
-                return "De wachtwoorden moeten hetzelfde zijn";
+            if (widget.minLength != null && value.characters.length < widget.minLength!) {
+              return "Het " + formattedWidgetText.toLowerCase() + " moet minimaal " + widget.minLength!.toString() + " characters lang zijn";
+            }
+            if (widget.mustBeSameAsText != null && !textTheSame) {
+              return "De " + formattedWidgetText  + "en moeten hetzelfde zijn";
             }
             return null;
           },
