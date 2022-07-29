@@ -40,7 +40,7 @@ class CheckboxLineState extends State<CheckboxLine> {
             ),
           ),
         ),
-        Text(widget.text, style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 13, color: (!widget.value && !widget.submitted) || (widget.value && widget.submitted) ? widget.textColor : app_theme.red))
+        Text(widget.text, style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 13, color: widget.value || (!widget.value && !widget.submitted) || (widget.value && widget.submitted) ? widget.textColor : app_theme.red))
       ]
     );
   }
