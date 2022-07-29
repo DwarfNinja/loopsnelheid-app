@@ -2,9 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:loopsnelheidapp/models/verify_token.dart';
-import 'package:loopsnelheidapp/services/api/register_service.dart';
-
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'package:loopsnelheidapp/models/verify_token.dart';
