@@ -108,7 +108,7 @@ class _DevicesState extends State<Devices> {
                                     return DataRow(
                                       cells: <DataCell>[
                                         DataCell(
-                                            Text(device.os)
+                                            Text(device.model)
                                         ),
                                         DataCell(
                                             Text(device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat")

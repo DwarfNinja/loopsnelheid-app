@@ -15,6 +15,7 @@ class User {
         'password': _password,
         'dateOfBirth': dateOfBirth,
         'weight': weight,
+        'length': 170,
         'sex': sex,
         'termsAndConditions': termsAndConditions,
         'privacyStatement': privacyStatement,
