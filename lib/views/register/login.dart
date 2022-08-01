@@ -40,10 +40,9 @@ class _LoginState extends State<Login> {
       LoginService loginService = LoginService();
       DeviceInfoService deviceInfoService = DeviceInfoService();
 
-      String deviceInfo = "";
-      await deviceInfoService.initPlatform().then((value) => deviceInfo = deviceInfoService.deviceData.toString());
+      await deviceInfoService.initPlatform();
 
-      return loginService.authenticate(emailController.text, passwordController.text, deviceInfoService.os!, deviceInfo);
+      return loginService.authenticate(emailController.text, passwordController.text, deviceInfoService.os!, deviceInfoService.model!);
     }
 
     handleAuthenticateResponse(response) {
