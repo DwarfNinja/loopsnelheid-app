@@ -7,6 +7,7 @@ import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/models/user.dart';
+import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 class RegisterBasics extends StatefulWidget {
   const RegisterBasics({Key? key}) : super(key: key);
@@ -38,88 +39,50 @@ class _RegisterBasicsState extends State<RegisterBasics> {
       }
     }
 
-    return Scaffold(
-      backgroundColor: app_theme.blue,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: app_theme.mainLinearGradient,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(height: 25),
-            Text(
-              "Loopsnelheid",
-              style: app_theme.textTheme.headline3!.copyWith(color: Colors.white),
-            ),
-            const Icon(
-              Icons.directions_walk,
-              color: Colors.white,
-              size: 60,
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              height: 650,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
-                ),
-                boxShadow: [
-                  app_theme.bottomBoxShadow,
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: Form(
-                  key: formKey,
-                  autovalidateMode: submitted
-                      ? AutovalidateMode.onUserInteraction
-                      : AutovalidateMode.disabled,
-                  child: Column(
-                    children: [
-                      InputField(
-                          controller: emailController,
-                          text: "E-mailadres",
-                          hint: "Voer hier uw e-mailadres in",
-                          validatorFunction: ValidatorFunction(
-                              regex: RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'),
-                              function: null,
-                              message: "Moet een geldig e-mailadres zijn")),
-                      const SizedBox(height: 20),
-                      InputField(
-                          controller: passwordController,
-                          text: "Wachtwoord",
-                          hint: "Voer hier uw wachtwoord in",
-                          private: true,
-                          minLength: 7),
-                      const SizedBox(height: 20),
-                      InputField(
-                          controller: passwordConfirmationController,
-                          mustBeSameAsText: passwordController,
-                          text: "Bevestig wachtwoord",
-                          hint: "Herhaal het wachtwoord",
-                          private: true,
-                          minLength: 7),
-                      const SizedBox(height: 25),
-                      FormButton(
-                          text: "Volgende",
-                          color: app_theme.blue,
-                          onPressed: () => onPressedNextButton()),
-                      const SizedBox(height: 15),
-                      FormButton(
-                          text: "Ga Terug",
-                          color: app_theme.white,
-                          onPressed: () => Navigator.pop(context))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return RegisterBase(
+        formKey: formKey,
+        submitted: submitted,
+        firstButton: FormButton(
+            text: "Volgende",
+            color: app_theme.blue,
+            onPressed: () => onPressedNextButton()),
+        secondButton: FormButton(
+            text: "Ga Terug",
+            color: app_theme.white,
+            onPressed: () => Navigator.pop(context)),
+        children: [
+          Text(
+              "Registreren",
+              style: app_theme.textTheme.headline5),
+          const SizedBox(height: 10),
+          Text(
+              "Vul uw gegevens hieronder in",
+              style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
+          const SizedBox(height: 20),
+          InputField(
+              controller: emailController,
+              text: "E-mailadres",
+              hint: "Voer hier uw e-mailadres in",
+              validatorFunction: ValidatorFunction(
+                  regex: RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'),
+                  function: null,
+                  message: "Moet een geldig e-mailadres zijn")),
+          const SizedBox(height: 15),
+          InputField(
+              controller: passwordController,
+              text: "Wachtwoord",
+              hint: "Voer hier uw wachtwoord in",
+              private: true,
+              minLength: 7),
+          const SizedBox(height: 15),
+          InputField(
+              controller: passwordConfirmationController,
+              mustBeSameAsText: passwordController,
+              text: "Bevestig wachtwoord",
+              hint: "Herhaal het wachtwoord",
+              private: true,
+              minLength: 7),
+        ]
     );
   }
 }
