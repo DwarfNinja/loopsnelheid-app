@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/widgets/register/register_snackbar.dart';
 import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 import 'package:native_pdf_view/native_pdf_view.dart';
@@ -42,10 +43,15 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
     handleRegisterResponse(response) {
       if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackbar(messageType: MessageType.success, message: "Success! U heeft een email ontvangen met u code!", icon: Icons.abc)
+        );
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setInteger("register_id", body['id']);
       } else if (response.statusCode == 400) {
-        // Repeat the proces
+        ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met de registratie!", icon: Icons.abc)
+        );
       }
     }
 
