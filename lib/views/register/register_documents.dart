@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:loopsnelheidapp/widgets/register/register_snackbar.dart';
 import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
-import 'package:native_pdf_view/native_pdf_view.dart';
+import 'package:pdfx/pdfx.dart';
 
 import 'package:loopsnelheidapp/models/user.dart';
 
