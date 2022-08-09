@@ -83,6 +83,7 @@ class _InputFieldState extends State<InputField> {
           maxLines: 1,
           obscureText: !widget.private ? false : !textVisible,
           decoration: InputDecoration(
+            errorStyle: const TextStyle(height: 0.75),
             contentPadding: const EdgeInsets.all(16.0),
             border: const OutlineInputBorder(
               borderSide: BorderSide(width: 2, color: app_theme.grey),
@@ -116,13 +117,13 @@ class _InputFieldState extends State<InputField> {
             }
 
             if (value == null || value.isEmpty) {
-              return formattedWidgetText + " mag niet leeg zijn";
+              return "Het " + formattedWidgetText.toLowerCase() + " mag niet leeg zijn";
             }
             if (widget.minLength != null && value.characters.length < widget.minLength!) {
               return "Het " + formattedWidgetText.toLowerCase() + " moet minimaal " + widget.minLength!.toString() + " characters lang zijn";
             }
             if (widget.mustBeSameAsText != null && !textTheSame) {
-              return "De " + formattedWidgetText  + "en moeten hetzelfde zijn";
+              return "De " + formattedWidgetText.toLowerCase()  + "en moeten hetzelfde zijn";
             }
             if (widget.validatorFunction != null) {
               return widget.validatorFunction!.build(value);

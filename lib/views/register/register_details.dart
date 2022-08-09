@@ -13,6 +13,7 @@ import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 class RegisterDetails extends StatefulWidget {
 
@@ -53,83 +54,46 @@ class _RegisterDetailsState extends State<RegisterDetails> {
       Navigator.pushNamed(context, "/register_documents");
     }
 
-    return Scaffold(
-      backgroundColor: app_theme.blue,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: app_theme.mainLinearGradient,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(height: 25),
-            Text(
-              "Loopsnelheid",
-              style: app_theme.textTheme.headline3!
-                  .copyWith(color: Colors.white),
-            ),
-            const Icon(
-              Icons.directions_walk,
-              color: Colors.white,
-              size: 60,
-            ),
-            const SizedBox(height: 10),
-            Container (
-              width: double.infinity,
-              height: 650,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
-                ),
-                boxShadow: [
-                  app_theme.bottomBoxShadow,
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: Form(
-                  key: formKey,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  child: Column(
-                    children: [
-                      GenderToggle(
-                          value: isFemale,
-                          onToggle: (val) {
-                            setState(() {
-                              isFemale = val;
-                            });
-                          }),
-                      const SizedBox(height: 25),
-                      DateInput(controller: dateOfBirthController),
-                      const SizedBox(height: 20),
-                      InputField(
-                        controller: weightController,
-                        text: "Gewicht",
-                        hint: "Voer uw gewicht in kilogram",
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}'), allow: true)
-                        ],
-                      ),
-                      const SizedBox(height: 25),
-                      FormButton(
-                          text: "Volgende",
-                          color: app_theme.blue,
-                          onPressed: () => onPressedNextButton()),
-                      const SizedBox(height: 15),
-                      FormButton(
-                          text: "Ga Terug",
-                          color: app_theme.white,
-                          onPressed: () => Navigator.pop(context))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return RegisterBase(
+        formKey: formKey,
+        submitted: submitted,
+        firstButton: FormButton(
+            text: "Volgende",
+            color: app_theme.blue,
+            onPressed: () => onPressedNextButton()),
+        secondButton: FormButton(
+            text: "Ga Terug",
+            color: app_theme.white,
+            onPressed: () => Navigator.pop(context)),
+        children: [
+          Text(
+              "Registreren",
+              style: app_theme.textTheme.headline5),
+          const SizedBox(height: 10),
+          Text(
+              "Vul uw details hieronder in",
+              style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
+          const SizedBox(height: 20),
+          GenderToggle(
+              value: isFemale,
+              onToggle: (val) {
+                setState(() {
+                  isFemale = val;
+                });
+              }),
+          const SizedBox(height: 25),
+          DateInput(controller: dateOfBirthController),
+          const SizedBox(height: 20),
+          InputField(
+              controller: weightController,
+              text: "Gewicht",
+              hint: "Voer uw gewicht in kilogram",
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}'), allow: true)
+              ]
+          )
+        ]
     );
   }
 }

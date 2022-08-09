@@ -6,21 +6,21 @@ class User {
   String? sex;
   bool termsAndConditions = false;
   bool privacyStatement = false;
-  bool olderThanSixteen = false;
+  bool isResearchCandidate = false;
 
   User(this._email, this._password);
 
   Map toJson() => {
-        'email': _email,
-        'password': _password,
-        'dateOfBirth': dateOfBirth,
-        'weight': weight,
-        'length': 170,
-        'sex': sex,
-        'termsAndConditions': termsAndConditions,
-        'privacyStatement': privacyStatement,
-        'olderThanSixteen': olderThanSixteen,
-      };
+    'email': _email,
+    'password': _password,
+    'dateOfBirth': dateOfBirth,
+    'weight': weight,
+    'length': 180,
+    'sex': sex,
+    'termsAndConditions': termsAndConditions,
+    'privacyStatement': privacyStatement,
+    'isResearchCandidate': isResearchCandidate,
+  };
 
   User.fromJson(Map<String, dynamic> json)
       : _email = json['email'],
@@ -30,5 +30,5 @@ class User {
         sex = json['sex'],
         termsAndConditions = json['termsAndConditions'],
         privacyStatement = json['privacyStatement'],
-        olderThanSixteen = json['olderThanSixteen'];
+        isResearchCandidate = json['isResearchCandidate'];
 }
