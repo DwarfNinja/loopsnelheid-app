@@ -27,7 +27,6 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
   bool termsAndConditions = false;
   bool privacyStatement = false;
-  bool olderThanSixteen = false;
   bool isResearchCandidate = false;
 
   bool submitted = false;
@@ -39,7 +38,6 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
     GlobalKey<CheckboxLineState> termsAndConditionsKey = GlobalKey();
     GlobalKey<CheckboxLineState> privacyStatementKey = GlobalKey();
-    GlobalKey<CheckboxLineState> olderThanSixteenKey = GlobalKey();
     GlobalKey<CheckboxLineState> isResearchCandidateKey = GlobalKey();
 
     handleRegisterResponse(response) {
@@ -62,7 +60,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
     }
 
     bool agreedToAllField() {
-      return (termsAndConditions && privacyStatement && olderThanSixteen && isResearchCandidate);
+      return (termsAndConditions && privacyStatement && isResearchCandidate);
     }
 
     onPressedNextButton() {
