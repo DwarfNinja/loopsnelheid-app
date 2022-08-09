@@ -28,59 +28,65 @@ class RegisterBaseState<T extends RegisterBase> extends State<T> {
     sharedPreferencesService.getSharedPreferenceInstance();
 
     return Scaffold(
-      backgroundColor: app_theme.blue,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: app_theme.mainLinearGradient,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(height: 25),
-            Text(
-              "Loopsnelheid",
-              style: app_theme.textTheme.headline3!.copyWith(color: Colors.white),
-            ),
-            const Icon(
-              Icons.directions_walk,
-              color: Colors.white,
-              size: 55,
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              height: 700,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
+        backgroundColor: app_theme.blue,
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height),
+            child: Container(
+                decoration: const BoxDecoration(
+                  gradient: app_theme.mainLinearGradient,
                 ),
-                boxShadow: [
-                  app_theme.bottomBoxShadow,
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 10, left: 30, right: 30),
-                child: Form(
-                  key: widget.formKey,
-                  autovalidateMode: widget.submitted
-                      ? AutovalidateMode.onUserInteraction
-                      : AutovalidateMode.disabled,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: widget.children + [
-                      const SizedBox(height: 30),
-                      widget.firstButton,
-                      const SizedBox(height: 15),
-                      widget.secondButton,
-                      const SizedBox(height: 80)],
-                  )
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(height: 25),
+                      Text(
+                        "Loopsnelheid",
+                        style: app_theme.textTheme.headline3!.copyWith(color: Colors.white),
+                      ),
+                      const Icon(
+                        Icons.directions_walk,
+                        color: Colors.white,
+                        size: 55,
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                          width: double.infinity,
+                          height: 700,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20.0),
+                                bottom: Radius.zero),
+                            boxShadow: [
+                              app_theme.bottomBoxShadow,
+                            ],
+                          ),
+                          child: Padding(
+                              padding: const EdgeInsets.only(top: 20, bottom: 10, left: 30, right: 30),
+                              child: Form(
+                                  key: widget.formKey,
+                                  autovalidateMode: widget.submitted
+                                      ? AutovalidateMode.onUserInteraction
+                                      : AutovalidateMode.disabled,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: widget.children + [
+                                      const SizedBox(height: 30),
+                                      widget.firstButton,
+                                      const SizedBox(height: 15),
+                                      widget.secondButton,
+                                      const SizedBox(height: 80)],
+                                  )
+                              )
+                          )
+                      )
+                    ]
                 )
-              )
-            )
-          ]
+            ),
+          ),
         )
-      )
     );
   }
 }
