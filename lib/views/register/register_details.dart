@@ -29,6 +29,7 @@ class _RegisterDetailsState extends State<RegisterDetails> {
   
   final dateOfBirthController = TextEditingController();
   final weightController = TextEditingController();
+  final heightController = TextEditingController();
   
   bool isFemale = false;
   bool submitted = false;
@@ -44,6 +45,7 @@ class _RegisterDetailsState extends State<RegisterDetails> {
       String formattedDate = DateFormat('yyyy-MM-dd').format(gettingDate);
 
       user.weight = int.parse(weightController.text);
+      user.height = int.parse(heightController.text);
       user.dateOfBirth = formattedDate;
       user.sex = isFemale ? "FEMALE" : "MALE";
       sharedPreferencesService.setObject("registerUser", user);
@@ -81,7 +83,7 @@ class _RegisterDetailsState extends State<RegisterDetails> {
                   isFemale = val;
                 });
               }),
-          const SizedBox(height: 25),
+          const SizedBox(height: 20),
           DateInput(controller: dateOfBirthController),
           const SizedBox(height: 20),
           InputField(
@@ -90,7 +92,17 @@ class _RegisterDetailsState extends State<RegisterDetails> {
               hint: "Voer uw gewicht in kilogram",
               keyboardType: TextInputType.number,
               inputFormatters: [
-                FilteringTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}'), allow: true)
+                FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
+              ]
+          ),
+          const SizedBox(height: 20),
+          InputField(
+              controller: heightController,
+              text: "Lengte",
+              hint: "Voer uw lengte in centimeter",
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
               ]
           )
         ]

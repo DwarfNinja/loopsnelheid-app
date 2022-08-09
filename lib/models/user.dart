@@ -3,6 +3,7 @@ class User {
   final String _password;
   String? dateOfBirth;
   int? weight;
+  int? height;
   String? sex;
   bool termsAndConditions = false;
   bool privacyStatement = false;
@@ -15,7 +16,7 @@ class User {
     'password': _password,
     'dateOfBirth': dateOfBirth,
     'weight': weight,
-    'length': 180,
+    'length': height,
     'sex': sex,
     'termsAndConditions': termsAndConditions,
     'privacyStatement': privacyStatement,
