@@ -103,6 +103,7 @@ class _RegisterDetailsState extends State<RegisterDetails> {
               controller: heightController,
               text: "Lengte",
               hint: "Voer uw lengte in centimeter",
+              article: "De",
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
