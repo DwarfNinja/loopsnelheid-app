@@ -52,8 +52,11 @@ class _RegisterDetailsState extends State<RegisterDetails> {
     }
 
     onPressedNextButton() {
-      sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
-      Navigator.pushNamed(context, "/register_documents");
+      setState(() => submitted = true);
+      if (formKey.currentState!.validate()) {
+        sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
+        Navigator.pushNamed(context, "/register_documents");
+      }
     }
 
     return RegisterBase(
