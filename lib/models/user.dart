@@ -28,6 +28,7 @@ class User {
         _password = json['password'],
         dateOfBirth = json['dateOfBirth'],
         weight = json['weight'],
+        height = json['length'],
         sex = json['sex'],
         termsAndConditions = json['termsAndConditions'],
         privacyStatement = json['privacyStatement'],
