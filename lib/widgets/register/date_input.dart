@@ -16,7 +16,7 @@ class DateInput extends StatefulWidget {
 class _DateInputState extends State<DateInput> {
 
   bool empty = true;
-  late DateTime pickedDate;
+  DateTime? pickedDate;
 
   @override
   void initState() {
@@ -103,13 +103,14 @@ class _DateInputState extends State<DateInput> {
             WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
           },
           validator: (String? value) {
-            if (DateTime.now().year - pickedDate.year < 18) {
-              return "De gebruiker moet 18 jaar of ouder zijn";
-            }
-
             if (widget.controller.text.isEmpty) {
               return "De geboortedatum mag niet leeg zijn";
             }
+
+            if (DateTime.now().year - pickedDate!.year < 18) {
+              return "De gebruiker moet 18 jaar of ouder zijn";
+            }
+
             return null;
           },
         ),
