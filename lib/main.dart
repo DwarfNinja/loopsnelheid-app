@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:device_preview/device_preview.dart' as device_preview;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:loopsnelheidapp/custom_page_route.dart';
+import 'package:loopsnelheidapp/services/env_service.dart';
 
 import 'package:loopsnelheidapp/views/dashboard/dashboard.dart';
 import 'package:loopsnelheidapp/views/register/login.dart';
@@ -21,7 +24,15 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+
+  if ((EnvService().loadFromEnvFile("WEB_DEBUG") as String).toBoolean() == true) {
+    runApp(device_preview.DevicePreview(
+        builder: (context) => const MyApp(),
+        enabled: !kReleaseMode));
+  }
+  else {
+    runApp(const MyApp());
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -79,5 +90,15 @@ class MyApp extends StatelessWidget {
       default:
         return const Login();
     }
+  }
+}
+
+extension on String {
+  bool toBoolean() {
+    return (toLowerCase() == "true" || toLowerCase() == "1")
+        ? true
+        : (toLowerCase() == "false" || toLowerCase() == "0"
+        ? false
+        : throw UnsupportedError("Cannot convert \"${this}\" to type bool"));
   }
 }
