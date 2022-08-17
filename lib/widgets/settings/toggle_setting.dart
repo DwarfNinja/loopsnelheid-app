@@ -36,10 +36,7 @@ class _ToggleSettingState extends State<ToggleSetting> {
 
   void setSetting() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      prefs.setBool(widget.setting, status);
-      widget.onToggle!(status);
-    });
+    prefs.setBool(widget.setting, status);
   }
 
   @override
@@ -66,9 +63,11 @@ class _ToggleSettingState extends State<ToggleSetting> {
           onToggle: (val) {
             setState(() {
               status = val;
-              setSetting();
-              },
-            );
+            });
+            setSetting();
+            if (widget.onToggle != null) {
+              widget.onToggle!(status);
+            }
           },
         ),
       ],
