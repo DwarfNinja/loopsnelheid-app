@@ -6,6 +6,7 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class DateInput extends StatefulWidget {
   final TextEditingController controller;
+
   const DateInput({Key? key, required this.controller}) : super(key: key);
 
   @override
@@ -15,18 +16,13 @@ class DateInput extends StatefulWidget {
 class _DateInputState extends State<DateInput> {
 
   bool empty = true;
+  DateTime? pickedDate;
 
   @override
   void initState() {
     widget.controller.text = "";
     widget.controller.addListener(onDateInputControllerChanged);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
   }
 
   void onDateInputControllerChanged() {
@@ -96,21 +92,25 @@ class _DateInputState extends State<DateInput> {
                 firstDate: DateTime(1900),
                 lastDate: DateTime.now()
             );
-
             if(pickedDate != null ){
-              String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+              this.pickedDate = pickedDate;
 
+              String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
               setState(() {
                 widget.controller.text = formattedDate;
-                // widget.pickedDate = pickedDate
               });
             }
-            // WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
+            WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
           },
           validator: (String? value) {
             if (widget.controller.text.isEmpty) {
-              return "Geboortedatum mag niet leeg zijn";
+              return "De geboortedatum mag niet leeg zijn";
             }
+
+            if (DateTime.now().year - pickedDate!.year < 18) {
+              return "De gebruiker moet 18 jaar of ouder zijn";
+            }
+
             return null;
           },
         ),

@@ -8,23 +8,29 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class InputField extends StatefulWidget {
   final TextEditingController? controller;
-  final TextEditingController? mustBeTheSame;
+  final TextEditingController? mustBeSameAsText;
   final String text;
   final String hint;
   final bool private;
   final IconData? icon;
+  final String? article;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final int? minLength;
+  final ValidatorFunction? validatorFunction;
 
   const InputField({Key? key,
     required this.text,
     required this.hint,
-    this.mustBeTheSame,
+    this.mustBeSameAsText,
     this.controller,
     this.private = false,
     this.icon,
+    this.article,
     this.keyboardType,
-    this.inputFormatters
+    this.inputFormatters,
+    this.minLength,
+    this.validatorFunction
   }) : super(key: key);
 
   @override
@@ -52,8 +58,8 @@ class _InputFieldState extends State<InputField> {
     }
     else if (widget.icon != null) {
       return Icon(
-        widget.icon,
-        color: app_theme.grey);
+          widget.icon,
+          color: app_theme.grey);
     }
     else {
       return null;
@@ -79,6 +85,7 @@ class _InputFieldState extends State<InputField> {
           maxLines: 1,
           obscureText: !widget.private ? false : !textVisible,
           decoration: InputDecoration(
+            errorStyle: const TextStyle(height: 0.75),
             contentPadding: const EdgeInsets.all(16.0),
             border: const OutlineInputBorder(
               borderSide: BorderSide(width: 2, color: app_theme.grey),
@@ -89,13 +96,14 @@ class _InputFieldState extends State<InputField> {
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2, color: empty || (widget.mustBeTheSame != null && textTheSame) ? app_theme.grey : app_theme.green),
+              borderSide: BorderSide(width: 2, color: !empty && (widget.mustBeSameAsText == null || textTheSame) ? app_theme.green : app_theme.grey),
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             errorBorder: const OutlineInputBorder(
               borderSide: BorderSide(width: 2, color: app_theme.red),
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
+            errorMaxLines: 2,
             hintText: widget.hint,
             hintStyle: GoogleFonts.montserrat(
                 fontSize: 16,
@@ -104,20 +112,50 @@ class _InputFieldState extends State<InputField> {
             suffixIcon: getIcon(),
           ),
           validator: (String? value) {
-            if (value == null || value.isEmpty) {
-              return widget.text + " mag niet leeg zijn";
+            String formattedWidgetText = widget.text;
+
+            if (widget.text.contains(" ")) {
+              formattedWidgetText = widget.text.split(" ")[1];
             }
-            if (widget.mustBeTheSame != null && !textTheSame) {
-                return "De wachtwoorden moeten hetzelfde zijn";
+
+            if (value == null || value.isEmpty) {
+              return "${widget.article ?? "Het"} ${formattedWidgetText.toLowerCase()} mag niet leeg zijn";
+            }
+            if (widget.minLength != null && value.characters.length < widget.minLength!) {
+              return "Het ${formattedWidgetText.toLowerCase()} moet minimaal ${widget.minLength!} characters lang zijn";
+            }
+            if (widget.mustBeSameAsText != null && !textTheSame) {
+              return "De ${formattedWidgetText.toLowerCase()}en moeten hetzelfde zijn";
+            }
+            if (widget.validatorFunction != null) {
+              return widget.validatorFunction!.build(value);
             }
             return null;
           },
           onChanged: (String? value) => setState(() {
-              empty = (value == null || value.isEmpty) ? true : false;
-              textTheSame = widget.mustBeTheSame != null && widget.mustBeTheSame!.text == value;
+            empty = (value == null || value.isEmpty) ? true : false;
+            textTheSame = widget.mustBeSameAsText != null && widget.mustBeSameAsText!.text == value;
           }),
         ),
       ],
     );
+  }
+}
+
+class ValidatorFunction {
+  final RegExp? regex;
+  final Function? function;
+  final String message;
+
+  const ValidatorFunction({this.regex, this.function, required this.message});
+
+  String? build(String value) {
+    if (function != null) {
+      function!();
+    }
+    if (regex != null && !regex!.hasMatch(value)) {
+      return message;
+    }
+    return null;
   }
 }

@@ -92,10 +92,7 @@ class _DevicesState extends State<Devices> {
                             return DataTable(
                                 columns: const [
                                   DataColumn(
-                                      label: Text('Apparaat')
-                                  ),
-                                  DataColumn(
-                                      label: Text('Type')
+                                      label: Text('Apparaat'),
                                   ),
                                   DataColumn(
                                     label: Text('Actie'),
@@ -108,10 +105,21 @@ class _DevicesState extends State<Devices> {
                                     return DataRow(
                                       cells: <DataCell>[
                                         DataCell(
-                                            Text(device.os)
-                                        ),
-                                        DataCell(
-                                            Text(device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat")
+                                          SizedBox(
+                                            width: 200,
+                                            child: RichText(
+                                              text: TextSpan(
+                                                text: device.model + '\n',
+                                                style: DefaultTextStyle.of(context).style,
+                                                children: [
+                                                  TextSpan(
+                                                    text: device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat",
+                                                    style: const TextStyle(fontSize: 16)
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          )
                                         ),
                                         DataCell(
                                           TextButton(
