@@ -10,7 +10,7 @@ import 'package:loopsnelheidapp/services/router/navigation_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 import 'package:loopsnelheidapp/services/api/export_service.dart';
 import 'package:loopsnelheidapp/services/api/research_service.dart';
-
+import 'package:loopsnelheidapp/services/setting/setting_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -34,7 +34,7 @@ class _SettingsState extends State<Settings> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
-    var isAdministrator = false;
+    bool isAdministrator = false;
     await sharedPreferencesService.getObject("roles").then((value) => {
       isAdministrator = value.contains("ROLE_ADMIN")
     });
@@ -153,6 +153,17 @@ class _SettingsState extends State<Settings> {
                               text: "Metingen",
                               setting: "measures",
                               ),
+                          const SizedBox(height: 25),
+                          ToggleSetting(
+                              text: "[Test]\nHandmatig Meten",
+                              setting: "manual_measure",
+                              onToggle: (bool status) {
+                                SettingService.getMeasureSetting().then((value) async {
+                                  bool measurePermitted = await SettingService.isMeasureDevice();
+                                  if(value == true && measurePermitted) {
+                                    status ? LocationService.startLocationService() : LocationService.stopLocationService();
+                                  }
+                                });
                               }),
                           const SizedBox(height: 50),
                           SettingsButton(
