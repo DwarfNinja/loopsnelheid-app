@@ -13,6 +13,7 @@ class InputField extends StatefulWidget {
   final String hint;
   final bool private;
   final IconData? icon;
+  final String? article;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final int? minLength;
@@ -25,6 +26,7 @@ class InputField extends StatefulWidget {
     this.controller,
     this.private = false,
     this.icon,
+    this.article,
     this.keyboardType,
     this.inputFormatters,
     this.minLength,
@@ -117,13 +119,13 @@ class _InputFieldState extends State<InputField> {
             }
 
             if (value == null || value.isEmpty) {
-              return "Het " + formattedWidgetText.toLowerCase() + " mag niet leeg zijn";
+              return "${widget.article ?? "Het"} ${formattedWidgetText.toLowerCase()} mag niet leeg zijn";
             }
             if (widget.minLength != null && value.characters.length < widget.minLength!) {
-              return "Het " + formattedWidgetText.toLowerCase() + " moet minimaal " + widget.minLength!.toString() + " characters lang zijn";
+              return "Het ${formattedWidgetText.toLowerCase()} moet minimaal ${widget.minLength!} characters lang zijn";
             }
             if (widget.mustBeSameAsText != null && !textTheSame) {
-              return "De " + formattedWidgetText.toLowerCase()  + "en moeten hetzelfde zijn";
+              return "De ${formattedWidgetText.toLowerCase()}en moeten hetzelfde zijn";
             }
             if (widget.validatorFunction != null) {
               return widget.validatorFunction!.build(value);
