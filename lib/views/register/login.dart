@@ -50,7 +50,7 @@ class _LoginState extends State<Login> {
         sharedPreferencesService.setObject("roles", body['roles']);
         sharedPreferencesService.setString("device_session", body['device']['session']);
         sharedPreferencesService.setString("device_type", body['device']['type']);
-        sharedPreferencesService.setBool("measure", false);
+        sharedPreferencesService.setBool("measures", false);
 
         Navigator.pushNamed(context, "/");
       } else if (response.statusCode == 401) {
