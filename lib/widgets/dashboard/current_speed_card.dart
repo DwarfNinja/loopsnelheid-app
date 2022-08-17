@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class CurrentSpeedCard extends StatefulWidget {
-  final double speedMs;
+  final double speed;
+  final double recSpeed;
 
-  const CurrentSpeedCard({Key? key, required this.speedMs})
+  const CurrentSpeedCard({Key? key, required this.speed, required this.recSpeed})
       : super(key: key);
-  
+
   @override
   State<CurrentSpeedCard> createState() => _CurrentSpeedCardState();
 }
 
 class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
-
   final lightBlueGradient = const LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -24,6 +25,9 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
 
   @override
   Widget build(BuildContext context) {
+    final aboveRecSpeed = widget.speed >= widget.recSpeed;
+    final colorGradient = aboveRecSpeed ? app_theme.greenLightLinearGradient : app_theme.yellowRedLinearGradient;
+
     return Container(
       width: 300,
       height: 325,
@@ -36,35 +40,41 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
           app_theme.bottomBoxShadow,
         ],
       ),
-      child: CustomPaint(
-        painter: CirclePainter(gradient: lightBlueGradient),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                convertMsToKmh(widget.speedMs).toStringAsFixed(1),
-                style: app_theme.textTheme.headline2!.copyWith(
-                  foreground: Paint()
-                    ..shader = lightBlueGradient.createShader(const Rect.fromLTWH(0, 260, 0, 200)),
-                ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(height: 20),
+          Text("Gemiddelde loopsnelheid 24 uur",
+              style: app_theme.textTheme.titleMedium,
+              textAlign: TextAlign.center),
+          const SizedBox(height: 85),
+          CustomPaint(
+            painter: CirclePainter(gradient: colorGradient),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.speed.toStringAsFixed(1),
+                    style: app_theme.textTheme.headline2!.copyWith(
+                      foreground: Paint()
+                        ..shader = colorGradient.createShader(const Rect.fromLTWH(0, 260, 0, 200)),
+                    ),
+                  ),
+                  Text(
+                    "km/h",
+                    style: app_theme.textTheme.headline6!.copyWith(
+                      foreground: Paint()
+                        ..shader = colorGradient.createShader(const Rect.fromLTWH(0, 325, 0, 200)),
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                "km/h",
-                style: app_theme.textTheme.headline6!.copyWith(
-                  foreground: Paint()
-                    ..shader = lightBlueGradient.createShader(const Rect.fromLTWH(0, 325, 0, 200)),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
-  }
-
-  double convertMsToKmh(double speed) {
-    return speed * 3.6;
   }
 }
 

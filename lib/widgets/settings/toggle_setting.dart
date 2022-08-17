@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_switch/flutter_switch.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class ToggleSetting extends StatefulWidget {
 
-  const ToggleSetting({Key? key, required this.text}) : super(key: key);
+  const ToggleSetting({Key? key, required this.text, required this.setting, this.onToggle}) : super(key: key);
   final String text;
+  final String setting;
+  final Function(bool)? onToggle;
 
   @override
   State<ToggleSetting> createState() => _ToggleSettingState();
@@ -15,6 +20,27 @@ class ToggleSetting extends StatefulWidget {
 class _ToggleSettingState extends State<ToggleSetting> {
 
   bool status = false;
+
+  @override
+  void initState() {
+    super.initState();
+    loadSetting();
+  }
+
+  void loadSetting() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      status = prefs.getBool(widget.setting) ?? false;
+    });
+  }
+
+  void setSetting() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setBool(widget.setting, status);
+      widget.onToggle!(status);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +66,8 @@ class _ToggleSettingState extends State<ToggleSetting> {
           onToggle: (val) {
             setState(() {
               status = val;
-            },
+              setSetting();
+              },
             );
           },
         ),

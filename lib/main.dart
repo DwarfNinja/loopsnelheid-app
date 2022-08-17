@@ -1,24 +1,26 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:geolocator/geolocator.dart';
-import 'package:loopsnelheidapp/settings/settings.dart';
-import 'package:loopsnelheidapp/sidebar.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:loopsnelheidapp/custom_page_route.dart';
 
+import 'package:loopsnelheidapp/views/dashboard/dashboard.dart';
+import 'package:loopsnelheidapp/views/register/login.dart';
+import 'package:loopsnelheidapp/views/register/register_basics.dart';
+import 'package:loopsnelheidapp/views/register/register_details.dart';
+import 'package:loopsnelheidapp/views/register/register_documents.dart';
+import 'package:loopsnelheidapp/views/register/register_verification.dart';
+import 'package:loopsnelheidapp/views/settings/devices.dart';
+import 'package:loopsnelheidapp/views/settings/settings.dart';
 
-import 'package:loopsnelheidapp/current_speed_card.dart';
-import 'package:loopsnelheidapp/average_speed_card.dart';
-
-import 'package:loopsnelheidapp/settings/time_scheduler.dart';
+import 'package:loopsnelheidapp/services/api/auth_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
-
 void main() async {
+  await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -31,134 +33,51 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      routes: {
-        "/": (context) => const Dashboard(),
-        "/settings" : (context) => const Settings()
+      onGenerateRoute: onGenerateRoute
+    );
+  }
+
+  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+    AuthService authService = AuthService();
+    return CustomPageRoute(child:
+        FutureBuilder<bool>(
+          future: authService.isUserAuthenticated(),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            return generateRouteBasedOnAuthentication(settings.name, snapshot.data);
+          },
+        ),
+    );
+  }
+
+  static generateRouteBasedOnAuthentication(String? routeName, bool? authenticated) {
+    if(authenticated == null) return Container();
+
+    if(authenticated) {
+      switch (routeName) {
+        case "/":
+          return const Dashboard();
+        case "/settings":
+          return  const Settings();
+        case "/devices":
+          return const Devices();
+        default:
+          return const Dashboard();
       }
-    );
-  }
-}
-
-class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
-
-  @override
-  State<Dashboard> createState() => _DashboardState();
-}
-
-class _DashboardState extends State<Dashboard> {
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-
-  double currentSpeedMs = 0;
-
-  static const LocationSettings locationSettings = LocationSettings(
-    accuracy: LocationAccuracy.high,
-    distanceFilter: 10,
-  );
-
-  void initPositionStream() async {
-    Stream<Position> positionStream =
-    Geolocator.getPositionStream(locationSettings: locationSettings);
-    positionStream.listen((Position? position) {
-      setState(() {
-        currentSpeedMs = position?.speed ?? 0.0;
-      });
-    });
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    List times = setRandomTimes();
-
-    TimeOfDay now = TimeOfDay.now();
-    double rightNow(TimeOfDay now) => now.hour + now.minute/60.0;
-
-    if (rightNow(now) >= times[0][0] && rightNow(now) <= times[0][1]) {
-      initPositionStream();
-      super.initState();
-    } else if (rightNow(now) >= times[1][0] && rightNow(now) <= times[1][1]) {
-      initPositionStream();
-      super.initState();
-    } else {
-      0.0;
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: app_theme.blue,
-      key: _globalKey,
-      drawer: const SideBar(),
-      body: SlidingUpPanel(
-        panel: Column(
-          children: const [
-            SizedBox(height: 10),
-            RotatedBox(
-              quarterTurns: 1,
-              child: Icon(
-                Icons.arrow_back_ios_new,
-                size: 30,
-              ),
-            ),
-          ],
-        ),
-        minHeight: 100,
-        maxHeight: 500,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-        margin: const EdgeInsets.only(left: 20, right: 20),
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: app_theme.mainLinearGradient,
-          ),
-          child: Stack(
-            children: [
-              IconButton(
-                padding: const EdgeInsets.all(20),
-                icon: const Icon(Icons.menu),
-                color: Colors.white,
-                iconSize: 38,
-                onPressed: () {
-                  _globalKey.currentState?.openDrawer();
-                },
-              ),
-              Center(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 70),
-                    Text(
-                      "Loopsnelheid",
-                      style: app_theme.textTheme.headline3!
-                          .copyWith(color: Colors.white),
-                    ),
-                    const SizedBox(height: 20),
-                    const Icon(
-                      Icons.directions_walk,
-                      color: Colors.white,
-                      size: 60,
-                    ),
-                    const SizedBox(height: 20),
-                    CurrentSpeedCard(speedMs: currentSpeedMs),
-                    const SizedBox(height: 25),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        AverageSpeedCard(header: "GEM WEEK", speed: "0.0"),
-                        SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM MAAND", speed: "0.0")
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    switch (routeName) {
+      case "/login":
+        return const Login();
+      case "/register_basics":
+        return const RegisterBasics();
+      case "/register_details":
+        return const RegisterDetails();
+      case "/register_documents":
+        return  const RegisterDocuments();
+      case "/register_verification":
+        return const RegisterVerification();
+      default:
+        return const Login();
+    }
   }
 }
