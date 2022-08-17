@@ -39,13 +39,13 @@ class MyApp extends StatelessWidget {
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     AuthService authService = AuthService();
-    return CustomPageRoute(child:
-        FutureBuilder<bool>(
-          future: authService.isUserAuthenticated(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            return generateRouteBasedOnAuthentication(settings.name, snapshot.data);
-          },
-        ),
+    return CustomPageRoute(
+      settings: settings,
+      child: FutureBuilder<bool>(
+        future: authService.isUserAuthenticated(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
+            generateRouteBasedOnAuthentication(settings.name, snapshot.data)
+      ),
     );
   }
 
