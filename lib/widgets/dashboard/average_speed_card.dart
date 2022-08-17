@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class AverageSpeedCard extends StatefulWidget {
   final String header;
@@ -41,7 +41,7 @@ class _AverageSpeedCardState extends State<AverageSpeedCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(widget.speed.toStringAsFixed(1),
-                    style: app_theme.textTheme.headline4,
+                    style: app_theme.textTheme.headline5,
                     textAlign: TextAlign.center),
                 Text("km/h",
                     style: app_theme.textTheme.subtitle1,
