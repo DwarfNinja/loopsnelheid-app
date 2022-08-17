@@ -86,113 +86,111 @@ class _GraphState extends State<Graph> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 320,
-      child: Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 20),
-            child: LineChart(
-              LineChartData(
-                minX: 0,
-                maxX: getOffset(),
-                minY: 0,
-                maxY: 7,
-                lineTouchData: LineTouchData(
-                  touchTooltipData: LineTouchTooltipData(
-                      maxContentWidth: 100,
-                      tooltipBgColor: app_theme.white,
-                      getTooltipItems: (touchedSpots) {
-                        return touchedSpots.map((LineBarSpot touchedSpot) {
-                          const textStyle = TextStyle(
-                            color: app_theme.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          );
-                          return LineTooltipItem(formatDateFlSpot(touchedSpot.x, touchedSpot.y),
-                              textStyle);
-                        }).toList();
-                      }),
-                  handleBuiltInTouches: true,
-                  getTouchLineStart: (data, index) => 0,
-                ),
-                gridData: FlGridData(
-                  show: true,
-                  verticalInterval: widget.status ? 1 : 4,
-                  getDrawingHorizontalLine: (value) {
-                    return FlLine(
-                      color: app_theme.black,
-                      strokeWidth: 1,
-                    );
-                  },
-                  drawVerticalLine: true,
-                  getDrawingVerticalLine: (value) {
-                    return FlLine(
-                      color: app_theme.black,
-                      strokeWidth: 1,
-                    );
-                  },
-                ),
-                borderData: FlBorderData(
-                  show: true,
-                  border: Border.all(color: app_theme.black, width: 1),
-                ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 20),
+        child: LineChart(
+          LineChartData(
+            minX: 0,
+            maxX: getOffset(),
+            minY: 0,
+            maxY: 7,
+            lineTouchData: LineTouchData(
+              touchTooltipData: LineTouchTooltipData(
+                  maxContentWidth: 100,
+                  tooltipBgColor: app_theme.white,
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((LineBarSpot touchedSpot) {
+                      const textStyle = TextStyle(
+                        color: app_theme.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      );
+                      return LineTooltipItem(formatDateFlSpot(touchedSpot.x, touchedSpot.y),
+                          textStyle);
+                    }).toList();
+                  }),
+              handleBuiltInTouches: true,
+              getTouchLineStart: (data, index) => 0,
+            ),
+            gridData: FlGridData(
+              show: true,
+              verticalInterval: widget.status ? 1 : 4,
+              getDrawingHorizontalLine: (value) {
+                return FlLine(
+                  color: app_theme.black,
+                  strokeWidth: 1,
+                );
+              },
+              drawVerticalLine: true,
+              getDrawingVerticalLine: (value) {
+                return FlLine(
+                  color: app_theme.black,
+                  strokeWidth: 1,
+                );
+              },
+            ),
+            borderData: FlBorderData(
+              show: true,
+              border: Border.all(color: app_theme.black, width: 1),
+            ),
 
-                titlesData: FlTitlesData(
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      interval: widget.status ? 1 : 4,
-                      reservedSize: 30,
-                      getTitlesWidget: bottomTitleWidgets,
-                    ),
-                  ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      interval: 1,
-                      reservedSize: 28,
-                      getTitlesWidget: leftTitleWidgets
-                    ),
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
+            titlesData: FlTitlesData(
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  interval: widget.status ? 1 : 4,
+                  reservedSize: 30,
+                  getTitlesWidget: bottomTitleWidgets,
                 ),
-                extraLinesData: ExtraLinesData(
-                    extraLinesOnTop: false,
-                    horizontalLines: [
-                      HorizontalLine(
-                          y: widget.limitSpeed,
-                          color:
-                          app_theme.red,
-                          strokeWidth: 4,
-                          dashArray: [10, 5]
-                      )
-                    ]
+              ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  interval: 1,
+                  reservedSize: 28,
+                  getTitlesWidget: leftTitleWidgets
                 ),
-                lineBarsData: [
-                  LineChartBarData(
-                    dotData: FlDotData(
-                      show: true,
-                      getDotPainter: (spot, percent, barData, index) {
-                        return FlDotCirclePainter(
-                          radius: 4,
-                          color: app_theme.white,
-                          strokeWidth: 3,
-                          strokeColor: app_theme.blue,
-                        );
-                      }
-                    ),
-                    spots: createFlSpotListFromData(),
-                    color: app_theme.blue,
-                    isCurved: false,
-                    barWidth: 4
-                  ),
-                ],
+              ),
+              topTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
               ),
             ),
+            extraLinesData: ExtraLinesData(
+                extraLinesOnTop: false,
+                horizontalLines: [
+                  HorizontalLine(
+                      y: widget.limitSpeed,
+                      color:
+                      app_theme.red,
+                      strokeWidth: 4,
+                      dashArray: [10, 5]
+                  )
+                ]
+            ),
+            lineBarsData: [
+              LineChartBarData(
+                dotData: FlDotData(
+                  show: true,
+                  getDotPainter: (spot, percent, barData, index) {
+                    return FlDotCirclePainter(
+                      radius: 4,
+                      color: app_theme.white,
+                      strokeWidth: 3,
+                      strokeColor: app_theme.blue,
+                    );
+                  }
+                ),
+                spots: createFlSpotListFromData(),
+                color: app_theme.blue,
+                isCurved: false,
+                barWidth: 4
+              ),
+            ],
           ),
+        ),
       ),
     );
   }
