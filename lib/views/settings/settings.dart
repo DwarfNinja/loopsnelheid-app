@@ -149,11 +149,10 @@ class _SettingsState extends State<Settings> {
                       child: Column(
                         children:  [
                           const SizedBox(height: 50),
-                          ToggleSetting(
-                              text: "Meten",
-                              setting: "measure",
-                              onToggle: (bool status) {
-                               status ? LocationService.startLocationService() : LocationService.stopLocationService();
+                          const ToggleSetting(
+                              text: "Metingen",
+                              setting: "measures",
+                              ),
                               }),
                           const SizedBox(height: 50),
                           SettingsButton(

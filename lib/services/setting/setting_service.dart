@@ -5,7 +5,7 @@ class SettingService {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
-    return sharedPreferencesService.getBool("measure");
+    return sharedPreferencesService.getBool("measures");
   }
 
   static Future<bool> isMeasureDevice() async {
