@@ -79,7 +79,7 @@ class _RegisterDetailsState extends State<RegisterDetails> {
               "Vul uw details hieronder in",
               textAlign: TextAlign.center,
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
-          const SizedBox(height: 20),
+          const SizedBox(height: 25),
           GenderToggle(
               value: isFemale,
               onToggle: (val) {
@@ -128,7 +128,7 @@ class GenderToggle extends StatefulWidget {
 class _GenderToggleState extends State<GenderToggle> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
         Align(
           alignment: Alignment.centerLeft,
@@ -140,7 +140,7 @@ class _GenderToggleState extends State<GenderToggle> {
             ),
           ),
         ),
-        const SizedBox(height: 17),
+        const SizedBox(width: 25),
         FlutterSwitch(
           width: 120,
           height: 40,
