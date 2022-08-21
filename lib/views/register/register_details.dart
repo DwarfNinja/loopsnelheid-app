@@ -91,9 +91,10 @@ class _RegisterDetailsState extends State<RegisterDetails> {
           DateInput(controller: dateOfBirthController),
           const SizedBox(height: 20),
           InputField(
-              controller: weightController,
-              text: "Gewicht",
-              hint: "Voer uw gewicht in kilogram",
+              controller: heightController,
+              text: "Lengte",
+              hint: "Voer uw lengte in centimeter",
+              article: "De",
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
@@ -101,10 +102,9 @@ class _RegisterDetailsState extends State<RegisterDetails> {
           ),
           const SizedBox(height: 20),
           InputField(
-              controller: heightController,
-              text: "Lengte",
-              hint: "Voer uw lengte in centimeter",
-              article: "De",
+              controller: weightController,
+              text: "Gewicht",
+              hint: "Voer uw gewicht in kilogram",
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
