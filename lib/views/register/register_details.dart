@@ -77,6 +77,7 @@ class _RegisterDetailsState extends State<RegisterDetails> {
           const SizedBox(height: 10),
           Text(
               "Vul uw details hieronder in",
+              textAlign: TextAlign.center,
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
           const SizedBox(height: 20),
           GenderToggle(

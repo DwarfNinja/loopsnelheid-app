@@ -95,6 +95,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
           const SizedBox(height: 10),
           Text(
               "Lees en accepteer de voorwaarden hieronder",
+              textAlign: TextAlign.center,
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
           const SizedBox(height: 20),
           Row(
