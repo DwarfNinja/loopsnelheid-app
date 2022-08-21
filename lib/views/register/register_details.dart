@@ -77,8 +77,9 @@ class _RegisterDetailsState extends State<RegisterDetails> {
           const SizedBox(height: 10),
           Text(
               "Vul uw details hieronder in",
+              textAlign: TextAlign.center,
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
-          const SizedBox(height: 20),
+          const SizedBox(height: 25),
           GenderToggle(
               value: isFemale,
               onToggle: (val) {
@@ -90,9 +91,10 @@ class _RegisterDetailsState extends State<RegisterDetails> {
           DateInput(controller: dateOfBirthController),
           const SizedBox(height: 20),
           InputField(
-              controller: weightController,
-              text: "Gewicht",
-              hint: "Voer uw gewicht in kilogram",
+              controller: heightController,
+              text: "Lengte",
+              hint: "Voer uw lengte in centimeter",
+              article: "De",
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
@@ -100,10 +102,9 @@ class _RegisterDetailsState extends State<RegisterDetails> {
           ),
           const SizedBox(height: 20),
           InputField(
-              controller: heightController,
-              text: "Lengte",
-              hint: "Voer uw lengte in centimeter",
-              article: "De",
+              controller: weightController,
+              text: "Gewicht",
+              hint: "Voer uw gewicht in kilogram",
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
@@ -127,7 +128,7 @@ class GenderToggle extends StatefulWidget {
 class _GenderToggleState extends State<GenderToggle> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
         Align(
           alignment: Alignment.centerLeft,
@@ -139,7 +140,7 @@ class _GenderToggleState extends State<GenderToggle> {
             ),
           ),
         ),
-        const SizedBox(height: 17),
+        const SizedBox(width: 25),
         FlutterSwitch(
           width: 120,
           height: 40,

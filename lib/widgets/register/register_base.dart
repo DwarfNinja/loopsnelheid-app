@@ -76,8 +76,7 @@ class RegisterBaseState<T extends RegisterBase> extends State<T> {
                                       const SizedBox(height: 30),
                                       widget.firstButton,
                                       const SizedBox(height: 15),
-                                      widget.secondButton,
-                                      const SizedBox(height: 80)],
+                                      widget.secondButton],
                                   )
                               )
                           )
