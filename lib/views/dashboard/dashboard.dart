@@ -11,8 +11,6 @@ import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
-import 'package:loopsnelheidapp/services/setting/setting_service.dart';
-import 'package:loopsnelheidapp/services/location/location_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -58,18 +56,18 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    var measureSetting = false;
-    var measurePermitted = false;
+    // bool measureSetting = false;
+    // bool measurePermitted = false;
 
     getAllMeasureValues();
 
-    SettingService.getMeasureSetting().then((value) async {
-      measureSetting = value as bool;
-      measurePermitted = await SettingService.isMeasureDevice();
-      if(measureSetting && measurePermitted) {
-        LocationService.startLocationService();
-      }
-    });
+    // SettingService.getMeasureSetting().then((value) async {
+    //   measureSetting = value as bool;
+    //   measurePermitted = await SettingService.isMeasureDevice();
+    //   if(measureSetting && measurePermitted) {
+    //     LocationService.startLocationService();
+    //   }
+    // });
   }
 
   @override
