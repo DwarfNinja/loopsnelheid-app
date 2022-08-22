@@ -71,6 +71,12 @@ class _SideBarState extends State<SideBar> {
                   ),
                   const SizedBox(height: 50),
                   SideBarButton(
+                    iconData: Icons.person,
+                    text: "Account",
+                    onPressed: () => NavigationService.executeRoute(context, "/account"),
+                  ),
+                  const SizedBox(height: 50),
+                  SideBarButton(
                     iconData: Icons.logout,
                     text: "Afmelden",
                     onPressed: () => logoutUser(context),

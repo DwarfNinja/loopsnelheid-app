@@ -6,6 +6,7 @@ import 'package:device_preview/device_preview.dart' as device_preview;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:loopsnelheidapp/custom_page_route.dart';
+
 import 'package:loopsnelheidapp/services/env_service.dart';
 
 import 'package:loopsnelheidapp/views/dashboard/dashboard.dart';
@@ -16,6 +17,7 @@ import 'package:loopsnelheidapp/views/register/register_documents.dart';
 import 'package:loopsnelheidapp/views/register/register_verification.dart';
 import 'package:loopsnelheidapp/views/settings/devices.dart';
 import 'package:loopsnelheidapp/views/settings/settings.dart';
+import 'package:loopsnelheidapp/views/account/account.dart';
 
 import 'package:loopsnelheidapp/services/api/auth_service.dart';
 
@@ -71,6 +73,8 @@ class MyApp extends StatelessWidget {
           return  const Settings();
         case "/devices":
           return const Devices();
+        case "/account":
+          return const Account();
         default:
           return const Dashboard();
       }
