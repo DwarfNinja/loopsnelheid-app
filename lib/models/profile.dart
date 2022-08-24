@@ -4,12 +4,13 @@ class Profile {
   String dateOfBirth;
   String sex;
   bool isResearchCandidate;
+  bool hasOpenDeleteRequest;
   int height;
   int weight;
   List<dynamic> roles;
 
 
-  Profile(this.id, this.email, this.dateOfBirth, this.sex, this.isResearchCandidate, this.height, this.weight, this.roles);
+  Profile(this.id, this.email, this.dateOfBirth, this.sex, this.isResearchCandidate, this.hasOpenDeleteRequest, this.height, this.weight, this.roles);
 
   Map toJson() => {
     'id': id,
@@ -17,6 +18,7 @@ class Profile {
     'dateOfBirth': dateOfBirth,
     'sex': sex,
     'isResearchCandidate': isResearchCandidate,
+    'hasOpenDeleteRequest': hasOpenDeleteRequest,
     'length': height,
     'weight': weight,
     'roles': roles
@@ -28,6 +30,7 @@ class Profile {
         dateOfBirth = json['dateOfBirth'],
         sex = json['sex'],
         isResearchCandidate = json['isResearchCandidate'],
+        hasOpenDeleteRequest = json['hasOpenDeleteRequest'],
         weight = json['weight'],
         height = json['length'],
         roles = json['roles'];

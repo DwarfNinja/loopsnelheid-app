@@ -5,6 +5,7 @@ import 'package:loopsnelheidapp/models/profile.dart';
 
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
+import 'package:loopsnelheidapp/widgets/account/account_button.dart';
 import 'package:loopsnelheidapp/widgets/account/account_line.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
@@ -21,10 +22,11 @@ class Account extends StatefulWidget {
 class _AccountState extends State<Account> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
-  Profile profile = Profile(0, "laden...", "laden...", "laden...", false, 0, 0, ["laden.."]);
+  final currentPasswordController = TextEditingController();
+  Profile profile = Profile(0, "laden...", "laden...", "laden...", false, false, 0, 0, ["laden.."]);
 
   void getAccount() async {
-    await AccountService.getAccount().then((value) => {
+    await ProfileService.getAccount().then((value) => {
       profile = value
     });
 
@@ -94,23 +96,45 @@ class _AccountState extends State<Account> {
                         app_theme.bottomBoxShadow,
                       ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(45),
-                      child: Column(
-                        children: [
-                          AccountLine(label: "Email", text: profile.email),
-                          const SizedBox(height: 20),
-                          const AccountLine(label: "Wachtwoord", text: "●●●●●●●●"),
-                          const SizedBox(height: 20),
-                          AccountLine(label: "Geboortedatum", text: profile.dateOfBirth),
-                          const SizedBox(height: 20),
-                          AccountLine(label: "Geslacht", text: profile.sex == "MALE" ? "MAN" : "VROUW"),
-                          const SizedBox(height: 20),
-                          AccountLine(label: "Lengte", text: profile.height.toString()),
-                          const SizedBox(height: 20),
-                          AccountLine(label: "Gewicht", text: profile.weight.toString()),
-                        ],
-                      ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 45, right: 45, top: 45, bottom: 30),
+                          child: Column(
+                            children: [
+                              AccountLine(label: "Email", text: profile.email),
+                              const SizedBox(height: 20),
+                              const AccountLine(label: "Wachtwoord", text: "●●●●●●●●"),
+                              const SizedBox(height: 20),
+                              AccountLine(label: "Geboortedatum", text: profile.dateOfBirth),
+                              const SizedBox(height: 20),
+                              AccountLine(label: "Geslacht", text: profile.sex == "MALE" ? "MAN" : "VROUW"),
+                              const SizedBox(height: 20),
+                              AccountLine(label: "Lengte", text: profile.height.toString()),
+                              const SizedBox(height: 20),
+                              AccountLine(label: "Gewicht", text: profile.weight.toString()),
+                            ],
+                          ),
+                        ),
+                        profile.hasOpenDeleteRequest ? AccountButton(
+                          iconData: Icons.cancel_outlined,
+                          text: "Verwijderen annuleren",
+                          buttonColor: app_theme.red,
+                          onPressed: () async {
+                            await ProfileService.cancelAccountDeletion().then((value) => {
+                              getAccount()
+                            });
+                          }) : AccountButton(
+                          iconData: Icons.delete_rounded,
+                          text: "Account verwijderen",
+                          buttonColor: app_theme.red,
+                          onPressed: () async {
+                            await ProfileService.deleteAccount().then((value) => {
+                              getAccount()
+                            });
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -119,6 +143,9 @@ class _AccountState extends State<Account> {
           ],
         ),
       ),
+    );
+  }
+}
     );
   }
 }
