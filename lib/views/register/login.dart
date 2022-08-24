@@ -86,6 +86,7 @@ class _LoginState extends State<Login> {
           const SizedBox(height: 10),
           Text(
               "Login met u huidige account of maak een nieuwe account aan",
+              textAlign: TextAlign.center,
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
           const SizedBox(height: 20),
           InputField(
