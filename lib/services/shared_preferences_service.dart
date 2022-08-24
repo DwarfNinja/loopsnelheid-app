@@ -22,9 +22,34 @@ class SharedPreferencesService {
     sharedPreferences.setString(name, value);
   }
 
-  getString(String name) async {
+  getString(String name) {
     final String? string = sharedPreferences.getString(name);
-
     return string;
+  }
+
+  setBool(String name, bool value) async {
+    sharedPreferences.setBool(name, value);
+  }
+
+  getBool(String name) {
+    return sharedPreferences.getBool(name);
+  }
+
+  removeString(String name) {
+    return sharedPreferences.remove(name);
+  }
+
+  getInteger(String name) {
+    final int? value = sharedPreferences.getInt(name);
+
+    return value;
+  }
+
+  setInteger(String name, int value) async {
+    sharedPreferences.setInt(name, value);
+  }
+
+  clearPreferences() {
+    sharedPreferences.clear();
   }
 }
