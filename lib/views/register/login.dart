@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
+import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 import 'package:loopsnelheidapp/services/api/login_service.dart';
 import 'package:loopsnelheidapp/services/device_info_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 class Login extends StatefulWidget {
 
@@ -91,7 +91,11 @@ class _LoginState extends State<Login> {
           const SizedBox(height: 20),
           InputField(
               controller: emailController,
-              text: "E-mailadres", hint: "Voer hier uw e-mailadres in"
+              text: "E-mailadres", hint: "Voer hier uw e-mailadres in",
+              validatorFunction: ValidatorFunction(
+                  regex: RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'),
+                  function: null,
+                  message: "Niet een geldig e-mailadres")
           ),
           const SizedBox(height: 25),
           InputField(
@@ -107,13 +111,16 @@ class _LoginState extends State<Login> {
 
 void alertDialog(BuildContext context) {
   var alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       title: Text(
           "Inloggen niet gelukt",
           style: app_theme.textTheme.headline5!
               .copyWith(color: app_theme.red)
       ),
       content: Text(
-          'Controleer uw ingevoerde gegevens nog eens.',
+          'Controleer uw e-mailadres en/of wachtwoord',
           style: app_theme.textTheme.bodyText2!
               .copyWith(color: app_theme.black)
       ),
@@ -128,7 +135,7 @@ void alertDialog(BuildContext context) {
             child: Text(
                 'Melding sluiten',
                 style: app_theme.textTheme.bodyText2!
-                    .copyWith(color: app_theme.black, fontSize: 14))
+                    .copyWith(color: app_theme.blue, fontSize: 14))
         ),
       ]
   );
