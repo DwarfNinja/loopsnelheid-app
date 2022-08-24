@@ -107,13 +107,16 @@ class _LoginState extends State<Login> {
 
 void alertDialog(BuildContext context) {
   var alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       title: Text(
           "Inloggen niet gelukt",
           style: app_theme.textTheme.headline5!
               .copyWith(color: app_theme.red)
       ),
       content: Text(
-          'Controleer uw ingevoerde gegevens nog eens.',
+          'Controleer uw e-mailadres en/of wachtwoord',
           style: app_theme.textTheme.bodyText2!
               .copyWith(color: app_theme.black)
       ),
@@ -128,7 +131,7 @@ void alertDialog(BuildContext context) {
             child: Text(
                 'Melding sluiten',
                 style: app_theme.textTheme.bodyText2!
-                    .copyWith(color: app_theme.black, fontSize: 14))
+                    .copyWith(color: app_theme.blue, fontSize: 14))
         ),
       ]
   );
