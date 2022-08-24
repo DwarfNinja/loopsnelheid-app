@@ -91,33 +91,35 @@ class _DevicesState extends State<Devices> {
                         app_theme.bottomBoxShadow,
                       ],
                     ),
-                    child: Stack(
-                      children: [
-                        FutureBuilder<List<Device>>(
-                          initialData: const <Device>[],
-                          future: _listDevicesFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
-
-                            return DataTable(
-                                columns: const [
-                                  DataColumn(
-                                      label: Text('Apparaat'),
-                                  ),
-                                  DataColumn(
-                                    label: Text('Actie'),
-                                  )
-                                ],
-                                rows: List.generate(
-                                  snapshot.data!.length,
+                    child: FutureBuilder(
+                      initialData: const <Device>[],
+                      future: _listDevicesFuture,
+                      builder: (BuildContext context, AsyncSnapshot<List<Device>> snapshot) {
+                        if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                                strokeWidth: 5,
+                                backgroundColor: app_theme.white,
+                                color: app_theme.blue),
+                          );
+                        }
+                        return DataTable(
+                            columns: const [
+                              DataColumn(
+                                label: Text('Apparaat'),
+                              ),
+                              DataColumn(
+                                label: Text('Actie'),
+                              )
+                            ],
+                            rows: List.generate(
+                              snapshot.data!.length,
                                   (index) {
-                                    var device = snapshot.data![index];
-                                    return DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(
-                                          SizedBox(
+                                var device = snapshot.data![index];
+                                return DataRow(
+                                  cells: <DataCell>[
+                                    DataCell(
+                                        SizedBox(
                                             width: 200,
                                             child: RichText(
                                               text: TextSpan(
@@ -125,34 +127,31 @@ class _DevicesState extends State<Devices> {
                                                 style: DefaultTextStyle.of(context).style,
                                                 children: [
                                                   TextSpan(
-                                                    text: device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat",
-                                                    style: const TextStyle(fontSize: 16)
+                                                      text: device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat",
+                                                      style: const TextStyle(fontSize: 16)
                                                   ),
                                                 ],
                                               ),
                                             )
-                                          )
-                                        ),
-                                        DataCell(
-                                          TextButton(
-                                            child: const Icon(Icons.check),
-                                            onPressed: () {
-                                              deviceService.markDeviceAsMeasureDevice(device.session).then((success) => {
-                                                if (success) {
-                                                  refreshList()
-                                                }
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ).toList(),
-                            );
-                          },
-                        )
-                      ],
+                                        )
+                                    ),
+                                    DataCell(
+                                      TextButton(
+                                        child: const Icon(Icons.check),
+                                        onPressed: () {
+                                          deviceService.markDeviceAsMeasureDevice(device.session).then((success) => {
+                                            if (success) {
+                                              refreshList()
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ).toList());
+                      },
                     ),
                   ),
                 ],
