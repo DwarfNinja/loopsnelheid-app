@@ -167,7 +167,7 @@ class _SettingsState extends State<Settings> {
                               }),
                           const SizedBox(height: 50),
                           SettingsButton(
-                            iconData: Icons.devices,
+                            iconData: Icons.devices_rounded,
                             text: "Mijn apparaten",
                             onPressed: (){
                               NavigationService.executeRoute(context, "/devices");
@@ -175,7 +175,7 @@ class _SettingsState extends State<Settings> {
                           ),
                           const SizedBox(height: 20),
                           SettingsButton(
-                            iconData: Icons.cloud_download,
+                            iconData: Icons.cloud_download_rounded,
                             text: "Exporteer gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
@@ -188,7 +188,7 @@ class _SettingsState extends State<Settings> {
                               if(snapshot.data != null && snapshot.data == true) {
                                 return
                                   SettingsButton(
-                                    iconData: Icons.download,
+                                    iconData: Icons.download_rounded,
                                     text: "Exporteer onderzoek",
                                     onPressed: (){
                                       exportAllDataButtonOnPressed();

@@ -32,7 +32,7 @@ class SettingsButton extends StatelessWidget {
         onPressed: onPressed,
         child: Row(
           children: [
-            Icon(iconData, color: app_theme.white, size: 35),
+            Icon(iconData, color: app_theme.white, size: 33),
             const SizedBox(width: 10),
             Text(text, style: app_theme.textTheme.bodyText1!.copyWith(color: app_theme.white))
           ],
