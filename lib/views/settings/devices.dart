@@ -36,7 +36,6 @@ class _DevicesState extends State<Devices> {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width - 20;
 
     return Scaffold(
       backgroundColor: app_theme.blue,
@@ -48,14 +47,21 @@ class _DevicesState extends State<Devices> {
         ),
         child: Stack(
           children: [
-            IconButton(
-              padding: const EdgeInsets.all(20),
-              icon: const Icon(Icons.menu),
-              color: Colors.white,
-              iconSize: 38,
-              onPressed: () {
-                _globalKey.currentState?.openDrawer();
-              },
+            Column(
+              children: [
+                IconButton(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  icon: const Icon(Icons.menu),
+                  color: Colors.white,
+                  iconSize: 38,
+                  onPressed: () {
+                    _globalKey.currentState?.openDrawer();
+                  },
+                ),
+                Text("Menu",
+                    style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
+                ),
+              ],
             ),
             Center(
               child: Column(
@@ -66,10 +72,16 @@ class _DevicesState extends State<Devices> {
                     style: app_theme.textTheme.headline3!
                         .copyWith(color: Colors.white),
                   ),
+                  const SizedBox(height: 15),
+                  const Icon(
+                    Icons.devices_rounded,
+                    color: Colors.white,
+                    size: 50,
+                  ),
                   const SizedBox(height: 20),
                   Container (
-                    width: width,
-                    height: 700,
+                    width: 375,
+                    height: 645,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(
