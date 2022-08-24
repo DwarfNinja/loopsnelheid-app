@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
-
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
+import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 import 'package:loopsnelheidapp/services/api/login_service.dart';
 import 'package:loopsnelheidapp/services/device_info_service.dart';
@@ -15,16 +14,15 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class Login extends StatefulWidget {
 
-  const Login({Key? key})
-      : super(key: key);
+  const Login({Key? key}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -52,6 +50,7 @@ class _LoginState extends State<Login> {
         sharedPreferencesService.setObject("roles", body['roles']);
         sharedPreferencesService.setString("device_session", body['device']['session']);
         sharedPreferencesService.setString("device_type", body['device']['type']);
+        sharedPreferencesService.setBool("measures", false);
 
         Navigator.pushNamed(context, "/");
       } else if (response.statusCode == 401) {
@@ -67,92 +66,61 @@ class _LoginState extends State<Login> {
       userAuthenticate().then((response) => handleAuthenticateResponse(response)).catchError((error) => handleAuthenticateError(error));
     }
 
-    return Scaffold(
-      backgroundColor: app_theme.blue,
-      drawer: const SideBar(),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: app_theme.mainLinearGradient,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(height: 25),
-            Text(
-              "Loopsnelheid",
-              style: app_theme.textTheme.headline3!
-                  .copyWith(color: Colors.white),
-            ),
-            const Icon(
-              Icons.directions_walk,
-              color: Colors.white,
-              size: 60,
-            ),
-            const SizedBox(height: 10),
-            Container (
-              width: double.infinity,
-              height: 650,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
-                ),
-                boxShadow: [
-                  app_theme.bottomBoxShadow,
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: Form(
-                  key: formKey,
-                  autovalidateMode: submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 30),
-                      InputField(
-                          controller: emailController,
-                          text: "E-mailadres", hint: "Voer hier uw e-mailadres in"
-                      ),
-                      const SizedBox(height: 20),
-                      InputField(
-                          controller: passwordController,
-                          text: "Wachtwoord",
-                          hint: "Voer hier uw wachtwoord in",
-                          private: true
-                      ),
-                      const SizedBox(height: 25),
-                      FormButton(
-                          text: "Inloggen",
-                          color: app_theme.blue,
-                          onPressed: () {
-                            setState(() => submitted = true);
-                            if (formKey.currentState!.validate()) {
-                              onPressedLoginButton();
-                            }
-                          }),
-                      const SizedBox(height: 15),
-                      FormButton(text: "Registreren", color: app_theme.white, onPressed: () => Navigator.pushNamed(context, "/register_basics"))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return RegisterBase(
+        formKey: formKey,
+        submitted: submitted,
+        firstButton: FormButton(
+            text: "Inloggen",
+            color: app_theme.blue,
+            onPressed: () {
+              setState(() => submitted = true);
+              if (formKey.currentState!.validate()) {
+                onPressedLoginButton();
+              }
+            }),
+        secondButton: FormButton(text: "Registreren", color: app_theme.white, onPressed: () => Navigator.pushNamed(context, "/register_basics")),
+        children: [
+          Text(
+              "Login",
+              style: app_theme.textTheme.headline5),
+          const SizedBox(height: 10),
+          Text(
+              "Login met u huidige account of maak een nieuwe account aan",
+              textAlign: TextAlign.center,
+              style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
+          const SizedBox(height: 20),
+          InputField(
+              controller: emailController,
+              text: "E-mailadres", hint: "Voer hier uw e-mailadres in",
+              validatorFunction: ValidatorFunction(
+                  regex: RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'),
+                  function: null,
+                  message: "Niet een geldig e-mailadres")
+          ),
+          const SizedBox(height: 25),
+          InputField(
+              controller: passwordController,
+              text: "Wachtwoord",
+              hint: "Voer hier uw wachtwoord in",
+              private: true
+          ),
+        ]
     );
   }
 }
 
 void alertDialog(BuildContext context) {
   var alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       title: Text(
-        "Inloggen niet gelukt",
-        style: app_theme.textTheme.headline5!
-          .copyWith(color: app_theme.red)
+          "Inloggen niet gelukt",
+          style: app_theme.textTheme.headline5!
+              .copyWith(color: app_theme.red)
       ),
       content: Text(
-        'Controleer uw ingevoerde gegevens nog eens.',
+          'Controleer uw e-mailadres en/of wachtwoord',
           style: app_theme.textTheme.bodyText2!
               .copyWith(color: app_theme.black)
       ),
@@ -160,21 +128,21 @@ void alertDialog(BuildContext context) {
       alignment: AlignmentDirectional.topCenter,
       actions: <Widget>[
         TextButton(
-          onPressed: () {
-            Navigator.of(context)
-                .pop(false);
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(false);
             },
-          child: Text(
-              'Melding sluiten',
-              style: app_theme.textTheme.bodyText2!
-                  .copyWith(color: app_theme.black, fontSize: 14))
+            child: Text(
+                'Melding sluiten',
+                style: app_theme.textTheme.bodyText2!
+                    .copyWith(color: app_theme.blue, fontSize: 14))
         ),
       ]
   );
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    }
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      }
   );
 }

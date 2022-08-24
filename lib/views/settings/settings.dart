@@ -10,7 +10,7 @@ import 'package:loopsnelheidapp/services/router/navigation_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 import 'package:loopsnelheidapp/services/api/export_service.dart';
 import 'package:loopsnelheidapp/services/api/research_service.dart';
-
+import 'package:loopsnelheidapp/services/setting/setting_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -34,7 +34,7 @@ class _SettingsState extends State<Settings> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
-    var isAdministrator = false;
+    bool isAdministrator = false;
     await sharedPreferencesService.getObject("roles").then((value) => {
       isAdministrator = value.contains("ROLE_ADMIN")
     });
@@ -149,15 +149,25 @@ class _SettingsState extends State<Settings> {
                       child: Column(
                         children:  [
                           const SizedBox(height: 50),
+                          const ToggleSetting(
+                              text: "Metingen",
+                              setting: "measures",
+                              ),
+                          const SizedBox(height: 25),
                           ToggleSetting(
-                              text: "Meten",
-                              setting: "measure",
+                              text: "[Test]\nHandmatig Meten",
+                              setting: "manual_measure",
                               onToggle: (bool status) {
-                               status ? LocationService.startLocationService() : LocationService.stopLocationService();
+                                SettingService.getMeasureSetting().then((value) async {
+                                  bool measurePermitted = await SettingService.isMeasureDevice();
+                                  if(value == true && measurePermitted) {
+                                    status ? LocationService.startLocationService() : LocationService.stopLocationService();
+                                  }
+                                });
                               }),
                           const SizedBox(height: 50),
                           SettingsButton(
-                            iconData: Icons.devices,
+                            iconData: Icons.devices_rounded,
                             text: "Mijn apparaten",
                             onPressed: (){
                               NavigationService.executeRoute(context, "/devices");
@@ -165,7 +175,7 @@ class _SettingsState extends State<Settings> {
                           ),
                           const SizedBox(height: 20),
                           SettingsButton(
-                            iconData: Icons.cloud_download,
+                            iconData: Icons.cloud_download_rounded,
                             text: "Exporteer gegevens",
                             onPressed: (){
                               exportDataButtonOnPressed();
@@ -178,7 +188,7 @@ class _SettingsState extends State<Settings> {
                               if(snapshot.data != null && snapshot.data == true) {
                                 return
                                   SettingsButton(
-                                    iconData: Icons.download,
+                                    iconData: Icons.download_rounded,
                                     text: "Exporteer onderzoek",
                                     onPressed: (){
                                       exportAllDataButtonOnPressed();
