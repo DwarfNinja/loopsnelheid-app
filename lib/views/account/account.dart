@@ -3,10 +3,10 @@ import 'package:loopsnelheidapp/services/api/profile_service.dart';
 
 import 'package:loopsnelheidapp/models/profile.dart';
 
-import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
-
 import 'package:loopsnelheidapp/widgets/account/account_button.dart';
 import 'package:loopsnelheidapp/widgets/account/account_line.dart';
+
+import 'package:loopsnelheidapp/widgets/info_base.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -20,7 +20,6 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
 
   final currentPasswordController = TextEditingController();
@@ -53,147 +52,91 @@ class _AccountState extends State<Account> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: app_theme.blue,
-      key: _globalKey,
-      drawer: const SideBar(),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: app_theme.mainLinearGradient,
-        ),
-        child: Stack(
-          children: [
-            Column(
+    return InfoBase(
+      pageName: "Account",
+      pageIcon: Icons.person,
+      child: Column(
+        children: [
+          const SizedBox(height: 50),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 45),
+            child: Column(
               children: [
-                IconButton(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  icon: const Icon(Icons.menu),
-                  color: Colors.white,
-                  iconSize: 38,
-                  onPressed: () {
-                    _globalKey.currentState?.openDrawer();
-                  },
-                ),
-                Text("Menu",
-                    style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
-                ),
+                AccountLine(label: "Email", text: profile.email),
+                const SizedBox(height: 20),
+                const AccountLine(label: "Wachtwoord", text: "●●●●●●●●"),
+                const SizedBox(height: 20),
+                AccountLine(label: "Geboortedatum", text: profile.dateOfBirth),
+                const SizedBox(height: 20),
+                AccountLine(label: "Geslacht", text: profile.sex == "MALE" ? "MAN" : "VROUW"),
+                const SizedBox(height: 20),
+                AccountLine(label: "Lengte", text: profile.height.toString()),
+                const SizedBox(height: 20),
+                AccountLine(label: "Gewicht", text: profile.weight.toString()),
               ],
             ),
-            Center(
-              child: Column(
-                children: [
-                  const SizedBox(height: 70),
-                  Text(
-                    "Account",
-                    style: app_theme.textTheme.headline3!
-                        .copyWith(color: Colors.white),
-                  ),
-                  const SizedBox(height: 15),
-                  const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 50,
-                  ),
-                  const SizedBox(height: 20),
-                  Container (
-                    width: 375,
-                    height: 645,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
-                      ),
-                      boxShadow: [
-                        app_theme.bottomBoxShadow,
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 45, right: 45, top: 45, bottom: 30),
-                          child: Column(
-                            children: [
-                              AccountLine(label: "Email", text: profile.email),
-                              const SizedBox(height: 20),
-                              const AccountLine(label: "Wachtwoord", text: "●●●●●●●●"),
-                              const SizedBox(height: 20),
-                              AccountLine(label: "Geboortedatum", text: profile.dateOfBirth),
-                              const SizedBox(height: 20),
-                              AccountLine(label: "Geslacht", text: profile.sex == "MALE" ? "MAN" : "VROUW"),
-                              const SizedBox(height: 20),
-                              AccountLine(label: "Lengte", text: profile.height.toString()),
-                              const SizedBox(height: 20),
-                              AccountLine(label: "Gewicht", text: profile.weight.toString()),
-                            ],
-                          ),
-                        ),
-                        profile.hasOpenDeleteRequest ? AccountButton(
-                          iconData: Icons.cancel_outlined,
-                          text: "Verwijderen annuleren",
-                          buttonColor: app_theme.red,
-                          onPressed: () async {
-                            await ProfileService.cancelAccountDeletion().then((value) => {
-                              getAccount()
-                            });
-                          }) : AccountButton(
-                          iconData: Icons.delete_rounded,
-                          text: "Account verwijderen",
-                          buttonColor: app_theme.red,
-                          onPressed: () async {
-                            await ProfileService.deleteAccount().then((value) => {
-                              getAccount()
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        AccountButton(
-                          iconData: Icons.edit_rounded,
-                          text: "Wachtwoord veranderen",
-                          buttonColor: app_theme.blue,
-                          onPressed: (){
-                            setState(() {
-                              requestedPasswordChange = !requestedPasswordChange;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        Form(
-                          key: formKey,
-                          child: Column(
-                            children: requestedPasswordChange ? [
-                              PasswordField(
-                                  controller: currentPasswordController,
-                                  text: "Huidige Wachtwoord",
-                                  hint: "Uw huidige wachtwoord",
-                                  private: true
-                              ),
-                              const SizedBox(height: 10),
-                              PasswordField(
-                                  controller: newPasswordController,
-                                  text: "Huidige Wachtwoord",
-                                  hint: "Uw nieuwe wachtwoord",
-                                  private: true
-                              ),
-                              const SizedBox(height: 10),
-                              AccountButton(
-                                iconData: Icons.send,
-                                text: "Versturen",
-                                buttonColor: app_theme.blue,
-                                buttonSize: const Size(170, 45),
-                                iconSize: 28,
-                                onPressed: () => onPressedSubmitPasswordChange(),
-                              ),
-                            ] : [],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+          ),
+          const SizedBox(height: 50),
+          profile.hasOpenDeleteRequest ? AccountButton(
+              iconData: Icons.cancel_outlined,
+              text: "Verwijderen annuleren",
+              buttonColor: app_theme.red,
+              onPressed: () async {
+                await ProfileService.cancelAccountDeletion().then((value) => {
+                  getAccount()
+                });
+              }) : AccountButton(
+            iconData: Icons.delete_rounded,
+            text: "Account verwijderen",
+            buttonColor: app_theme.red,
+            onPressed: () async {
+              await ProfileService.deleteAccount().then((value) => {
+                getAccount()
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          AccountButton(
+            iconData: Icons.edit_rounded,
+            text: "Wachtwoord veranderen",
+            buttonColor: app_theme.blue,
+            onPressed: (){
+              setState(() {
+                requestedPasswordChange = !requestedPasswordChange;
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          Form(
+            key: formKey,
+            child: Column(
+              children: requestedPasswordChange ? [
+                PasswordField(
+                    controller: currentPasswordController,
+                    text: "Huidige Wachtwoord",
+                    hint: "Uw huidige wachtwoord",
+                    private: true
+                ),
+                const SizedBox(height: 10),
+                PasswordField(
+                    controller: newPasswordController,
+                    text: "Huidige Wachtwoord",
+                    hint: "Uw nieuwe wachtwoord",
+                    private: true
+                ),
+                const SizedBox(height: 10),
+                AccountButton(
+                  iconData: Icons.send,
+                  text: "Versturen",
+                  buttonColor: app_theme.blue,
+                  buttonSize: const Size(170, 45),
+                  iconSize: 28,
+                  onPressed: () => onPressedSubmitPasswordChange(),
+                ),
+              ] : [],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
