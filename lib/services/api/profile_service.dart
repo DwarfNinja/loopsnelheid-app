@@ -10,6 +10,7 @@ import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 class ProfileService {
   static final String profileEndpoint = EnvService().loadBackendApiFromEnvFile() + "/auth/profile";
   static final String deleteEndpoint = EnvService().loadBackendApiFromEnvFile() + "/auth/profile/delete";
+  static final String forgotPasswordEndpoint = EnvService().loadBackendApiFromEnvFile() + "/auth/reset/password";
   static final String passwordEndpoint = EnvService().loadBackendApiFromEnvFile() + "/auth/profile/password";
 
   static Future<Profile> getAccount() async {
@@ -45,6 +46,20 @@ class ProfileService {
       'Accept': 'application/json',
       'Authorization': 'Bearer ${sharedPreferencesService.getString("token")}',
     });
+    return response.statusCode;
+  }
+
+  static Future<int> forgotPassword(String email) async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    await sharedPreferencesService.getSharedPreferenceInstance();
+
+    final response = await http.post(Uri.parse(forgotPasswordEndpoint), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${sharedPreferencesService.getString("token")}',
+    },
+        body: jsonEncode({"email": email})
+    );
     return response.statusCode;
   }
 

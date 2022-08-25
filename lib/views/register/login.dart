@@ -79,6 +79,7 @@ class _LoginState extends State<Login> {
               }
             }),
         secondButton: FormButton(text: "Registreren", color: app_theme.white, onPressed: () => Navigator.pushNamed(context, "/register_basics")),
+        buttonSpacing: 15,
         children: [
           Text(
               "Login",
@@ -104,6 +105,20 @@ class _LoginState extends State<Login> {
               hint: "Voer hier uw wachtwoord in",
               private: true
           ),
+          const SizedBox(height: 15),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: const Size(5, 30),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+              onPressed: () {
+                Navigator.pushNamed(context, "/forgot_password");
+              },
+              child: Text('Wachtwoord vergeten', style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.blue)),
+            ),
+          )
         ]
     );
   }
@@ -128,10 +143,7 @@ void alertDialog(BuildContext context) {
       alignment: AlignmentDirectional.topCenter,
       actions: <Widget>[
         TextButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .pop(false);
-            },
+            onPressed: () => Navigator.of(context).pop(),
             child: Text(
                 'Melding sluiten',
                 style: app_theme.textTheme.bodyText2!
