@@ -79,6 +79,7 @@ class _LoginState extends State<Login> {
               }
             }),
         secondButton: FormButton(text: "Registreren", color: app_theme.white, onPressed: () => Navigator.pushNamed(context, "/register_basics")),
+        buttonSpacing: 15,
         children: [
           Text(
               "Login",
@@ -128,10 +129,7 @@ void alertDialog(BuildContext context) {
       alignment: AlignmentDirectional.topCenter,
       actions: <Widget>[
         TextButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .pop(false);
-            },
+            onPressed: () => Navigator.of(context).pop(),
             child: Text(
                 'Melding sluiten',
                 style: app_theme.textTheme.bodyText2!
