@@ -9,7 +9,7 @@ class CustomSnackbar extends SnackBar {
     padding: const EdgeInsets.all(20),
     margin: const EdgeInsets.all(10),
     duration: const Duration(seconds: 4),
-    backgroundColor: messageType == MessageType.success ? app_theme.green : app_theme.red,
+    backgroundColor: getBackgroundColor(messageType),
     content: Center(
         heightFactor: 1,
         child: Row(
@@ -17,7 +17,7 @@ class CustomSnackbar extends SnackBar {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Icon(
-                  messageType == MessageType.success ? Icons.check_circle_outline_rounded : Icons.error_outline_rounded,
+                  getIcon(messageType),
                   color: app_theme.white, size: 27),
             ),
             Flexible(
@@ -32,9 +32,44 @@ class CustomSnackbar extends SnackBar {
   );
 }
 
+Color getBackgroundColor(messageType) {
+    switch(messageType) {
+      case MessageType.success: {
+        return app_theme.green;
+      }
+      case MessageType.error: {
+        return app_theme.red;
+      }
+      case MessageType.info: {
+        return app_theme.blue;
+      }
+      default: {
+        return app_theme.blue;
+      }
+    }
+}
+
+IconData getIcon(messageType) {
+  switch(messageType) {
+    case MessageType.success: {
+      return Icons.check_circle_outline_rounded;
+    }
+    case MessageType.error: {
+      return Icons.error_outline_rounded;
+    }
+    case MessageType.info: {
+      return Icons.info_outline_rounded;
+    }
+    default: {
+      return Icons.info_outline_rounded;
+    }
+  }
+}
+
 enum MessageType {
   success,
-  error
+  error,
+  info
 }
 
 

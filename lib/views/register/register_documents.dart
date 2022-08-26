@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/widgets/register/register_snackbar.dart';
+import 'package:loopsnelheidapp/widgets/custom_snackbar.dart';
 import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 import 'package:pdfx/pdfx.dart';
