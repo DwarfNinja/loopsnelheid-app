@@ -80,7 +80,7 @@ class _AccountState extends State<Account> {
           profile.hasOpenDeleteRequest ? AccountButton(
               iconData: Icons.cancel_outlined,
               text: "Verwijderen annuleren",
-              buttonColor: app_theme.red,
+              color: app_theme.red,
               onPressed: () async {
                 await ProfileService.cancelAccountDeletion().then((value) => {
                   getAccount()
@@ -88,7 +88,7 @@ class _AccountState extends State<Account> {
               }) : AccountButton(
             iconData: Icons.delete_rounded,
             text: "Account verwijderen",
-            buttonColor: app_theme.red,
+            color: app_theme.red,
             onPressed: () async {
               await ProfileService.deleteAccount().then((value) => {
                 getAccount()
@@ -99,7 +99,7 @@ class _AccountState extends State<Account> {
           AccountButton(
             iconData: Icons.edit_rounded,
             text: "Wachtwoord veranderen",
-            buttonColor: app_theme.blue,
+            color: app_theme.blue,
             onPressed: (){
               setState(() {
                 requestedPasswordChange = !requestedPasswordChange;
@@ -128,7 +128,7 @@ class _AccountState extends State<Account> {
                 AccountButton(
                   iconData: Icons.send,
                   text: "Versturen",
-                  buttonColor: app_theme.blue,
+            color: app_theme.blue,
                   buttonSize: const Size(170, 45),
                   iconSize: 28,
                   onPressed: () => onPressedSubmitPasswordChange(),
