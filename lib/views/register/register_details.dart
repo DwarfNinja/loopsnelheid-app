@@ -9,11 +9,11 @@ import 'package:loopsnelheidapp/models/user.dart';
 import 'package:loopsnelheidapp/widgets/register/date_input.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
+import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 class RegisterDetails extends StatefulWidget {
 
@@ -118,8 +118,18 @@ class _RegisterDetailsState extends State<RegisterDetails> {
 class GenderToggle extends StatefulWidget {
   final Function(bool) onToggle;
   final bool value;
+  final TextStyle? headerStyle;
+  final Size switchSize;
+  final double toggleSize;
 
-  const GenderToggle({Key? key, required this.onToggle, required this.value}) : super(key: key);
+  const GenderToggle({
+    Key? key,
+    required this.onToggle,
+    required this.value,
+    this.headerStyle,
+    this.switchSize = const Size(120, 40),
+    this.toggleSize = 35
+  }) : super(key: key);
 
   @override
   State<GenderToggle> createState() => _GenderToggleState();
@@ -136,16 +146,16 @@ class _GenderToggleState extends State<GenderToggle> {
             padding: const EdgeInsets.only(left: 10),
             child: Text(
                 "Geslacht",
-                style: app_theme.textTheme.headline6!.copyWith(color: app_theme.black)
+                style: widget.headerStyle ?? app_theme.textTheme.headline6!.copyWith(color: app_theme.black)
             ),
           ),
         ),
         const SizedBox(width: 25),
         FlutterSwitch(
-          width: 120,
-          height: 40,
+          width: widget.switchSize.width,
+          height: widget.switchSize.height,
           valueFontSize: 18,
-          toggleSize: 35,
+          toggleSize: widget.toggleSize,
           value: widget.value,
           activeText: "Vrouw",
           inactiveText: "Man",
