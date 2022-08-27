@@ -29,15 +29,7 @@ class _DateInputState extends State<DateInput> {
 
   @override
   void initState() {
-    widget.controller.text = "";
-    widget.controller.addListener(onDateInputControllerChanged);
     super.initState();
-  }
-
-  void onDateInputControllerChanged() {
-    setState(() {
-      empty = (widget.controller.text == "") ? true : false;
-    });
   }
 
   @override
@@ -112,6 +104,7 @@ class _DateInputState extends State<DateInput> {
               setState(() {
                 widget.controller.text = formattedDate;
               });
+              empty = widget.controller.text.isEmpty ? true : false;
             }
             WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
           },
@@ -120,7 +113,7 @@ class _DateInputState extends State<DateInput> {
               return "De geboortedatum mag niet leeg zijn";
             }
 
-            if (DateTime.now().year - pickedDate!.year < 18) {
+            if (DateTime.now().year - DateFormat("yyyy-MM-dd").parse(widget.controller.text).year < 18) {
               return "De gebruiker moet 18 jaar of ouder zijn";
             }
 
