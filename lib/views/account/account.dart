@@ -5,8 +5,9 @@ import 'package:loopsnelheidapp/models/profile.dart';
 
 import 'package:loopsnelheidapp/widgets/account/account_button.dart';
 import 'package:loopsnelheidapp/widgets/account/account_line.dart';
-
 import 'package:loopsnelheidapp/widgets/info_base.dart';
+
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -24,17 +25,21 @@ class _AccountState extends State<Account> {
 
   final currentPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
+  final SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
 
   bool requestedPasswordChange = false;
 
   Profile profile = Profile(0, "laden...", "laden...", "laden...", false, false, 0, 0, ["laden.."]);
 
   void getAccount() async {
-    await ProfileService.getAccount().then((value) => {
-      profile = value
-    });
+    await sharedPreferencesService.getSharedPreferenceInstance();
 
-    setState(() {});
+    await ProfileService.getAccount().then((value) => {
+      setState(() {
+        profile = value;
+      }),
+      sharedPreferencesService.setObject("profile", profile)
+    });
   }
 
   onPressedSubmitPasswordChange() {
@@ -97,44 +102,17 @@ class _AccountState extends State<Account> {
           ),
           const SizedBox(height: 20),
           AccountButton(
-            iconData: Icons.edit_rounded,
-            text: "Wachtwoord veranderen",
+            iconData: Icons.lock_person_rounded,
+            text: "Login aanpassen",
             color: app_theme.blue,
-            onPressed: (){
-              setState(() {
-                requestedPasswordChange = !requestedPasswordChange;
-              });
-            },
+            onPressed: () => Navigator.pushNamed(context, "/edit_basics"),
           ),
           const SizedBox(height: 20),
-          Form(
-            key: formKey,
-            child: Column(
-              children: requestedPasswordChange ? [
-                PasswordField(
-                    controller: currentPasswordController,
-                    text: "Huidige Wachtwoord",
-                    hint: "Uw huidige wachtwoord",
-                    private: true
-                ),
-                const SizedBox(height: 10),
-                PasswordField(
-                    controller: newPasswordController,
-                    text: "Huidige Wachtwoord",
-                    hint: "Uw nieuwe wachtwoord",
-                    private: true
-                ),
-                const SizedBox(height: 10),
-                AccountButton(
-                  iconData: Icons.send,
-                  text: "Versturen",
+          AccountButton(
+            iconData: Icons.edit_rounded,
+            text: "Details aanpassen",
             color: app_theme.blue,
-                  buttonSize: const Size(170, 45),
-                  iconSize: 28,
-                  onPressed: () => onPressedSubmitPasswordChange(),
-                ),
-              ] : [],
-            ),
+            onPressed: () => Navigator.pushNamed(context, "/edit_details"),
           ),
         ],
       ),
