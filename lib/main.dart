@@ -6,6 +6,8 @@ import 'package:device_preview/device_preview.dart' as device_preview;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:loopsnelheidapp/custom_page_route.dart';
+import 'package:loopsnelheidapp/views/account/edit_basics.dart';
+import 'package:loopsnelheidapp/views/account/edit_details.dart';
 
 import 'package:loopsnelheidapp/views/dashboard/dashboard.dart';
 import 'package:loopsnelheidapp/views/register/forgot_password.dart';
@@ -75,6 +77,10 @@ class MyApp extends StatelessWidget {
           return const Devices();
         case "/account":
           return const Account();
+        case "/edit_basics":
+          return const EditBasics();
+        case "/edit_details":
+          return const EditDetails();
         default:
           return const Dashboard();
       }
