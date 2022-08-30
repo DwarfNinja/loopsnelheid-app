@@ -11,6 +11,7 @@ import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
+import 'package:loopsnelheidapp/services/measure/activity_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -56,22 +57,19 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    // bool measureSetting = false;
-    // bool measurePermitted = false;
 
     getAllMeasureValues();
 
-    // SettingService.getMeasureSetting().then((value) async {
-    //   measureSetting = value as bool;
-    //   measurePermitted = await SettingService.isMeasureDevice();
-    //   if(measureSetting && measurePermitted) {
-    //     LocationService.startLocationService();
-    //   }
-    // });
+    ActivityService.isActivityPermissionGranted().then((activityPermission) async {
+      if (activityPermission) {
+        ActivityService.startActivityService();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
@@ -122,20 +120,20 @@ class _DashboardState extends State<Dashboard> {
           child: Stack(
             children: [
               Column(
-                  children: [
-                    IconButton(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                      icon: const Icon(Icons.menu),
-                      color: Colors.white,
-                      iconSize: 38,
-                      onPressed: () {
-                        _globalKey.currentState?.openDrawer();
-                        },
-                    ),
-                    Text("Menu",
-                        style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
-                    ),
-                  ],
+                children: [
+                  IconButton(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    icon: const Icon(Icons.menu),
+                    color: Colors.white,
+                    iconSize: 38,
+                    onPressed: () {
+                      _globalKey.currentState?.openDrawer();
+                    },
+                  ),
+                  Text("Menu",
+                      style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
+                  ),
+                ],
               ),
               Center(
                 child: Column(
