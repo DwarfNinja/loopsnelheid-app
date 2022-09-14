@@ -50,7 +50,7 @@
     <img src="assets/documentation/permissions/activity_permission.png" width="200" alt="Melding voor Fysieke activeit rechten toestaan">
 </p>
 
-2. Indien uw de onderstaande melding krijgt, volg dan de aanwijzingen in de app om Fysieke activiteit rechten toe te staan. Anders mag u dit overslaan en naar volgende stap gaan.
+2. Indien u de onderstaande melding krijgt, volg dan de aanwijzingen in de app om Fysieke activiteit rechten toe te staan. Anders kunt u deze stap overslaan en naar volgende stap gaan.
 
 <p align="center">
     <img src="assets/documentation/permissions/activity_permission_required.png" width="200" alt="Melding voor vereisen van Fysieke activeit rechten">
@@ -65,7 +65,7 @@
     <img src="assets/documentation/permissions/location_permission.png" width="200" alt="Melding voor Locatie rechten toestaan">
 </p>
 
-4. Indien uw de onderstaande melding krijgt, volg dan de aanwijzingen in de app om Locatie rechten toe te staan. Anders kan u deze stap overslaan en zijn de rechten van de Loopsnelheid app gereed.
+4. Indien u de onderstaande melding krijgt, volg dan de aanwijzingen in de app om Locatie rechten toe te staan. Anders kunt u deze stap overslaan en zijn de rechten van de Loopsnelheid app gereed.
 
 <p align="center">
     <img src="assets/documentation/permissions/location_permission_required.png" width="200" alt="Melding voor vereisen van locatie rechten">
@@ -89,7 +89,7 @@
     <img src="assets/documentation/sidebar_settings.png" width="200" alt="Navigatie menu">
 </p>
 
-3. Zorg dat de knop `Metingen` **aan** staat en de knop `Handmatig meten` **uit** staat zoals de foto hieronder.
+3. Zorg dat de knop `Metingen` **aan** staat en de knop `Handmatig Meten` **uit** staat zoals de foto hieronder.
 
 <p align="center">
     <img src="assets/documentation/settings_page_toggles.png" width="200" alt="Instellingen">
@@ -107,4 +107,4 @@
     <img src="assets/documentation/devices_page_device.png" width="200" alt="Mijn Apparaten">
 </p>
 
-4. Uw apparaat is gereed een de Loopsnelheid app kan worden gebruikt!
+4. Uw apparaat is gereed en de Loopsnelheid app kan worden gebruikt!
