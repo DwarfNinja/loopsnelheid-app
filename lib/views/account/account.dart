@@ -90,6 +90,20 @@ class _AccountState extends State<Account> {
                 ),
               ),
               const SizedBox(height: 50),
+              AccountButton(
+                iconData: Icons.lock_person_rounded,
+                text: "Login aanpassen",
+                color: app_theme.blue,
+                onPressed: () => Navigator.pushNamed(context, "/edit_basics"),
+              ),
+              const SizedBox(height: 20),
+              AccountButton(
+                iconData: Icons.edit_rounded,
+                text: "Details aanpassen",
+                color: app_theme.blue,
+                onPressed: () => Navigator.pushNamed(context, "/edit_details"),
+              ),
+              const SizedBox(height: 20),
               snapshot.data!.hasOpenDeleteRequest ? AccountButton(
                   iconData: Icons.cancel_outlined,
                   text: "Verwijderen annuleren",
@@ -109,20 +123,6 @@ class _AccountState extends State<Account> {
                     getProfile()
                   });
                 },
-              ),
-              const SizedBox(height: 20),
-              AccountButton(
-                iconData: Icons.lock_person_rounded,
-                text: "Login aanpassen",
-                color: app_theme.blue,
-                onPressed: () => Navigator.pushNamed(context, "/edit_basics"),
-              ),
-              const SizedBox(height: 20),
-              AccountButton(
-                iconData: Icons.edit_rounded,
-                text: "Details aanpassen",
-                color: app_theme.blue,
-                onPressed: () => Navigator.pushNamed(context, "/edit_details"),
               ),
             ],
           );
