@@ -5,12 +5,12 @@ import 'package:loopsnelheidapp/widgets/info_base.dart';
 import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 
-import 'package:loopsnelheidapp/services/location/location_service.dart';
 import 'package:loopsnelheidapp/services/router/navigation_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 import 'package:loopsnelheidapp/services/api/export_service.dart';
 import 'package:loopsnelheidapp/services/api/research_service.dart';
 import 'package:loopsnelheidapp/services/setting/setting_service.dart';
+import 'package:loopsnelheidapp/services/measure/activity_service.dart';
 
 class Settings extends StatefulWidget {
 
@@ -97,6 +97,7 @@ class _SettingsState extends State<Settings> {
             const ToggleSetting(
               text: "Metingen",
               setting: "measures",
+              initialStatus: true,
             ),
             const SizedBox(height: 25),
             ToggleSetting(
@@ -104,9 +105,9 @@ class _SettingsState extends State<Settings> {
                 setting: "manual_measure",
                 onToggle: (bool status) {
                   SettingService.getMeasureSetting().then((value) async {
-                    bool measurePermitted = await SettingService.isMeasureDevice();
-                    if(value == true && measurePermitted) {
-                      status ? LocationService.startLocationService() : LocationService.stopLocationService();
+                    bool isMeasureDevice = await SettingService.isMeasureDevice();
+                    if(value == true && isMeasureDevice) {
+                      status ? ActivityService.startActivityService() : ActivityService.stopActivityService();
                     }
                   });
                 }),

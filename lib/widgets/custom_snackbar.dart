@@ -8,7 +8,7 @@ class CustomSnackbar extends SnackBar {
     behavior: SnackBarBehavior.floating,
     padding: const EdgeInsets.all(20),
     margin: const EdgeInsets.all(10),
-    duration: const Duration(seconds: 4),
+    duration: const Duration(seconds: 6),
     backgroundColor: getBackgroundColor(messageType),
     content: Center(
         heightFactor: 1,
@@ -17,7 +17,7 @@ class CustomSnackbar extends SnackBar {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Icon(
-                  getIcon(messageType),
+                  icon ?? getIcon(messageType),
                   color: app_theme.white, size: 27),
             ),
             Flexible(
