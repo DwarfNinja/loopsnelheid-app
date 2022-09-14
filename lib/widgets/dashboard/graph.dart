@@ -8,9 +8,9 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 class Graph extends StatefulWidget {
   final Map<String, dynamic>? data;
   final bool status;
-  final double limitSpeed;
+  final double recSpeed;
 
-  const Graph({Key? key, required this.data, required this.status, required this.limitSpeed})
+  const Graph({Key? key, required this.data, required this.status, required this.recSpeed})
       : super(key: key);
 
   @override
@@ -158,7 +158,7 @@ class _GraphState extends State<Graph> {
                 extraLinesOnTop: false,
                 horizontalLines: [
                   HorizontalLine(
-                      y: widget.limitSpeed,
+                      y: widget.recSpeed,
                       color:
                       app_theme.red,
                       strokeWidth: 4,
