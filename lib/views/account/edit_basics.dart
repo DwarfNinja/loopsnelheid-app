@@ -31,25 +31,26 @@ class _EditBasicsState extends State<EditBasics> {
 
   bool submitted = false;
 
-  Profile profile = Profile(0, "laden...", "laden...", "laden...", false, false, 0, 0, ["laden.."]);
+  Future<Profile>? profile;
 
-  void getAccount() async {
+  Future<Profile> getProfile() async {
     await sharedPreferencesService.getSharedPreferenceInstance();
 
     if (sharedPreferencesService.containsKey("profile")) {
       dynamic localJsonProfile = sharedPreferencesService.getObject("profile");
-      profile = Profile.fromJson(localJsonProfile);
-      setAccountInFields();
+      Profile profileFromJson = Profile.fromJson(localJsonProfile);
+      setAccountInFields(profileFromJson);
+      return Future.value(profileFromJson);
     }
-    else {
-      await ProfileService.getAccount().then((value) => {
-        profile = value,
-        setAccountInFields()
-      });
-    }
+
+    Future<Profile> response = ProfileService.getAccount();
+    response.then((value) => {
+      setAccountInFields(value)
+    });
+    return response;
   }
 
-  setAccountInFields() {
+  void setAccountInFields(Profile profile) {
     setState(() {
       emailController.text = profile.email;
     });
@@ -91,7 +92,7 @@ class _EditBasicsState extends State<EditBasics> {
   void initState() {
     super.initState();
 
-    getAccount();
+    profile = getProfile();
   }
 
   @override
@@ -99,61 +100,75 @@ class _EditBasicsState extends State<EditBasics> {
     return InfoBase(
       pageName: "Account",
       pageIcon: Icons.person,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: Form(
-          key: formKey,
-          autovalidateMode: submitted
-              ? AutovalidateMode.onUserInteraction
-              : AutovalidateMode.disabled,
-          child: Column(
-            children: [
-              const SizedBox(height: 25),
-              Text(
-                  "Aanpassen",
-                  style: app_theme.textTheme.headline6),
-              const SizedBox(height: 10),
-              Text(
-                  "Pas hieronder de gegevens aan die u wilt veranderen",
-                  textAlign: TextAlign.center,
-                  style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
-              const SizedBox(height: 25),
-              AccountField(
-                  controller: emailController,
-                  text: "E-mailadres",
-                  hint: "Voer hier uw nieuwe e-mailadres in",
+      child: FutureBuilder(
+        future: profile,
+        builder: (BuildContext context, AsyncSnapshot<Profile> snapshot) {
+          if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(
+                  strokeWidth: 5,
+                  backgroundColor: app_theme.white,
+                  color: app_theme.blue),
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Form(
+              key: formKey,
+              autovalidateMode: submitted
+                  ? AutovalidateMode.onUserInteraction
+                  : AutovalidateMode.disabled,
+              child: Column(
+                children: [
+                  const SizedBox(height: 25),
+                  Text(
+                      "Aanpassen",
+                      style: app_theme.textTheme.headline6),
+                  const SizedBox(height: 10),
+                  Text(
+                      "Pas hieronder de gegevens aan die u wilt veranderen",
+                      textAlign: TextAlign.center,
+                      style: app_theme.textTheme.bodyText2!.copyWith(
+                          fontSize: 15, color: app_theme.grey)),
+                  const SizedBox(height: 25),
+                  AccountField(
+                    controller: emailController,
+                    text: "E-mailadres",
+                    hint: "Voer hier uw nieuwe e-mailadres in",
+                  ),
+                  const SizedBox(height: 15),
+                  AccountField(
+                      controller: currentPasswordController,
+                      text: "Huidig wachtwoord",
+                      hint: "Voer hier uw huidige wachtwoord in",
+                      private: true
+                  ),
+                  const SizedBox(height: 15),
+                  AccountField(
+                      controller: newPasswordController,
+                      text: "Nieuw wachtwoord",
+                      hint: "Voer hier uw nieuwe wachtwoord in",
+                      private: true
+                  ),
+                  const SizedBox(height: 25),
+                  AccountButton(
+                      iconData: Icons.check_rounded,
+                      text: "Gegevens aanpassen",
+                      color: app_theme.blue,
+                      onPressed: () => onPressedSubmitBasicsChange()
+                  ),
+                  const SizedBox(height: 25),
+                  AccountButton(
+                    iconData: Icons.keyboard_backspace_rounded,
+                    text: "Ga terug",
+                    color: app_theme.white,
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
               ),
-              const SizedBox(height: 15),
-              AccountField(
-                  controller: currentPasswordController,
-                  text: "Huidig wachtwoord",
-                  hint: "Voer hier uw huidige wachtwoord in",
-                  private: true
-              ),
-              const SizedBox(height: 15),
-              AccountField(
-                  controller: newPasswordController,
-                  text: "Nieuw wachtwoord",
-                  hint: "Voer hier uw nieuwe wachtwoord in",
-                  private: true
-              ),
-              const SizedBox(height: 25),
-              AccountButton(
-                iconData: Icons.check_rounded,
-                text: "Gegevens aanpassen",
-                color: app_theme.blue,
-                onPressed: () => onPressedSubmitBasicsChange()
-              ),
-              const SizedBox(height: 25),
-              AccountButton(
-                iconData: Icons.keyboard_backspace_rounded,
-                text: "Ga terug",
-                color: app_theme.white,
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
