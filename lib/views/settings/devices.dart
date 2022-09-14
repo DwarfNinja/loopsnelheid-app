@@ -17,8 +17,9 @@ class Devices extends StatefulWidget {
 }
 
 class _DevicesState extends State<Devices> {
-  Future<List<Device>>? listDevicesFuture;
   DeviceService deviceService = DeviceService();
+
+  late Future<List<Device>> listDevicesFuture;
 
   @override
   void initState() {
@@ -50,48 +51,46 @@ class _DevicesState extends State<Devices> {
                   color: app_theme.blue),
             );
           }
+          snapshot.data!.sort((Device a, Device b) => a.id.compareTo(b.id));
           return DataTable(
               columns: const [
                 DataColumn(
                   label: Text('Apparaat'),
                 ),
                 DataColumn(
-                  label: Text('Actie'),
+                  label: Expanded(child: Center(child: Text('Actie', textAlign: TextAlign.center))),
                 )
               ],
               rows: List.generate(
                 snapshot.data!.length,
                     (index) {
-                  var device = snapshot.data![index];
+                  Device device = snapshot.data![index];
                   return DataRow(
                     cells: <DataCell>[
                       DataCell(
-                          SizedBox(
-                              width: 200,
-                              child: RichText(
-                                text: TextSpan(
-                                  text: device.model + '\n',
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: [
-                                    TextSpan(
-                                        text: device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat",
-                                        style: const TextStyle(fontSize: 16)
-                                    ),
-                                  ],
-                                ),
-                              )
-                          )
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(device.model),
+                            Text(device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat")
+                          ],
+                        )
                       ),
                       DataCell(
-                        TextButton(
-                          child: const Icon(Icons.check),
-                          onPressed: () {
-                            deviceService.markDeviceAsMeasureDevice(device.session).then((success) => {
-                              if (success) {
-                                refreshList()
-                              }
-                            });
-                          },
+                        Center(
+                          child: IconButton(
+                            icon: device.type == "READING_DEVICE" ? const Icon(
+                                Icons.check_box_outline_blank_rounded, size: 28, color: app_theme.blue)
+                                : const Icon(Icons.check_box, size: 28, color: app_theme.blue),
+                            onPressed: () {
+                              deviceService.markDeviceAsMeasureDevice(device.session).then((success) => {
+                                if (success) {
+                                  refreshList()
+                                }
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ],

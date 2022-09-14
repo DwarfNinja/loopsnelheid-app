@@ -44,14 +44,12 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
     handleRegisterResponse(response) {
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-            CustomSnackbar(messageType: MessageType.success, message: "Success! U heeft een email ontvangen met u code!")
-        );
+            CustomSnackbar(messageType: MessageType.success, message: "Success! U heeft een email ontvangen met u code!"));
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setInteger("register_id", body['id']);
       } else if (response.statusCode == 400) {
         ScaffoldMessenger.of(context).showSnackBar(
-            CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met de registratie!")
-        );
+            CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met de registratie!"));
       }
     }
 
@@ -72,7 +70,8 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
     onPressedNextButton() {
       setState(() => submitted = true);
       if (agreedToAllField() && formKey.currentState!.validate()) {
-        sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
+        dynamic userjson = sharedPreferencesService.getObject("registerUser");
+        assignUserValues(User.fromJson(userjson));
         Navigator.pushNamed(context, "/register_verification");
       }
     }

@@ -5,8 +5,9 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 class AverageSpeedCard extends StatefulWidget {
   final String header;
   final double speed;
+  final bool loadingIndicator;
 
-  const AverageSpeedCard({Key? key, required this.header, required this.speed})
+  const AverageSpeedCard({Key? key, required this.header, required this.speed, this.loadingIndicator = false})
       : super(key: key);
 
   @override
@@ -37,7 +38,12 @@ class _AverageSpeedCardState extends State<AverageSpeedCard> {
                 app_theme.bottomBoxShadow,
               ],
             ),
-            child: Column(
+            child: widget.loadingIndicator ? const Center(
+              child: CircularProgressIndicator(
+                  strokeWidth: 5,
+                  backgroundColor: app_theme.white,
+                  color: app_theme.blue),
+            ) : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(widget.speed.toStringAsFixed(1),
