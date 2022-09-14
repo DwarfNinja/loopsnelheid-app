@@ -9,11 +9,15 @@ class SharedPreferencesService {
     sharedPreferences = await SharedPreferences.getInstance();
   }
 
+  bool containsKey(String name) {
+    return sharedPreferences.containsKey(name);
+  }
+
   setObject(String name, Object object) async {
     sharedPreferences.setString(name, jsonEncode(object));
   }
 
-  getObject(String name) async {
+  getObject(String name) {
     final String? object = sharedPreferences.getString(name);
     return jsonDecode(object!);
   }
@@ -35,8 +39,8 @@ class SharedPreferencesService {
     return sharedPreferences.getBool(name);
   }
 
-  removeString(String name) {
-    return sharedPreferences.remove(name);
+  setInteger(String name, int value) async {
+    sharedPreferences.setInt(name, value);
   }
 
   getInteger(String name) {
@@ -45,8 +49,8 @@ class SharedPreferencesService {
     return value;
   }
 
-  setInteger(String name, int value) async {
-    sharedPreferences.setInt(name, value);
+  remove(String name) {
+    return sharedPreferences.remove(name);
   }
 
   clearPreferences() {
