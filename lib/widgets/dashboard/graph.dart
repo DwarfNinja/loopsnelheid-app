@@ -39,19 +39,15 @@ class _GraphState extends State<Graph> {
     return dateTimeOfFlSpot;
   }
 
-  String reverseXGraphTitle(String xTitle) {
-    return (int.parse(xTitle) - getOffset()).abs().toStringAsFixed(0);
-  }
-
   Widget getXGraphTitle(double x, TitleMeta meta) {
     DateTime dateTimeOfFlSpot = getDateTimeOfFlSpot(x);
     final String formatter = DateFormat('EEEE').format(dateTimeOfFlSpot);
-    return Text(widget.status ? enToNlDays[formatter] ?? 'NaN' : reverseXGraphTitle(meta.formattedValue));
+    return Text(widget.status ? enToNlDays[formatter] ?? 'NaN' : dateTimeOfFlSpot.day.toString());
   }
 
   String formatDateFlSpot(double x, double y) {
     DateTime dateTimeOfFlSpot = getDateTimeOfFlSpot(x);
-    final String formatter = DateFormat('dd/MM').format(dateTimeOfFlSpot);
+    final String formatter = DateFormat('dd-MM').format(dateTimeOfFlSpot);
     return '$formatter, ${y.toStringAsFixed(2)}';
   }
 
@@ -69,16 +65,16 @@ class _GraphState extends State<Graph> {
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     return SideTitleWidget(
       space: 8,
-      child: Text(meta.formattedValue),
       axisSide: meta.axisSide,
+      child: Text(meta.formattedValue),
     );
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     return SideTitleWidget(
       space: 7,
-      child: getXGraphTitle(value, meta),
       axisSide: meta.axisSide,
+      child: getXGraphTitle(value, meta),
     );
   }
 
@@ -96,14 +92,14 @@ class _GraphState extends State<Graph> {
             maxY: 7,
             lineTouchData: LineTouchData(
               touchTooltipData: LineTouchTooltipData(
-                  maxContentWidth: 100,
+                  maxContentWidth: 200,
                   tooltipBgColor: app_theme.white,
                   getTooltipItems: (touchedSpots) {
                     return touchedSpots.map((LineBarSpot touchedSpot) {
                       const textStyle = TextStyle(
                         color: app_theme.blue,
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 15,
                       );
                       return LineTooltipItem(formatDateFlSpot(touchedSpot.x, touchedSpot.y),
                           textStyle);
