@@ -20,11 +20,15 @@
 
 1. Klik op de knop `Registreren`.
 
-<img src="assets/documentation/login/login_page_register.png" width="200" alt="Login pagina">
+<p align="center">
+    <img src="assets/documentation/login/login_page_register.png" width="200" alt="Login pagina">
+</p>
 
 2. Vul uw gegevens in. 
 
-<img src="assets/documentation/login/register_page.png" width="200" alt="Registreer pagina">
+<p align="center">
+    <img src="assets/documentation/login/register_page.png" width="200" alt="Registreer pagina">
+</p>
 
 3. Volg de rest van de stappen beschreven in de volgende paginas om een account aan te maken.
 
@@ -34,54 +38,73 @@
 1. Vul uw inlog gegevens in.
 2. Klik op de knop `Inloggen`.
 
-<img src="assets/documentation/login/login_page_login.png" width="200" alt="Login pagina">
-
+<p align="center">
+    <img src="assets/documentation/login/login_page_login.png" width="200" alt="Login pagina">
+</p>
 
 ### Stap 4: Rechten toestaan
 
 1. Bij de melding om "Loopsnelheid toegang te geven tot je fysieke activiteit?", druk op **Toestaan**.
 
-<img src="assets/documentation/permissions/activity_permission.png" width="200" alt="Melding voor Fysieke activeit rechten toestaan">
+<p align="center">
+    <img src="assets/documentation/permissions/activity_permission.png" width="200" alt="Melding voor Fysieke activeit rechten toestaan">
+</p>
 
 2. Indien uw de onderstaande melding krijgt, volg dan de aanwijzingen in de app om Fysieke activiteit rechten toe te staan. Anders mag u dit overslaan en naar volgende stap gaan.
 
-<img src="assets/documentation/permissions/activity_permission_required.png" width="200" alt="Melding voor vereisen van Fysieke activeit rechten">
-<img src="assets/documentation/permissions/app_settings.png" width="200" alt="App Instellingen">
-<img src="assets/documentation/permissions/app_permissions_activity_step1.png" width="200" alt="App rechten">
-<img src="assets/documentation/permissions/app_permissions_activity_step2.png" width="200" alt="Fysieke activeit rechten">
+<p align="center">
+    <img src="assets/documentation/permissions/activity_permission_required.png" width="200" alt="Melding voor vereisen van Fysieke activeit rechten">
+    <img src="assets/documentation/permissions/app_settings.png" width="200" alt="App Instellingen">
+    <img src="assets/documentation/permissions/app_permissions_activity_step1.png" width="200" alt="App rechten">
+    <img src="assets/documentation/permissions/app_permissions_activity_step2.png" width="200" alt="Fysieke activeit rechten">
+</p>
 
 3. Bij de melding om "Loopsnelheid toegang te geven tot de locatie van dit apparaat?", druk op **Altijd toestaan**. Als uw deze optie niet ziet staan druk dan op **Tijdens gebruik van de app**. 
 
-<img src="assets/documentation/permissions/location_permission.png" width="200" alt="Melding voor Locatie rechten toestaan">
+<p align="center">
+    <img src="assets/documentation/permissions/location_permission.png" width="200" alt="Melding voor Locatie rechten toestaan">
+</p>
 
 4. Indien uw de onderstaande melding krijgt, volg dan de aanwijzingen in de app om Locatie rechten toe te staan. Anders kan u deze stap overslaan en zijn de rechten van de Loopsnelheid app gereed.
 
-<img src="assets/documentation/permissions/location_permission_required.png" width="200" alt="Melding voor vereisen van locatie rechten">
-<img src="assets/documentation/permissions/app_settings.png" width="200" alt="App Instellingen">
-<img src="assets/documentation/permissions/app_permissions_location-step1.png" width="200" alt="App rechten">
-<img src="assets/documentation/permissions/app_permissions_location_step2.png" width="200" alt="Locatie rechten">
+<p align="center">
+    <img src="assets/documentation/permissions/location_permission_required.png" width="200" alt="Melding voor vereisen van locatie rechten">
+    <img src="assets/documentation/permissions/app_settings.png" width="200" alt="App Instellingen">
+    <img src="assets/documentation/permissions/app_permissions_location-step1.png" width="200" alt="App rechten">
+    <img src="assets/documentation/permissions/app_permissions_location_step2.png" width="200" alt="Locatie rechten">
+</p>
 
 
 ### Stap 5: Meten van uw loopsnelheid
 
 1. Klik op de knop `Menu` om het navigatie menu te openen.
 
-<img src="assets/documentation/dashboard_page.png" width="200" alt="Dashboard">
+<p align="center">
+    <img src="assets/documentation/dashboard_page.png" width="200" alt="Dashboard">
+</p>
 
 2. Klik op de knop `Instellingen` in het navigatie menu.
-   
-<img src="assets/documentation/sidebar_settings.png" width="200" alt="Navigatie menu">
+
+<p align="center">
+    <img src="assets/documentation/sidebar_settings.png" width="200" alt="Navigatie menu">
+</p>
 
 3. Zorg dat de knop `Metingen` **aan** staat en de knop `Handmatig meten` **uit** staat zoals de foto hieronder.
 
-<img src="assets/documentation/settings_page_toggles.png" width="200" alt="Instellingen">
+<p align="center">
+    <img src="assets/documentation/settings_page_toggles.png" width="200" alt="Instellingen">
+</p>
 
 3. Klik op de knop `Mijn apparaten`.
 
-<img src="assets/documentation/settings_page_devices.png" width="200" alt="Instellingen">
+<p align="center">
+    <img src="assets/documentation/settings_page_devices.png" width="200" alt="Instellingen">
+</p>
 
 3. Zorg dat uw apparaat aangevinkt is en dat het woord `Meetapparaat` er onder staat.
 
-<img src="assets/documentation/devices_page_device.png" width="200" alt="Mijn Apparaten">
+<p align="center">
+    <img src="assets/documentation/devices_page_device.png" width="200" alt="Mijn Apparaten">
+</p>
 
 4. Uw apparaat is gereed een de Loopsnelheid app kan worden gebruikt!
