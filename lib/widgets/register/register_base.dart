@@ -13,8 +13,9 @@ class RegisterBase extends StatefulWidget {
   final bool submitted;
   final FormButton firstButton;
   final FormButton secondButton;
+  final double buttonSpacing;
 
-  const RegisterBase({Key? key, this.children = const [], required this.formKey, required this.submitted, required this.firstButton, required this.secondButton}) : super(key: key);
+  const RegisterBase({Key? key, this.children = const [], required this.formKey, required this.submitted, required this.firstButton, required this.secondButton, this.buttonSpacing = 30}) : super(key: key);
 
   @override
   State<RegisterBase> createState() => RegisterBaseState();
@@ -73,11 +74,10 @@ class RegisterBaseState<T extends RegisterBase> extends State<T> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: widget.children + [
-                                      const SizedBox(height: 30),
+                                      SizedBox(height: widget.buttonSpacing),
                                       widget.firstButton,
                                       const SizedBox(height: 15),
-                                      widget.secondButton,
-                                      const SizedBox(height: 80)],
+                                      widget.secondButton],
                                   )
                               )
                           )

@@ -13,16 +13,17 @@ import 'package:loopsnelheidapp/services/api/measure_service.dart';
 
 class LocationService {
   static List<Measure> measureList = [];
-  static double latestSpeedSend = 0;
+
+  static bool isServiceRunning = false;
 
   static const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.best,
-      distanceFilter: 5
+      distanceFilter: 10,
   );
 
   static Future<void> initializeService() async {
-    final service = FlutterBackgroundService();
-    await service.configure(
+    final backgroundService = FlutterBackgroundService();
+    await backgroundService.configure(
       androidConfiguration: AndroidConfiguration(
         onStart: onLocationStart,
         autoStart: false,
@@ -40,11 +41,13 @@ class LocationService {
     await initializeService();
     final service = FlutterBackgroundService();
     service.startService();
+    isServiceRunning = true;
   }
 
   static stopLocationService() async {
     final service = FlutterBackgroundService();
     service.invoke("stopService");
+    isServiceRunning = false;
   }
 
   @pragma('vm:entry-point')
@@ -71,23 +74,24 @@ class LocationService {
       if (service is AndroidServiceInstance) {
         service.setForegroundNotificationInfo(
             title: "Loopsnelheid",
-            content: "Metingen aan het uitvoeren ..."
+            content: "Metingen aan het uitvoeren..."
         );
       }
+    });
 
-      Stream<Position> positionStream =
-      Geolocator.getPositionStream(locationSettings: locationSettings);
-      positionStream.listen((Position? position) {
-        var speed = position?.speed ?? 0.0;
-        var convertedSpeed = MeasureService.convertMsToKmh(speed);
-        Measure measure = Measure(DateTime.now().toIso8601String(), convertedSpeed);
-        measureList.add(measure);
+    Stream<Position> positionStream =
+    Geolocator.getPositionStream(locationSettings: locationSettings);
+    positionStream.listen((Position? position) {
+      var speed = position?.speed ?? 0.0;
+      var convertedSpeed = MeasureService.convertMsToKmh(speed);
+      Measure measure = Measure(DateTime.now().toIso8601String(), convertedSpeed);
+      measureList.add(measure);
+    });
 
-        if(latestSpeedSend == convertedSpeed) return;
-        latestSpeedSend = convertedSpeed;
-
+    Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (measureList.isNotEmpty) {
         MeasureService.storeMeasures(measureList);
-      });
+      }
     });
   }
 

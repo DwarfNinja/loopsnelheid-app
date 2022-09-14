@@ -56,6 +56,7 @@ class _RegisterBasicsState extends State<RegisterBasics> {
               style: app_theme.textTheme.headline5),
           const SizedBox(height: 10),
           Text(
+              textAlign: TextAlign.center,
               "Vul uw gegevens hieronder in",
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
           const SizedBox(height: 20),

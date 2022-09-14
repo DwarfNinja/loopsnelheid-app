@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/widgets/register/register_snackbar.dart';
+import 'package:loopsnelheidapp/widgets/custom_snackbar.dart';
 import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 import 'package:pdfx/pdfx.dart';
@@ -44,14 +44,12 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
     handleRegisterResponse(response) {
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-            CustomSnackbar(messageType: MessageType.success, message: "Success! U heeft een email ontvangen met u code!", icon: Icons.abc)
-        );
+            CustomSnackbar(messageType: MessageType.success, message: "Success! U heeft een email ontvangen met u code!"));
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setInteger("register_id", body['id']);
       } else if (response.statusCode == 400) {
         ScaffoldMessenger.of(context).showSnackBar(
-            CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met de registratie!", icon: Icons.abc)
-        );
+            CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met de registratie!"));
       }
     }
 
@@ -72,7 +70,8 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
     onPressedNextButton() {
       setState(() => submitted = true);
       if (agreedToAllField() && formKey.currentState!.validate()) {
-        sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
+        dynamic userjson = sharedPreferencesService.getObject("registerUser");
+        assignUserValues(User.fromJson(userjson));
         Navigator.pushNamed(context, "/register_verification");
       }
     }
@@ -95,6 +94,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
           const SizedBox(height: 10),
           Text(
               "Lees en accepteer de voorwaarden hieronder",
+              textAlign: TextAlign.center,
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
           const SizedBox(height: 20),
           Row(

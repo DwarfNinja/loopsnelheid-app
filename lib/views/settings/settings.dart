@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
+import 'package:loopsnelheidapp/widgets/info_base.dart';
 
 import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 
-import 'package:loopsnelheidapp/services/location/location_service.dart';
 import 'package:loopsnelheidapp/services/router/navigation_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 import 'package:loopsnelheidapp/services/api/export_service.dart';
 import 'package:loopsnelheidapp/services/api/research_service.dart';
-
-
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/services/setting/setting_service.dart';
+import 'package:loopsnelheidapp/services/measure/activity_service.dart';
 
 class Settings extends StatefulWidget {
 
@@ -24,8 +22,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   ExportService exportService = ExportService();
   ResearchService researchService = ResearchService();
 
@@ -34,7 +30,7 @@ class _SettingsState extends State<Settings> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
-    var isAdministrator = false;
+    bool isAdministrator = false;
     await sharedPreferencesService.getObject("roles").then((value) => {
       isAdministrator = value.contains("ROLE_ADMIN")
     });
@@ -90,111 +86,64 @@ class _SettingsState extends State<Settings> {
       exportAllData();
     }
 
-    return Scaffold(
-      backgroundColor: app_theme.blue,
-      key: _globalKey,
-      drawer: const SideBar(),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: app_theme.mainLinearGradient,
-        ),
-        child: Stack(
+    return InfoBase(
+      pageName: "Instellingen",
+      pageIcon: Icons.settings,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 45),
+        child: Column(
           children: [
-            Column(
-              children: [
-                IconButton(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  icon: const Icon(Icons.menu),
-                  color: Colors.white,
-                  iconSize: 38,
-                  onPressed: () {
-                    _globalKey.currentState?.openDrawer();
-                  },
-                ),
-                Text("Menu",
-                    style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
-                ),
-              ],
+            const SizedBox(height: 50),
+            const ToggleSetting(
+              text: "Metingen",
+              setting: "measures",
+              initialStatus: true,
             ),
-            Center(
-              child: Column(
-                children: [
-                   const SizedBox(height: 70),
-                  Text(
-                    "Instellingen",
-                    style: app_theme.textTheme.headline3!
-                        .copyWith(color: Colors.white),
-                  ),
-                  const SizedBox(height: 15),
-                  const Icon(
-                    Icons.settings,
-                    color: Colors.white,
-                    size: 50,
-                  ),
-                  const SizedBox(height: 20),
-                  Container (
-                    width: 375,
-                    height: 645,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
-                      ),
-                      boxShadow: [
-                        app_theme.bottomBoxShadow,
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 45, right: 45),
-                      child: Column(
-                        children:  [
-                          const SizedBox(height: 50),
-                          ToggleSetting(
-                              text: "Meten",
-                              setting: "measure",
-                              onToggle: (bool status) {
-                               status ? LocationService.startLocationService() : LocationService.stopLocationService();
-                              }),
-                          const SizedBox(height: 50),
-                          SettingsButton(
-                            iconData: Icons.devices,
-                            text: "Mijn apparaten",
-                            onPressed: (){
-                              NavigationService.executeRoute(context, "/devices");
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          SettingsButton(
-                            iconData: Icons.cloud_download,
-                            text: "Exporteer gegevens",
-                            onPressed: (){
-                              exportDataButtonOnPressed();
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          FutureBuilder<bool>(
-                            future: isAdministrator(),
-                            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                              if(snapshot.data != null && snapshot.data == true) {
-                                return
-                                  SettingsButton(
-                                    iconData: Icons.download,
-                                    text: "Exporteer onderzoek",
-                                    onPressed: (){
-                                      exportAllDataButtonOnPressed();
-                                    },
-                                  );
-                              }
+            const SizedBox(height: 25),
+            ToggleSetting(
+                text: "[Test]\nHandmatig Meten",
+                setting: "manual_measure",
+                onToggle: (bool status) {
+                  SettingService.getMeasureSetting().then((value) async {
+                    bool isMeasureDevice = await SettingService.isMeasureDevice();
+                    if(value == true && isMeasureDevice) {
+                      status ? ActivityService.startActivityService() : ActivityService.stopActivityService();
+                    }
+                  });
+                }),
+            const SizedBox(height: 50),
+            SettingsButton(
+              iconData: Icons.devices_rounded,
+              text: "Mijn apparaten",
+              onPressed: (){
+                NavigationService.executeRoute(context, "/devices");
+              },
+            ),
+            const SizedBox(height: 20),
+            SettingsButton(
+              iconData: Icons.cloud_download_rounded,
+              text: "Exporteer gegevens",
+              onPressed: (){
+                exportDataButtonOnPressed();
+              },
+            ),
+            const SizedBox(height: 20),
+            FutureBuilder<bool>(
+              future: isAdministrator(),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if(snapshot.data != null && snapshot.data == true) {
+                  return
+                    SettingsButton(
+                      iconData: Icons.download_rounded,
+                      text: "Exporteer onderzoek",
+                      onPressed: (){
+                        exportAllDataButtonOnPressed();
+                      },
+                    );
+                }
 
-                              return Container();
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                return Container();
+              },
             ),
           ],
         ),

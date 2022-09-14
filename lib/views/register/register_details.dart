@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
 
 import 'package:loopsnelheidapp/models/user.dart';
@@ -9,11 +8,12 @@ import 'package:loopsnelheidapp/models/user.dart';
 import 'package:loopsnelheidapp/widgets/register/date_input.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
+import 'package:loopsnelheidapp/widgets/register/register_base.dart';
+import 'package:loopsnelheidapp/widgets/gender_toggle.dart';
 
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 class RegisterDetails extends StatefulWidget {
 
@@ -54,7 +54,8 @@ class _RegisterDetailsState extends State<RegisterDetails> {
     onPressedNextButton() {
       setState(() => submitted = true);
       if (formKey.currentState!.validate()) {
-        sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
+        dynamic userjson = sharedPreferencesService.getObject("registerUser");
+        assignUserValues(User.fromJson(userjson));
         Navigator.pushNamed(context, "/register_documents");
       }
     }
@@ -77,8 +78,9 @@ class _RegisterDetailsState extends State<RegisterDetails> {
           const SizedBox(height: 10),
           Text(
               "Vul uw details hieronder in",
+              textAlign: TextAlign.center,
               style: app_theme.textTheme.bodyText2!.copyWith(fontSize: 15, color: app_theme.grey)),
-          const SizedBox(height: 20),
+          const SizedBox(height: 25),
           GenderToggle(
               value: isFemale,
               onToggle: (val) {
@@ -90,16 +92,6 @@ class _RegisterDetailsState extends State<RegisterDetails> {
           DateInput(controller: dateOfBirthController),
           const SizedBox(height: 20),
           InputField(
-              controller: weightController,
-              text: "Gewicht",
-              hint: "Voer uw gewicht in kilogram",
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
-              ]
-          ),
-          const SizedBox(height: 20),
-          InputField(
               controller: heightController,
               text: "Lengte",
               hint: "Voer uw lengte in centimeter",
@@ -108,54 +100,18 @@ class _RegisterDetailsState extends State<RegisterDetails> {
               inputFormatters: [
                 FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
               ]
+          ),
+          const SizedBox(height: 20),
+          InputField(
+              controller: weightController,
+              text: "Gewicht",
+              hint: "Voer uw gewicht in kilogram",
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter(RegExp(r'^\d{0,3}'), allow: true)
+              ]
           )
         ]
-    );
-  }
-}
-
-class GenderToggle extends StatefulWidget {
-  final Function(bool) onToggle;
-  final bool value;
-
-  const GenderToggle({Key? key, required this.onToggle, required this.value}) : super(key: key);
-
-  @override
-  State<GenderToggle> createState() => _GenderToggleState();
-}
-
-class _GenderToggleState extends State<GenderToggle> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Text(
-                "Geslacht",
-                style: app_theme.textTheme.headline6!.copyWith(color: app_theme.black)
-            ),
-          ),
-        ),
-        const SizedBox(height: 17),
-        FlutterSwitch(
-          width: 120,
-          height: 40,
-          valueFontSize: 18,
-          toggleSize: 35,
-          value: widget.value,
-          activeText: "Vrouw",
-          inactiveText: "Man",
-          activeIcon: const Icon(Icons.female),
-          inactiveIcon: const Icon(Icons.male),
-          activeColor: app_theme.red,
-          inactiveColor: app_theme.blue,
-          showOnOff: true,
-          onToggle: widget.onToggle,
-        ),
-      ],
     );
   }
 }
