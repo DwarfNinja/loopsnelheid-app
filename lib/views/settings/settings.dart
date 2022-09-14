@@ -97,6 +97,7 @@ class _SettingsState extends State<Settings> {
             const ToggleSetting(
               text: "Metingen",
               setting: "measures",
+              initialStatus: true,
             ),
             const SizedBox(height: 25),
             ToggleSetting(
