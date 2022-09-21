@@ -8,6 +8,7 @@ import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 import 'package:loopsnelheidapp/services/api/login_service.dart';
 import 'package:loopsnelheidapp/services/device_info_service.dart';
+import 'package:loopsnelheidapp/services/setting/setting_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
@@ -50,8 +51,9 @@ class _LoginState extends State<Login> {
         sharedPreferencesService.setObject("roles", body['roles']);
         sharedPreferencesService.setString("device_session", body['device']['session']);
         sharedPreferencesService.setString("device_type", body['device']['type']);
-        sharedPreferencesService.setBool("measures", false);
-
+        SettingService.isMeasureDevice().then((isMeasureDevice) {
+          sharedPreferencesService.setBool("measures", isMeasureDevice);
+        });
         Navigator.pushNamed(context, "/");
       } else if (response.statusCode == 401) {
         alertDialog(context);
@@ -143,7 +145,7 @@ void alertDialog(BuildContext context) {
       alignment: AlignmentDirectional.topCenter,
       actions: <Widget>[
         TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.pop(context),
             child: Text(
                 'Melding sluiten',
                 style: app_theme.textTheme.bodyText2!

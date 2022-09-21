@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/models/average_measure.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -25,37 +26,26 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
-  Map<String, dynamic> weeklyMeasures = {};
-  Map<String, dynamic> monthlyMeasures = {};
-  double currentSpeed = 0;
-  double dailySpeed = 0;
-  double dailyRecSpeed = 0;
-  double weeklySpeed = 0;
-  double monthlySpeed = 0;
+  late Future<AverageMeasure> dailyAverageMeasure;
+  late Future<AverageMeasure> weeklyAverageMeasure;
+  late Future<AverageMeasure> monthlyAverageMeasure;
+  late Future<List<AverageMeasure>> graphDataAverageMeasures;
 
   bool weekGraphView = true;
 
   void getAllMeasureValues() async {
-    await MeasureService.getAverageDailyMeasure().then((value) => {
-      dailySpeed = value.averageSpeed,
-      dailyRecSpeed = value.defaultMeasureBasedOnProfile.speed,
-    });
-
-    await MeasureService.getAverageWeeklyMeasure().then((value) => {
-      weeklySpeed = value.averageSpeed,
-      weeklyMeasures = value.measures
-    });
-
-    await MeasureService.getAverageMonthlyMeasure().then((value) => {
-      monthlySpeed = value.averageSpeed,
-      monthlyMeasures = value.measures
-    });
-
-    setState(() {});
+    dailyAverageMeasure = MeasureService.getAverageDailyMeasure();
+    weeklyAverageMeasure = MeasureService.getAverageWeeklyMeasure();
+    monthlyAverageMeasure = MeasureService.getAverageMonthlyMeasure();
+    graphDataAverageMeasures = Future.wait([weeklyAverageMeasure, monthlyAverageMeasure]);
   }
 
   @override
   void initState() {
+    measureService.getDefaultMeasures().then((value) => {
+      print(value)
+    });
+
     super.initState();
 
     getAllMeasureValues();
@@ -82,37 +72,58 @@ class _DashboardState extends State<Dashboard> {
           topRight: Radius.circular(20),
         ),
         margin: const EdgeInsets.only(left: 20, right: 20),
-        panel: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 5),
-            const RotatedBox(
-              quarterTurns: 1,
-              child: Icon(
-                Icons.arrow_back_ios_new,
-                size: 30,
-              ),
-            ),
-            Text("Open",
-                style: app_theme.textTheme.bodyText2),
-            const SizedBox(height: 7),
-            Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView, limitSpeed: dailyRecSpeed),
-            const SizedBox(height: 15),
-            const LegendText(text: "Gemiddelde loopsnelheid", color: app_theme.blue),
-            const SizedBox(height: 3),
-            LegendText(text: "Aanbevolen Loopsnelheid ($dailyRecSpeed km/h)", color: app_theme.red),
-            const SizedBox(height: 22),
-            ToggleButton(
-                activeText: "Week",
-                inactiveText: "Maand",
-                onToggle: (bool value) {
-                  setState(() {
-                    weekGraphView = value;
-                  });
-                },
-                value: weekGraphView)
-          ],
-        ),
+        panel: FutureBuilder(
+          future: graphDataAverageMeasures,
+          builder: (BuildContext context, AsyncSnapshot<List<AverageMeasure>> snapshot) {
+            if (snapshot.hasError || snapshot.data == null ||
+                snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                    strokeWidth: 5,
+                    backgroundColor: app_theme.white,
+                    color: app_theme.blue),
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 5),
+                const RotatedBox(
+                  quarterTurns: 1,
+                  child: Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 30,
+                  ),
+                ),
+                Text("Open",
+                    style: app_theme.textTheme.bodyText2),
+                const SizedBox(height: 7),
+                Graph(data: weekGraphView ? snapshot.data![0].measures : snapshot.data![1].measures,
+                          status: weekGraphView,
+                          recSpeed: snapshot.data![1].defaultMeasureBasedOnProfile.speed),
+                const SizedBox(height: 15),
+                LegendText(
+                    text: "Gemiddelde loopsnelheid (${
+                        weekGraphView ? snapshot.data![0].averageSpeed.toStringAsFixed(1)
+                            : snapshot.data![1].averageSpeed.toStringAsFixed(1)} km/h)",
+                    color: app_theme.blue),
+                const SizedBox(height: 3),
+                LegendText(
+                    text: "Aanbevolen Loopsnelheid (${snapshot.data![1].defaultMeasureBasedOnProfile.speed.toStringAsFixed(1)} km/h)",
+                    color: app_theme.red),
+                const SizedBox(height: 22),
+                ToggleButton(
+                    activeText: "Week",
+                    inactiveText: "Maand",
+                    onToggle: (bool value) {
+                      setState(() {
+                        weekGraphView = value;
+                      });
+                    },
+                    value: weekGraphView)
+              ],
+            );
+          }),
         body: Container(
           decoration: const BoxDecoration(
             gradient: app_theme.mainLinearGradient,
@@ -151,17 +162,45 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 25),
-                    CurrentSpeedCard(
-                        speed: dailySpeed,
-                        recSpeed: dailyRecSpeed
+                    FutureBuilder(
+                      future: dailyAverageMeasure,
+                      builder: (BuildContext context, AsyncSnapshot<AverageMeasure> snapshot) {
+                        if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                          return const CurrentSpeedCard(
+                              speed: 0.0,
+                              recSpeed: 0.0,
+                              loadingIndicator: true
+                          );
+                        }
+                        return CurrentSpeedCard(
+                            speed: snapshot.data!.averageSpeed,
+                            recSpeed: snapshot.data!.defaultMeasureBasedOnProfile.speed
+                        );
+                      },
                     ),
                     const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AverageSpeedCard(header: "GEM. WEEK", speed: weeklySpeed),
+                        FutureBuilder(
+                          future: weeklyAverageMeasure,
+                          builder: (BuildContext context, AsyncSnapshot<AverageMeasure> snapshot) {
+                            if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                              return const AverageSpeedCard(header: "GEM. WEEK", speed: 0.0, loadingIndicator: true);
+                            }
+                            return AverageSpeedCard(header: "GEM. WEEK", speed: snapshot.data!.averageSpeed);
+                          },
+                        ),
                         const SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM. MAAND", speed: monthlySpeed)
+                        FutureBuilder(
+                          future: monthlyAverageMeasure,
+                          builder: (BuildContext context, AsyncSnapshot<AverageMeasure> snapshot) {
+                            if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                              return const AverageSpeedCard(header: "GEM. MAAND", speed: 0.0, loadingIndicator: true);
+                            }
+                            return AverageSpeedCard(header: "GEM. MAAND", speed: snapshot.data!.averageSpeed);
+                          },
+                        ),
                       ],
                     ),
                   ],
