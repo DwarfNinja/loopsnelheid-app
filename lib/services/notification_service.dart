@@ -11,3 +11,10 @@ class NotificationService {
       },
     );
   }
+
+  static void showSnackBar(BuildContext context, SnackBar snackBar) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      snackBar
+    );
+  }
+}
