@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+
+import 'package:loopsnelheidapp/widgets/info_base.dart';
+
+import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
-import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
-
-import '../../services/api/export_service.dart';
-
-String currentRoute = "/";
+import 'package:loopsnelheidapp/services/router/navigation_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/services/api/export_service.dart';
+import 'package:loopsnelheidapp/services/api/research_service.dart';
+import 'package:loopsnelheidapp/services/setting/setting_service.dart';
+import 'package:loopsnelheidapp/services/measure/activity_service.dart';
 
 class Settings extends StatefulWidget {
 
@@ -20,23 +22,28 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   ExportService exportService = ExportService();
+  ResearchService researchService = ResearchService();
 
 
-  Future<bool> _getBoolFromSharedPref() async{
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.setBool('Meten', true);
+  Future<bool> isAdministrator() async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    await sharedPreferencesService.getSharedPreferenceInstance();
+
+    bool isAdministrator = false;
+    await sharedPreferencesService.getObject("roles").then((value) => {
+      isAdministrator = value.contains("ROLE_ADMIN")
+    });
+
+    return isAdministrator;
   }
 
   @override
   Widget build(BuildContext context) {
-
     showAlertDialog(BuildContext context) {
       Widget okButton = TextButton(
         child: const Text("OK"),
-        onPressed: () => executeRoute(context, "/"),
+        onPressed: () => NavigationService.executeRoute(context, "/"),
       );
       AlertDialog alert = AlertDialog(
         title: const Text("Data Exporteren..."),
@@ -52,104 +59,95 @@ class _SettingsState extends State<Settings> {
         },
       );
     }
+
     exportData() {
+
       exportService.requestExportData();
       showAlertDialog(context);
+    }
+
+    exportAllData() {
+      isAdministrator().then((value) => {
+        if (value) {
+          researchService.getStatistics().then((value) => {
+            if (value == 200) {
+              showAlertDialog(context)
+            }
+          })
+        }
+      });
     }
 
     exportDataButtonOnPressed(){
       exportData();
     }
 
-    return Scaffold(
-      backgroundColor: app_theme.blue,
-      key: _globalKey,
-      drawer: const SideBar(),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: app_theme.mainLinearGradient,
-        ),
-        child: Stack(
+    exportAllDataButtonOnPressed(){
+      exportAllData();
+    }
+
+    return InfoBase(
+      pageName: "Instellingen",
+      pageIcon: Icons.settings,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 45),
+        child: Column(
           children: [
-            IconButton(
-              padding: const EdgeInsets.all(20),
-              icon: const Icon(Icons.menu),
-              color: Colors.white,
-              iconSize: 38,
-              onPressed: () {
-                _globalKey.currentState?.openDrawer();
+            const SizedBox(height: 50),
+            const ToggleSetting(
+              text: "Metingen",
+              setting: "measures",
+              initialStatus: true,
+            ),
+            const SizedBox(height: 25),
+            ToggleSetting(
+                text: "[Test]\nHandmatig Meten",
+                setting: "manual_measure",
+                onToggle: (bool status) {
+                  SettingService.getMeasureSetting().then((value) async {
+                    bool isMeasureDevice = await SettingService.isMeasureDevice();
+                    if(value == true && isMeasureDevice) {
+                      status ? ActivityService.startActivityService() : ActivityService.stopActivityService();
+                    }
+                  });
+                }),
+            const SizedBox(height: 50),
+            SettingsButton(
+              iconData: Icons.devices_rounded,
+              text: "Mijn apparaten",
+              onPressed: (){
+                NavigationService.executeRoute(context, "/devices");
               },
             ),
-            Center(
-              child: Column(
-                children: [
-                   SizedBox(height: 70),
-                  Text(
-                    "Instellingen",
-                    style: app_theme.textTheme.headline3!
-                        .copyWith(color: Colors.white),
-                  ),
-                  const SizedBox(height: 20),
-                  Container (
-                    width: 375,
-                    height: 700,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
-                      ),
-                      boxShadow: [
-                        app_theme.bottomBoxShadow,
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 45, right: 45),
-                      child: Column(
-                        children:  [
-                          SizedBox(height: 50),
-                          const ToggleSetting(
-                              text: "Meten",
-                              setting: "measure"),
-                          SizedBox(height: 20),
-                          const ToggleSetting(
-                              text: "Meldingen",
-                              setting: "notifications"),
-                          SizedBox(height: 50),
-                          SideBarButton(
-                            iconData: Icons.next_plan_rounded,
-                            text: "Exporteer Gegevens",
-                            onPressed: (){
-                              exportDataButtonOnPressed();
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            const SizedBox(height: 20),
+            SettingsButton(
+              iconData: Icons.cloud_download_rounded,
+              text: "Exporteer gegevens",
+              onPressed: (){
+                exportDataButtonOnPressed();
+              },
+            ),
+            const SizedBox(height: 20),
+            FutureBuilder<bool>(
+              future: isAdministrator(),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if(snapshot.data != null && snapshot.data == true) {
+                  return
+                    SettingsButton(
+                      iconData: Icons.download_rounded,
+                      text: "Exporteer onderzoek",
+                      onPressed: (){
+                        exportAllDataButtonOnPressed();
+                      },
+                    );
+                }
+
+                return Container();
+              },
             ),
           ],
         ),
       ),
     );
   }
-
-
-
-  void executeRoute(BuildContext context, String name) {
-    if (currentRoute != name) {
-      Navigator.pushReplacementNamed(context, name);
-    }
-    else {
-      Navigator.pop(context);
-    }
-    currentRoute = name;
-  }
-
-
-
 }
-
-
-// hier komt de save data
