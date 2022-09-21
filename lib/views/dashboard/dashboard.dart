@@ -42,6 +42,10 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
+    measureService.getDefaultMeasures().then((value) => {
+      print(value)
+    });
+
     super.initState();
 
     getAllMeasureValues();
