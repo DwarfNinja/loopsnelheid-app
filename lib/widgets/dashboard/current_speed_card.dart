@@ -5,8 +5,9 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 class CurrentSpeedCard extends StatefulWidget {
   final double speed;
   final double recSpeed;
+  final bool loadingIndicator;
 
-  const CurrentSpeedCard({Key? key, required this.speed, required this.recSpeed})
+  const CurrentSpeedCard({Key? key, required this.speed, required this.recSpeed, this.loadingIndicator = false})
       : super(key: key);
 
   @override
@@ -48,8 +49,12 @@ class _CurrentSpeedCardState extends State<CurrentSpeedCard> {
               style: app_theme.textTheme.titleMedium,
               textAlign: TextAlign.center),
           const SizedBox(height: 85),
-          CustomPaint(
-            painter: CirclePainter(gradient: colorGradient),
+          widget.loadingIndicator ? const CircularProgressIndicator(
+              strokeWidth: 5,
+              backgroundColor:
+              app_theme.white,
+              color: app_theme.blue
+          ) : CustomPaint(painter: CirclePainter(gradient: colorGradient),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
