@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/user.dart';
-import '../../models/verify_token.dart';
+import 'package:loopsnelheidapp/models/user.dart';
+import 'package:loopsnelheidapp/models/verify_token.dart';
 
 class RegisterService {
   final String registerUserEndpoint =
@@ -22,10 +22,10 @@ class RegisterService {
         body: jsonEncode(user));
   }
 
-  Future<void> verifyEmailByDigitalCode(VerifyToken verifyToken) async {
-    await http.post(Uri.parse(verifyMailEndpoint +
-        verifyToken.userId +
-        "/" +
-        verifyToken.digitalCode));
+  Future<bool> verifyEmailByDigitalCode(VerifyToken verifyToken) async {
+    final response = await http.post(Uri.parse(verifyMailEndpoint +
+        verifyToken.userId.toString() + "/" + verifyToken.digitalCode));
+
+    return response.statusCode == 200;
   }
 }

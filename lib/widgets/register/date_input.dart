@@ -6,7 +6,17 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class DateInput extends StatefulWidget {
   final TextEditingController controller;
-  const DateInput({Key? key, required this.controller}) : super(key: key);
+  final TextStyle? headerStyle;
+  final EdgeInsets? contentPadding;
+  final TextStyle? hintStyle;
+
+  const DateInput({
+    Key? key,
+    required this.controller,
+    this.headerStyle,
+    this.contentPadding = const EdgeInsets.all(16.0),
+    this.hintStyle
+  }) : super(key: key);
 
   @override
   State<DateInput> createState() => _DateInputState();
@@ -15,24 +25,11 @@ class DateInput extends StatefulWidget {
 class _DateInputState extends State<DateInput> {
 
   bool empty = true;
+  DateTime? pickedDate;
 
   @override
   void initState() {
-    widget.controller.text = "";
-    widget.controller.addListener(onDateInputControllerChanged);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
-
-  void onDateInputControllerChanged() {
-    setState(() {
-      empty = (widget.controller.text == "") ? true : false;
-    });
   }
 
   @override
@@ -43,14 +40,18 @@ class _DateInputState extends State<DateInput> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 10),
-              child: Text("Geboortedatum", style: app_theme.textTheme.headline6!.copyWith(color: app_theme.black)),
+              child: Text(
+                  "Geboortedatum",
+                  style: widget.headerStyle ?? app_theme.textTheme.headline6!.copyWith(color: app_theme.black)),
             )
         ),
         const SizedBox(height: 10),
         TextFormField(
           controller: widget.controller,
+          maxLines: 1,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.all(16.0),
+            errorStyle: const TextStyle(height: 0.75),
+            contentPadding: widget.contentPadding,
             border: const OutlineInputBorder(
               borderSide: BorderSide(width: 2, color: app_theme.grey),
               borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -68,7 +69,7 @@ class _DateInputState extends State<DateInput> {
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
             hintText: "xx-xx-xxxx",
-            hintStyle: GoogleFonts.montserrat(
+            hintStyle: widget.hintStyle ?? GoogleFonts.montserrat(
                 fontSize: 16,
                 color: app_theme.grey,
                 fontWeight: FontWeight.w300),
@@ -96,21 +97,26 @@ class _DateInputState extends State<DateInput> {
                 firstDate: DateTime(1900),
                 lastDate: DateTime.now()
             );
-
             if(pickedDate != null ){
-              String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+              this.pickedDate = pickedDate;
 
+              String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
               setState(() {
                 widget.controller.text = formattedDate;
-                // widget.pickedDate = pickedDate
               });
+              empty = widget.controller.text.isEmpty ? true : false;
             }
-            // WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
+            WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
           },
           validator: (String? value) {
             if (widget.controller.text.isEmpty) {
-              return "Geboortedatum mag niet leeg zijn";
+              return "De geboortedatum mag niet leeg zijn";
             }
+
+            if (DateTime.now().year - DateFormat("yyyy-MM-dd").parse(widget.controller.text).year < 18) {
+              return "De gebruiker moet 18 jaar of ouder zijn";
+            }
+
             return null;
           },
         ),

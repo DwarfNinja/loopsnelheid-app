@@ -1,23 +1,24 @@
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:loopsnelheidapp/models/average_measure.dart';
 
-import '../../models/measure.dart';
-import '../../utils/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/models/average_measure.dart';
+import 'package:loopsnelheidapp/models/measure.dart';
+
+import 'package:loopsnelheidapp/services/env_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 class MeasureService {
-  final String averageDailyEndpoint = dotenv.env['BACKEND_API_URL']! + "/stats/today";
-  final String averageWeeklyEndpoint =  dotenv.env['BACKEND_API_URL']! + "/stats/week";
-  final String averageMonthlyEndpoint = dotenv.env['BACKEND_API_URL']! + "/stats/month";
-  final String storeMeasureEndpoint = dotenv.env['BACKEND_API_URL']! + "/measures";
+  static final String averageDailyEndpoint = EnvService().loadBackendApiFromEnvFile() + "/stats/today";
+  static final String averageWeeklyEndpoint =  EnvService().loadBackendApiFromEnvFile() + "/stats/week";
+  static final String averageMonthlyEndpoint = EnvService().loadBackendApiFromEnvFile() + "/stats/month";
+  static final String storeMeasureEndpoint = EnvService().loadBackendApiFromEnvFile() + "/measures";
 
   static double convertMsToKmh(double speed) {
     return speed * 3.6;
   }
 
-  Future<AverageMeasure> getAverageDailyMeasure() async {
+  static Future<AverageMeasure> getAverageDailyMeasure() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
@@ -29,7 +30,7 @@ class MeasureService {
     return AverageMeasure.fromJson(jsonDecode(response.body));
   }
 
-  Future<AverageMeasure> getAverageWeeklyMeasure() async {
+  static Future<AverageMeasure> getAverageWeeklyMeasure() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
@@ -41,8 +42,7 @@ class MeasureService {
     return AverageMeasure.fromJson(jsonDecode(response.body));
   }
 
-
-  Future<AverageMeasure> getAverageMonthlyMeasure() async {
+  static Future<AverageMeasure> getAverageMonthlyMeasure() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
@@ -54,14 +54,14 @@ class MeasureService {
     return AverageMeasure.fromJson(jsonDecode(response.body));
   }
 
-  List<Measure> getGraphMeasures(Map<String, dynamic> measures) {
+  static List<Measure> getGraphMeasures(Map<String, dynamic> measures) {
     List<Measure> graphMeasures = [];
     measures.forEach((date, speed) => graphMeasures.add(Measure(date, speed)));
 
     return graphMeasures;
   }
 
-  void storeMeasures(List<Measure> measures) async {
+  static void storeMeasures(List<Measure> measures) async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
     await http.post(
@@ -70,6 +70,7 @@ class MeasureService {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer ${sharedPreferencesService.getString("token")}',
+        'session': sharedPreferencesService.getString("device_session")
       },
       body: jsonEncode(measures),
     );

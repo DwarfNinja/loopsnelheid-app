@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class LegendText extends StatelessWidget {
@@ -11,7 +12,7 @@ class LegendText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 40),
+      padding: const EdgeInsets.only(left: 25),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
