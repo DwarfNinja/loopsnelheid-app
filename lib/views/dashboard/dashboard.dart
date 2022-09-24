@@ -53,7 +53,7 @@ class _DashboardState extends State<Dashboard> {
             NotificationService.showAlert(
                 context,
                 CustomAlert(
-                  titleText: "Toestemming vereisd",
+                  titleText: "Toestemming vereist",
                   messageText: "Locatie toestemming is nodig om u loopsnelheid te meten. Ga naar Instellingen en zet de Locatie rechten voor de Loopsnelheid app op \"Altijd toestaan\".",
                   buttonText: "Naar Instellingen",
                   onPressed: () {
@@ -74,7 +74,7 @@ class _DashboardState extends State<Dashboard> {
         NotificationService.showAlert(
             context,
             CustomAlert(
-              titleText: "Toestemming vereisd",
+              titleText: "Toestemming vereist",
               messageText:"Fysieke Activiteit toestemming is nodig om u loopsnelheid te meten. Ga naar Instellingen en zet de Fysieke activieit rechten voor de Loopsnelheid app op \"Toestaan\".",
               buttonText: "Naar Instellingen",
               onPressed: () {
