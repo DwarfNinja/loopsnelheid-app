@@ -1,14 +1,23 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pausable_timer/pausable_timer.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 
 import 'package:loopsnelheidapp/models/measure.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
 
 class LocationService {
+  static StreamSubscription<Position>? positionStream;
+
+  static PausableTimer uploadTimer = PausableTimer(const Duration(seconds: 30), () {
+    uploadData();
+    uploadTimer.reset();
+    uploadTimer.start();
+  });
+
   static List<Measure> measureList = [];
 
   static bool isServiceRunning = false;
@@ -41,19 +50,14 @@ class LocationService {
         .handleError(onPositionError)
         .listen(onReceivePosition);
 
+    restartUploadTimer();
     isServiceRunning = true;
-
-    Timer.periodic(const Duration(seconds: 30), (timer) {
-      uploadData();
-      if (isServiceRunning == false) {
-        timer.cancel();
-      }
-    });
   }
 
   static void stopLocationService() {
     cancelMeasuring();
     uploadData();
+    cancelUploadTimer();
     isServiceRunning = false;
   }
 
@@ -74,7 +78,16 @@ class LocationService {
   }
 
   static void cancelMeasuring() {
-   positionStream?.cancel();
+    positionStream?.cancel();
+  }
+
+  static void restartUploadTimer() {
+    uploadTimer.reset();
+    uploadTimer.start();
+  }
+
+  static void cancelUploadTimer() {
+    uploadTimer.cancel();
   }
 
   static bool onIosBackground(ServiceInstance service) {
