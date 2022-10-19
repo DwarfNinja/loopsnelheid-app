@@ -22,8 +22,6 @@ class LocationService {
 
   static bool isServiceRunning = false;
 
-  static StreamSubscription<Position>? positionStream;
-
   static const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.best,
       distanceFilter: 10,
