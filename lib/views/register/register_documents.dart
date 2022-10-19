@@ -99,8 +99,14 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Document(text: "Algemene Voorwaarden", documentAsset: 'assets/privacy_verklaring.pdf'),
-              Document(text: "Privacy Verklaring", documentAsset: 'assets/privacy_verklaring.pdf')
+              Document(
+                  text: "Algemene Voorwaarden",
+                  documentAsset: 'assets/algemene_voorwaarden_oud-fit.pdf',
+                  documentPreview: 'assets/images/algemene_voorwaarden_preview.png'),
+              Document(
+                  text: "Privacy Verklaring",
+                  documentAsset: 'assets/privacy_verklaring_oud-fit.pdf',
+                  documentPreview: 'assets/images/privacy_verklaring_preview.png')
             ],
           ),
           const SizedBox(height: 20),
@@ -142,8 +148,9 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 class Document extends StatelessWidget {
   final String text;
   final String documentAsset;
+  final String documentPreview;
 
-  const Document({Key? key, required this.text, required this.documentAsset})
+  const Document({Key? key, required this.text, required this.documentAsset, required this.documentPreview})
       : super(key: key);
 
   @override
@@ -159,7 +166,7 @@ class Document extends StatelessWidget {
           child: Container(
             constraints: const BoxConstraints(minWidth: 80, maxWidth: 140, minHeight: 140, maxHeight: 170),
             decoration: BoxDecoration(
-                image: const DecorationImage(image: AssetImage('assets/images/lorem_ipsum_document.png'), fit: BoxFit.cover),
+                image: DecorationImage(image: AssetImage(documentPreview), fit: BoxFit.cover),
                 boxShadow: const [
                   app_theme.bottomBoxShadow,
                 ],
