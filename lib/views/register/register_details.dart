@@ -11,7 +11,6 @@ import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 import 'package:loopsnelheidapp/widgets/gender_toggle.dart';
 
-
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
@@ -55,7 +54,8 @@ class _RegisterDetailsState extends State<RegisterDetails> {
     onPressedNextButton() {
       setState(() => submitted = true);
       if (formKey.currentState!.validate()) {
-        sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
+        dynamic userjson = sharedPreferencesService.getObject("registerUser");
+        assignUserValues(User.fromJson(userjson));
         Navigator.pushNamed(context, "/register_documents");
       }
     }

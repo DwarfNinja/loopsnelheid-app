@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/services/measure/location_service.dart';
 
 import 'package:loopsnelheidapp/widgets/info_base.dart';
 
@@ -10,7 +11,7 @@ import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 import 'package:loopsnelheidapp/services/api/export_service.dart';
 import 'package:loopsnelheidapp/services/api/research_service.dart';
 import 'package:loopsnelheidapp/services/setting/setting_service.dart';
-import 'package:loopsnelheidapp/services/measure/activity_service.dart';
+import 'package:loopsnelheidapp/services/measure/background_service.dart';
 
 class Settings extends StatefulWidget {
 
@@ -24,7 +25,6 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   ExportService exportService = ExportService();
   ResearchService researchService = ResearchService();
-
 
   Future<bool> isAdministrator() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
@@ -94,20 +94,27 @@ class _SettingsState extends State<Settings> {
         child: Column(
           children: [
             const SizedBox(height: 50),
-            const ToggleSetting(
+            ToggleSetting(
               text: "Metingen",
               setting: "measures",
               initialStatus: true,
+              onToggle: (bool status) {
+                  status ? BackgroundService.startBackgroundService() : BackgroundService.stopBackgroundService();
+              }
             ),
             const SizedBox(height: 25),
             ToggleSetting(
                 text: "[Test]\nHandmatig Meten",
                 setting: "manual_measure",
                 onToggle: (bool status) {
+                  if (status == false) {
+                    LocationService.runLocationService();
+                    return;
+                  }
                   SettingService.getMeasureSetting().then((value) async {
                     bool isMeasureDevice = await SettingService.isMeasureDevice();
                     if(value == true && isMeasureDevice) {
-                      status ? ActivityService.startActivityService() : ActivityService.stopActivityService();
+                      status ? LocationService.runLocationService() : LocationService.stopLocationService();
                     }
                   });
                 }),
