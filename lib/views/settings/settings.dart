@@ -30,10 +30,7 @@ class _SettingsState extends State<Settings> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
-    bool isAdministrator = false;
-    await sharedPreferencesService.getObject("roles").then((value) => {
-      isAdministrator = value.contains("ROLE_ADMIN")
-    });
+    bool isAdministrator = sharedPreferencesService.getObject("roles").contains("ROLE_ADMIN");
 
     return isAdministrator;
   }
