@@ -12,16 +12,24 @@ class ActivityService {
   static FlutterActivityRecognition activityRecognition = FlutterActivityRecognition.instance;
   static StreamSubscription<Activity>? activityStreamSubscription;
 
-  static PausableTimer measureTimer = PausableTimer(const Duration(minutes: 15), () {});
+  static PausableTimer measureTimer = PausableTimer(const Duration(minutes: 15), () {
+    ActivityService.stopActivityService();
+    LocationService.stopLocationService();
+  });
+
+  static bool isServiceRunning = false;
 
   static void startActivityService() {
     activityStreamSubscription = activityRecognition.activityStream
         .handleError(onActivityError)
         .listen(onReceiveActivity);
+
+    isServiceRunning = true;
   }
 
   static void stopActivityService() {
     activityStreamSubscription?.cancel();
+    isServiceRunning = false;
   }
 
   static Future<bool> isActivityPermissionGranted() async {
@@ -42,26 +50,26 @@ class ActivityService {
   static void onReceiveActivity(Activity activity) {
     print('Activity Detected >> ${activity.toJson()}');
 
-    if(DateTime.now().hour > 5) {
-      measureTimer.reset();
+    if (activity.type == ActivityType.WALKING && (activity.confidence == ActivityConfidence.MEDIUM || activity.confidence == ActivityConfidence.HIGH)) {
+      SettingService.isMeasureDevice().then((isMeasureDevice) async {
+        if(isMeasureDevice) {
+          LocationService.runLocationService();
+          measureTimer.start();
+        }
+      });
     }
+    else if (LocationService.isServiceRunning) {
+      LocationService.stopLocationService();
+      measureTimer.pause();
+    }
+  }
 
-    if (!measureTimer.isExpired) {
-      if (activity.type == ActivityType.WALKING && activity.confidence == ActivityConfidence.HIGH) {
-        SettingService.getMeasureSetting().then((value) async {
-          bool measureSetting = value as bool;
-          bool isMeasureDevice = await SettingService.isMeasureDevice();
-          if(measureSetting && isMeasureDevice) {
-            LocationService.startLocationService();
-            measureTimer.start();
-          }
-        });
-      }
-      else if (LocationService.isServiceRunning) {
-        LocationService.stopLocationService();
-        measureTimer.pause();
-      }
-    }
+  static bool isMeasureTimerExpired() {
+    return measureTimer.isExpired;
+  }
+
+  static void resetMeasureTimer() {
+    measureTimer.reset();
   }
 
   static void onActivityError(dynamic error) {

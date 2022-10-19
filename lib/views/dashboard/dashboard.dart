@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:loopsnelheidapp/models/average_measure.dart';
+import 'package:loopsnelheidapp/services/measure/background_service.dart';
 import 'package:loopsnelheidapp/services/measure/location_service.dart';
 import 'package:loopsnelheidapp/services/notification_service.dart';
 
@@ -17,6 +18,7 @@ import 'package:loopsnelheidapp/widgets/notification/custom_alert.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
 import 'package:loopsnelheidapp/services/measure/activity_service.dart';
+import 'package:loopsnelheidapp/services/setting/setting_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -47,7 +49,6 @@ class _DashboardState extends State<Dashboard> {
   void requestPermissions() {
     ActivityService.isActivityPermissionGranted().then((activityPermission) async {
       if (activityPermission) {
-        ActivityService.startActivityService();
         LocationService.isAlwaysLocationPermissionGranted().then((locationPermission) async {
           if (!locationPermission) {
             NotificationService.showAlert(
@@ -99,6 +100,12 @@ class _DashboardState extends State<Dashboard> {
     getAllMeasureValues();
 
     requestPermissions();
+
+    SettingService.getMeasureSetting().then((measureSetting) async {
+      if (measureSetting) {
+        BackgroundService.startBackgroundService();
+      }
+    });
   }
 
   @override
