@@ -21,6 +21,22 @@ class LocationService {
       distanceFilter: 10,
   );
 
+  static Future<bool> isAlwaysLocationPermissionGranted() async {
+    LocationPermission reqResult;
+    reqResult = await Geolocator.checkPermission();
+    if (reqResult != LocationPermission.always) {
+      reqResult = await Geolocator.requestPermission();
+      if (reqResult != LocationPermission.always) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static Future<bool> openAppSettings() async {
+    return Geolocator.openAppSettings();
+  }
+
   static Future<void> initializeService() async {
     final backgroundService = FlutterBackgroundService();
     await backgroundService.configure(
