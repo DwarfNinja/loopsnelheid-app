@@ -8,9 +8,10 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class ToggleSetting extends StatefulWidget {
 
-  const ToggleSetting({Key? key, required this.text, required this.setting, this.onToggle}) : super(key: key);
+  const ToggleSetting({Key? key, required this.text, required this.setting, this.initialStatus = false, this.onToggle}) : super(key: key);
   final String text;
   final String setting;
+  final bool initialStatus;
   final Function(bool)? onToggle;
 
   @override
@@ -30,7 +31,7 @@ class _ToggleSettingState extends State<ToggleSetting> {
   void loadSetting() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      status = prefs.getBool(widget.setting) ?? false;
+      status = prefs.getBool(widget.setting) ?? widget.initialStatus;
     });
   }
 
