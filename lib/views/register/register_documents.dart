@@ -192,14 +192,14 @@ class DocumentDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pdfController = PdfController(
-      document: PdfDocument.openAsset(documentAsset)
+    final pdfController = PdfControllerPinch(
+      document: PdfDocument.openAsset(documentAsset),
     );
     return Dialog(
       child: SizedBox(
         width: 600,
         height: 600,
-        child: PdfView(
+        child: PdfViewPinch(
           controller: pdfController,
           scrollDirection: Axis.vertical,
         ),
