@@ -30,10 +30,7 @@ class _SettingsState extends State<Settings> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
-    bool isAdministrator = false;
-    await sharedPreferencesService.getObject("roles").then((value) => {
-      isAdministrator = value.contains("ROLE_ADMIN")
-    });
+    bool isAdministrator = sharedPreferencesService.getObject("roles").contains("ROLE_ADMIN");
 
     return isAdministrator;
   }
@@ -102,22 +99,6 @@ class _SettingsState extends State<Settings> {
                   status ? BackgroundService.startBackgroundService() : BackgroundService.stopBackgroundService();
               }
             ),
-            const SizedBox(height: 25),
-            ToggleSetting(
-                text: "[Test]\nHandmatig Meten",
-                setting: "manual_measure",
-                onToggle: (bool status) {
-                  if (status == false) {
-                    LocationService.runLocationService();
-                    return;
-                  }
-                  SettingService.getMeasureSetting().then((value) async {
-                    bool isMeasureDevice = await SettingService.isMeasureDevice();
-                    if(value == true && isMeasureDevice) {
-                      status ? LocationService.runLocationService() : LocationService.stopLocationService();
-                    }
-                  });
-                }),
             const SizedBox(height: 50),
             SettingsButton(
               iconData: Icons.devices_rounded,
@@ -148,7 +129,6 @@ class _SettingsState extends State<Settings> {
                       },
                     );
                 }
-
                 return Container();
               },
             ),
