@@ -84,7 +84,7 @@ class _EditDetailsState extends State<EditDetails> {
 
   handleRegisterResponse(response) {
     if (response == 200) {
-      NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Success! U gegevens zijn aangepast!"));
+      NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! U gegevens zijn aangepast!"));
     } else if (response == 400) {
       NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u gegevens!"));
     }

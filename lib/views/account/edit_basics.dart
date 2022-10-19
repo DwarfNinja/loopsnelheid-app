@@ -62,7 +62,7 @@ class _EditBasicsState extends State<EditBasics> {
       if (emailController.text.isNotEmpty) {
         ProfileService.changeEmail(emailController.text).then((response) => {
           if (response == 200) {
-            NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Success! Uw email is aangepast! Er is een bevestigings mail verstuurt naar uw mailbox!"))
+            NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! Uw email is aangepast! Er is een bevestigings mail verstuurt naar uw mailbox!"))
           } else if (response == 400) {
             NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u email!"))
           }
@@ -72,7 +72,7 @@ class _EditBasicsState extends State<EditBasics> {
         ProfileService.changePassword(currentPasswordController.text, newPasswordController.text)
             .then((response) => {
           if (response == 200) {
-            NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Success! U wachtwoord is aangepast!"))
+            NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! U wachtwoord is aangepast!"))
           } else if (response == 400) {
             NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u wachtwoord!"))
           }
