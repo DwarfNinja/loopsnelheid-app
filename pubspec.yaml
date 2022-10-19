@@ -89,7 +89,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/privacy_verklaring.pdf
+    - assets/privacy_verklaring_oud-fit.pdf
+    - assets/algemene_voorwaarden_oud-fit.pdf
     - assets/images/
     - .env
 
