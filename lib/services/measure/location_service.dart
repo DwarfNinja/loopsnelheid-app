@@ -14,10 +14,28 @@ import 'package:loopsnelheidapp/services/api/measure_service.dart';
 class LocationService {
   static List<Measure> measureList = [];
 
+  static bool isServiceRunning = false;
+
   static const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.best,
       distanceFilter: 10,
   );
+
+  static Future<bool> isAlwaysLocationPermissionGranted() async {
+    LocationPermission reqResult;
+    reqResult = await Geolocator.checkPermission();
+    if (reqResult != LocationPermission.always) {
+      reqResult = await Geolocator.requestPermission();
+      if (reqResult != LocationPermission.always) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static Future<bool> openAppSettings() async {
+    return Geolocator.openAppSettings();
+  }
 
   static Future<void> initializeService() async {
     final backgroundService = FlutterBackgroundService();
@@ -39,11 +57,13 @@ class LocationService {
     await initializeService();
     final service = FlutterBackgroundService();
     service.startService();
+    isServiceRunning = true;
   }
 
   static stopLocationService() async {
     final service = FlutterBackgroundService();
     service.invoke("stopService");
+    isServiceRunning = false;
   }
 
   @pragma('vm:entry-point')
@@ -70,7 +90,7 @@ class LocationService {
       if (service is AndroidServiceInstance) {
         service.setForegroundNotificationInfo(
             title: "Loopsnelheid",
-            content: "Metingen aan het uitvoeren ..."
+            content: "Metingen aan het uitvoeren..."
         );
       }
     });

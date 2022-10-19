@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:loopsnelheidapp/models/average_measure.dart';
+import 'package:loopsnelheidapp/services/measure/location_service.dart';
+import 'package:loopsnelheidapp/services/notification_service.dart';
+
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
@@ -9,8 +13,10 @@ import 'package:loopsnelheidapp/widgets/dashboard/legend_text.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/toggle_button.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
+import 'package:loopsnelheidapp/widgets/notification/custom_alert.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
+import 'package:loopsnelheidapp/services/measure/activity_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -24,54 +30,80 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
-  Map<String, dynamic> weeklyMeasures = {};
-  Map<String, dynamic> monthlyMeasures = {};
-  double currentSpeed = 0;
-  double dailySpeed = 0;
-  double dailyRecSpeed = 0;
-  double weeklySpeed = 0;
-  double monthlySpeed = 0;
+  late Future<AverageMeasure> dailyAverageMeasure;
+  late Future<AverageMeasure> weeklyAverageMeasure;
+  late Future<AverageMeasure> monthlyAverageMeasure;
+  late Future<List<AverageMeasure>> graphDataAverageMeasures;
 
   bool weekGraphView = true;
 
   void getAllMeasureValues() async {
-    await MeasureService.getAverageDailyMeasure().then((value) => {
-      dailySpeed = value.averageSpeed,
-      dailyRecSpeed = value.defaultMeasureBasedOnProfile.speed,
-    });
+    dailyAverageMeasure = MeasureService.getAverageDailyMeasure();
+    weeklyAverageMeasure = MeasureService.getAverageWeeklyMeasure();
+    monthlyAverageMeasure = MeasureService.getAverageMonthlyMeasure();
+    graphDataAverageMeasures = Future.wait([weeklyAverageMeasure, monthlyAverageMeasure]);
+  }
 
-    await MeasureService.getAverageWeeklyMeasure().then((value) => {
-      weeklySpeed = value.averageSpeed,
-      weeklyMeasures = value.measures
+  void requestPermissions() {
+    ActivityService.isActivityPermissionGranted().then((activityPermission) async {
+      if (activityPermission) {
+        ActivityService.startActivityService();
+        LocationService.isAlwaysLocationPermissionGranted().then((locationPermission) async {
+          if (!locationPermission) {
+            NotificationService.showAlert(
+                context,
+                CustomAlert(
+                  titleText: "Toestemming vereist",
+                  messageText: "Locatie toestemming is nodig om u loopsnelheid te meten. Ga naar Instellingen en zet de Locatie rechten voor de Loopsnelheid app op \"Altijd toestaan\".",
+                  buttonText: "Naar Instellingen",
+                  onPressed: () {
+                    LocationService.openAppSettings().then((value) {
+                      if (value == true) {
+                        Navigator.pop(context);
+                        requestPermissions();
+                      }
+                    });
+                  },
+                ),
+                dismissable: false
+            );
+          }
+        });
+      }
+      else {
+        NotificationService.showAlert(
+            context,
+            CustomAlert(
+              titleText: "Toestemming vereist",
+              messageText:"Fysieke Activiteit toestemming is nodig om u loopsnelheid te meten. Ga naar Instellingen en zet de Fysieke activieit rechten voor de Loopsnelheid app op \"Toestaan\".",
+              buttonText: "Naar Instellingen",
+              onPressed: () {
+                LocationService.openAppSettings().then((value) {
+                  if (value == true) {
+                    Navigator.pop(context);
+                    requestPermissions();
+                  }
+                });
+              },
+            ),
+            dismissable: false
+        );
+      }
     });
-
-    await MeasureService.getAverageMonthlyMeasure().then((value) => {
-      monthlySpeed = value.averageSpeed,
-      monthlyMeasures = value.measures
-    });
-
-    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    // bool measureSetting = false;
-    // bool measurePermitted = false;
 
     getAllMeasureValues();
 
-    // SettingService.getMeasureSetting().then((value) async {
-    //   measureSetting = value as bool;
-    //   measurePermitted = await SettingService.isMeasureDevice();
-    //   if(measureSetting && measurePermitted) {
-    //     LocationService.startLocationService();
-    //   }
-    // });
+    requestPermissions();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: app_theme.blue,
       key: _globalKey,
@@ -84,37 +116,58 @@ class _DashboardState extends State<Dashboard> {
           topRight: Radius.circular(20),
         ),
         margin: const EdgeInsets.only(left: 20, right: 20),
-        panel: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 5),
-            const RotatedBox(
-              quarterTurns: 1,
-              child: Icon(
-                Icons.arrow_back_ios_new,
-                size: 30,
-              ),
-            ),
-            Text("Open",
-                style: app_theme.textTheme.bodyText2),
-            const SizedBox(height: 7),
-            Graph(data: weekGraphView ? weeklyMeasures : monthlyMeasures, status: weekGraphView, limitSpeed: dailyRecSpeed),
-            const SizedBox(height: 15),
-            const LegendText(text: "Gemiddelde loopsnelheid", color: app_theme.blue),
-            const SizedBox(height: 3),
-            LegendText(text: "Aanbevolen Loopsnelheid ($dailyRecSpeed km/h)", color: app_theme.red),
-            const SizedBox(height: 22),
-            ToggleButton(
-                activeText: "Week",
-                inactiveText: "Maand",
-                onToggle: (bool value) {
-                  setState(() {
-                    weekGraphView = value;
-                  });
-                },
-                value: weekGraphView)
-          ],
-        ),
+        panel: FutureBuilder(
+          future: graphDataAverageMeasures,
+          builder: (BuildContext context, AsyncSnapshot<List<AverageMeasure>> snapshot) {
+            if (snapshot.hasError || snapshot.data == null ||
+                snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                    strokeWidth: 5,
+                    backgroundColor: app_theme.white,
+                    color: app_theme.blue),
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 5),
+                const RotatedBox(
+                  quarterTurns: 1,
+                  child: Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 30,
+                  ),
+                ),
+                Text("Open",
+                    style: app_theme.textTheme.bodyText2),
+                const SizedBox(height: 7),
+                Graph(data: weekGraphView ? snapshot.data![0].measures : snapshot.data![1].measures,
+                          status: weekGraphView,
+                          recSpeed: snapshot.data![1].defaultMeasureBasedOnProfile.speed),
+                const SizedBox(height: 15),
+                LegendText(
+                    text: "Gemiddelde loopsnelheid (${
+                        weekGraphView ? snapshot.data![0].averageSpeed.toStringAsFixed(1)
+                            : snapshot.data![1].averageSpeed.toStringAsFixed(1)} km/h)",
+                    color: app_theme.blue),
+                const SizedBox(height: 3),
+                LegendText(
+                    text: "Aanbevolen Loopsnelheid (${snapshot.data![1].defaultMeasureBasedOnProfile.speed.toStringAsFixed(1)} km/h)",
+                    color: app_theme.red),
+                const SizedBox(height: 22),
+                ToggleButton(
+                    activeText: "Week",
+                    inactiveText: "Maand",
+                    onToggle: (bool value) {
+                      setState(() {
+                        weekGraphView = value;
+                      });
+                    },
+                    value: weekGraphView)
+              ],
+            );
+          }),
         body: Container(
           decoration: const BoxDecoration(
             gradient: app_theme.mainLinearGradient,
@@ -122,20 +175,20 @@ class _DashboardState extends State<Dashboard> {
           child: Stack(
             children: [
               Column(
-                  children: [
-                    IconButton(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                      icon: const Icon(Icons.menu),
-                      color: Colors.white,
-                      iconSize: 38,
-                      onPressed: () {
-                        _globalKey.currentState?.openDrawer();
-                        },
-                    ),
-                    Text("Menu",
-                        style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
-                    ),
-                  ],
+                children: [
+                  IconButton(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    icon: const Icon(Icons.menu),
+                    color: Colors.white,
+                    iconSize: 38,
+                    onPressed: () {
+                      _globalKey.currentState?.openDrawer();
+                    },
+                  ),
+                  Text("Menu",
+                      style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.white)
+                  ),
+                ],
               ),
               Center(
                 child: Column(
@@ -153,17 +206,45 @@ class _DashboardState extends State<Dashboard> {
                       size: 60,
                     ),
                     const SizedBox(height: 25),
-                    CurrentSpeedCard(
-                        speed: dailySpeed,
-                        recSpeed: dailyRecSpeed
+                    FutureBuilder(
+                      future: dailyAverageMeasure,
+                      builder: (BuildContext context, AsyncSnapshot<AverageMeasure> snapshot) {
+                        if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                          return const CurrentSpeedCard(
+                              speed: 0.0,
+                              recSpeed: 0.0,
+                              loadingIndicator: true
+                          );
+                        }
+                        return CurrentSpeedCard(
+                            speed: snapshot.data!.averageSpeed,
+                            recSpeed: snapshot.data!.defaultMeasureBasedOnProfile.speed
+                        );
+                      },
                     ),
                     const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AverageSpeedCard(header: "GEM. WEEK", speed: weeklySpeed),
+                        FutureBuilder(
+                          future: weeklyAverageMeasure,
+                          builder: (BuildContext context, AsyncSnapshot<AverageMeasure> snapshot) {
+                            if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                              return const AverageSpeedCard(header: "GEM. WEEK", speed: 0.0, loadingIndicator: true);
+                            }
+                            return AverageSpeedCard(header: "GEM. WEEK", speed: snapshot.data!.averageSpeed);
+                          },
+                        ),
                         const SizedBox(width: 50),
-                        AverageSpeedCard(header: "GEM. MAAND", speed: monthlySpeed)
+                        FutureBuilder(
+                          future: monthlyAverageMeasure,
+                          builder: (BuildContext context, AsyncSnapshot<AverageMeasure> snapshot) {
+                            if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                              return const AverageSpeedCard(header: "GEM. MAAND", speed: 0.0, loadingIndicator: true);
+                            }
+                            return AverageSpeedCard(header: "GEM. MAAND", speed: snapshot.data!.averageSpeed);
+                          },
+                        ),
                       ],
                     ),
                   ],

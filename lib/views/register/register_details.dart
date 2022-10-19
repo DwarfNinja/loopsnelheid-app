@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
 
 import 'package:loopsnelheidapp/models/user.dart';
@@ -9,11 +8,12 @@ import 'package:loopsnelheidapp/models/user.dart';
 import 'package:loopsnelheidapp/widgets/register/date_input.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
+import 'package:loopsnelheidapp/widgets/register/register_base.dart';
+import 'package:loopsnelheidapp/widgets/gender_toggle.dart';
 
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
-import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 class RegisterDetails extends StatefulWidget {
 
@@ -54,7 +54,8 @@ class _RegisterDetailsState extends State<RegisterDetails> {
     onPressedNextButton() {
       setState(() => submitted = true);
       if (formKey.currentState!.validate()) {
-        sharedPreferencesService.getObject("registerUser").then((user) => (assignUserValues(User.fromJson(user))));
+        dynamic userjson = sharedPreferencesService.getObject("registerUser");
+        assignUserValues(User.fromJson(userjson));
         Navigator.pushNamed(context, "/register_documents");
       }
     }
@@ -111,52 +112,6 @@ class _RegisterDetailsState extends State<RegisterDetails> {
               ]
           )
         ]
-    );
-  }
-}
-
-class GenderToggle extends StatefulWidget {
-  final Function(bool) onToggle;
-  final bool value;
-
-  const GenderToggle({Key? key, required this.onToggle, required this.value}) : super(key: key);
-
-  @override
-  State<GenderToggle> createState() => _GenderToggleState();
-}
-
-class _GenderToggleState extends State<GenderToggle> {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Text(
-                "Geslacht",
-                style: app_theme.textTheme.headline6!.copyWith(color: app_theme.black)
-            ),
-          ),
-        ),
-        const SizedBox(width: 25),
-        FlutterSwitch(
-          width: 120,
-          height: 40,
-          valueFontSize: 18,
-          toggleSize: 35,
-          value: widget.value,
-          activeText: "Vrouw",
-          inactiveText: "Man",
-          activeIcon: const Icon(Icons.female),
-          inactiveIcon: const Icon(Icons.male),
-          activeColor: app_theme.red,
-          inactiveColor: app_theme.blue,
-          showOnOff: true,
-          onToggle: widget.onToggle,
-        ),
-      ],
     );
   }
 }

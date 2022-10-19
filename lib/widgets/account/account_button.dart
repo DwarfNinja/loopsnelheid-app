@@ -6,15 +6,13 @@ class AccountButton extends StatelessWidget {
 
   final IconData iconData;
   final String text;
-  final Color? textColor;
-  final Color? buttonColor;
+  final Color? color;
   final Size? buttonSize;
   final double? iconSize;
   final Function() onPressed;
 
-  const AccountButton({Key? key, required this.iconData, required this.text,
-    this.textColor = Colors.white, this.buttonSize = const Size(300, 50),
-    this.iconSize = 33, this.buttonColor =  app_theme.blue, required this.onPressed}) : super(key: key);
+  const AccountButton({Key? key, required this.iconData, required this.text, this.buttonSize = const Size(300, 50),
+    this.iconSize = 33, this.color =  app_theme.blue, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +30,17 @@ class AccountButton extends StatelessWidget {
             ),
             minimumSize: buttonSize,
             maximumSize: buttonSize,
-            backgroundColor: buttonColor,
+            backgroundColor: color,
             padding: const EdgeInsets.only(left: 12)
         ),
         onPressed: onPressed,
         child: Row(
           children: [
-            Icon(iconData, color: app_theme.white, size: iconSize),
+            Icon(iconData,
+                color: color!.computeLuminance() > 0.5 ? app_theme.black : app_theme.white,
+                size: iconSize),
             const SizedBox(width: 10),
-            Text(text, style: app_theme.textTheme.bodyText1!.copyWith(color: textColor))
+            Text(text, style: app_theme.textTheme.headline6!.copyWith(color: color!.computeLuminance() > 0.5 ? app_theme.black : app_theme.white))
           ],
         ),
       ),
