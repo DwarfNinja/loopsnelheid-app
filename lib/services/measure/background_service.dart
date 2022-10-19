@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:cron/cron.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:loopsnelheidapp/services/measure/activity_service.dart';
 import 'package:loopsnelheidapp/services/measure/location_service.dart';
@@ -60,15 +61,14 @@ class BackgroundService {
       service.stopSelf();
     });
 
-    if (ActivityService.isMeasureTimerExpired()) {
-      if(DateTime.now().hour > 5) {
-        ActivityService.resetMeasureTimer();
-      }
-      else {
-        ActivityService.stopActivityService();
-      }
-    }
-    else {
+    final cron = Cron();
+
+    cron.schedule(Schedule.parse("0 5 * * *"), () async {
+      ActivityService.resetMeasureTimer();
+      ActivityService.startActivityService();
+    });
+
+    if (!ActivityService.isMeasureTimerExpired() && !ActivityService.isServiceRunning) {
       ActivityService.startActivityService();
     }
 
