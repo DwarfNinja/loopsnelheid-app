@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:loopsnelheidapp/models/device.dart';
 
+import 'package:loopsnelheidapp/widgets/info_base.dart';
+
 import 'package:loopsnelheidapp/services/api/device_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/widgets/info_base.dart';
@@ -25,12 +28,27 @@ class _DevicesState extends State<Devices> {
   void initState() {
     super.initState();
     listDevicesFuture = deviceService.getDevices();
+    setDeviceType();
+  }
+
+  void setDeviceType() async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    sharedPreferencesService.getSharedPreferenceInstance();
+
+    Device thisDevice;
+    listDevicesFuture.then((deviceList) => {
+      thisDevice = deviceList.firstWhere((device) => device.session == sharedPreferencesService.getString("device_session")),
+      if (thisDevice.type != sharedPreferencesService.getString("device_type")) {
+        sharedPreferencesService.setString("device_type", thisDevice.type),
+      }
+    });
   }
 
   void refreshList() {
     setState(() {
       listDevicesFuture = deviceService.getDevices();
     });
+    setDeviceType();
   }
 
   @override
