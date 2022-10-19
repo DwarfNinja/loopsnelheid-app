@@ -12,7 +12,10 @@ class ActivityService {
   static FlutterActivityRecognition activityRecognition = FlutterActivityRecognition.instance;
   static StreamSubscription<Activity>? activityStreamSubscription;
 
-  static PausableTimer measureTimer = PausableTimer(const Duration(minutes: 15), () {});
+  static PausableTimer measureTimer = PausableTimer(const Duration(minutes: 15), () {
+    ActivityService.stopActivityService();
+    LocationService.stopLocationService();
+  });
 
   static bool isServiceRunning = false;
 
