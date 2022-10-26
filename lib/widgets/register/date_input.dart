@@ -113,7 +113,7 @@ class _DateInputState extends State<DateInput> {
               return "De geboortedatum mag niet leeg zijn";
             }
 
-            if (DateTime.now().year - DateFormat("yyyy-MM-dd").parse(widget.controller.text).year < 18) {
+            if (DateTime.now().year - DateFormat("dd-MM-yyyy").parse(widget.controller.text).year < 18) {
               return "De gebruiker moet 18 jaar of ouder zijn";
             }
 

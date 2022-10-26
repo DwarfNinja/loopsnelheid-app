@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:loopsnelheidapp/models/profile.dart';
+import 'package:loopsnelheidapp/services/notification_service.dart';
 
 import 'package:loopsnelheidapp/widgets/info_base.dart';
 import 'package:loopsnelheidapp/widgets/account/account_field.dart';
 import 'package:loopsnelheidapp/widgets/account/account_button.dart';
-import 'package:loopsnelheidapp/widgets/custom_snackbar.dart';
+import 'package:loopsnelheidapp/widgets/notification/custom_snackbar.dart';
 
 import 'package:loopsnelheidapp/services/api/profile_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
@@ -57,35 +58,30 @@ class _EditBasicsState extends State<EditBasics> {
   }
 
   void onPressedSubmitBasicsChange() {
+    profile?.then((value) => {
     if (formKey.currentState!.validate()) {
-      if (emailController.text.isNotEmpty) {
-        ProfileService.changeEmail(emailController.text).then((response) => {
-          if (response == 200) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackbar(messageType: MessageType.success, message: "Success! Uw email is aangepast! Er is een bevestigings mail verstuurt naar uw mailbox!")
-            )
-          } else if (response == 400) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u email!")
-            )
-          }
-        });
-      }
-      if (currentPasswordController.text.isNotEmpty && newPasswordController.text.isNotEmpty) {
-        ProfileService.changePassword(currentPasswordController.text, newPasswordController.text)
-            .then((response) => {
-          if (response == 200) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackbar(messageType: MessageType.success, message: "Success! U wachtwoord is aangepast!")
-            )
-          } else if (response == 400) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u wachtwoord!")
-            )
-          }
-        });
-      }
+        if (emailController.text.isNotEmpty && emailController.text != value.email) {
+      ProfileService.changeEmail(emailController.text).then((response) => {
+        if (response == 200) {
+          NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! Uw email is aangepast! Er is een bevestigings mail verstuurt naar uw mailbox!"))
+        } else if (response == 400) {
+          NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u email!"))
+        }
+      })
+    },
+    if (currentPasswordController.text.isNotEmpty && newPasswordController.text.isNotEmpty) {
+      ProfileService.changePassword(currentPasswordController.text, newPasswordController.text)
+          .then((response) => {
+        if (response == 200) {
+          NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! U wachtwoord is aangepast!"))
+        } else if (response == 400) {
+          NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u wachtwoord!"))
+        }
+      })
     }
+  }
+    });
+
   }
 
   @override

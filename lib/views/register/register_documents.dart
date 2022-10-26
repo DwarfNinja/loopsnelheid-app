@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/widgets/custom_snackbar.dart';
+import 'package:loopsnelheidapp/widgets/notification/custom_snackbar.dart';
 import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 import 'package:pdfx/pdfx.dart';
@@ -13,6 +13,7 @@ import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 
 import 'package:loopsnelheidapp/services/api/register_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/services/notification_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -43,13 +44,11 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
     handleRegisterResponse(response) {
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            CustomSnackbar(messageType: MessageType.success, message: "Success! U heeft een email ontvangen met u code!"));
+        NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! U heeft een email ontvangen met u code!"));
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setInteger("register_id", body['id']);
       } else if (response.statusCode == 400) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met de registratie!"));
+        NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met de registratie!"));
       }
     }
 
@@ -100,8 +99,14 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Document(text: "Algemene Voorwaarden", documentAsset: 'assets/privacy_verklaring.pdf'),
-              Document(text: "Privacy Verklaring", documentAsset: 'assets/privacy_verklaring.pdf')
+              Document(
+                  text: "Algemene Voorwaarden",
+                  documentAsset: 'assets/algemene_voorwaarden_oud-fit.pdf',
+                  documentPreview: 'assets/images/algemene_voorwaarden_preview.png'),
+              Document(
+                  text: "Privacy Verklaring",
+                  documentAsset: 'assets/privacy_verklaring_oud-fit.pdf',
+                  documentPreview: 'assets/images/privacy_verklaring_preview.png')
             ],
           ),
           const SizedBox(height: 20),
@@ -143,8 +148,9 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 class Document extends StatelessWidget {
   final String text;
   final String documentAsset;
+  final String documentPreview;
 
-  const Document({Key? key, required this.text, required this.documentAsset})
+  const Document({Key? key, required this.text, required this.documentAsset, required this.documentPreview})
       : super(key: key);
 
   @override
@@ -160,7 +166,7 @@ class Document extends StatelessWidget {
           child: Container(
             constraints: const BoxConstraints(minWidth: 80, maxWidth: 140, minHeight: 140, maxHeight: 170),
             decoration: BoxDecoration(
-                image: const DecorationImage(image: AssetImage('assets/images/lorem_ipsum_document.png'), fit: BoxFit.cover),
+                image: DecorationImage(image: AssetImage(documentPreview), fit: BoxFit.cover),
                 boxShadow: const [
                   app_theme.bottomBoxShadow,
                 ],
@@ -186,14 +192,14 @@ class DocumentDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pdfController = PdfController(
-      document: PdfDocument.openAsset(documentAsset)
+    final pdfController = PdfControllerPinch(
+      document: PdfDocument.openAsset(documentAsset),
     );
     return Dialog(
       child: SizedBox(
         width: 600,
         height: 600,
-        child: PdfView(
+        child: PdfViewPinch(
           controller: pdfController,
           scrollDirection: Axis.vertical,
         ),
