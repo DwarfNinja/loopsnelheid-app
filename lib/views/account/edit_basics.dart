@@ -58,27 +58,30 @@ class _EditBasicsState extends State<EditBasics> {
   }
 
   void onPressedSubmitBasicsChange() {
+    profile?.then((value) => {
     if (formKey.currentState!.validate()) {
-      if (emailController.text.isNotEmpty) {
-        ProfileService.changeEmail(emailController.text).then((response) => {
-          if (response == 200) {
-            NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! Uw email is aangepast! Er is een bevestigings mail verstuurt naar uw mailbox!"))
-          } else if (response == 400) {
-            NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u email!"))
-          }
-        });
-      }
-      if (currentPasswordController.text.isNotEmpty && newPasswordController.text.isNotEmpty) {
-        ProfileService.changePassword(currentPasswordController.text, newPasswordController.text)
-            .then((response) => {
-          if (response == 200) {
-            NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! U wachtwoord is aangepast!"))
-          } else if (response == 400) {
-            NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u wachtwoord!"))
-          }
-        });
-      }
+        if (emailController.text.isNotEmpty && emailController.text != value.email) {
+      ProfileService.changeEmail(emailController.text).then((response) => {
+        if (response == 200) {
+          NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! Uw email is aangepast! Er is een bevestigings mail verstuurt naar uw mailbox!"))
+        } else if (response == 400) {
+          NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u email!"))
+        }
+      })
+    },
+    if (currentPasswordController.text.isNotEmpty && newPasswordController.text.isNotEmpty) {
+      ProfileService.changePassword(currentPasswordController.text, newPasswordController.text)
+          .then((response) => {
+        if (response == 200) {
+          NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! U wachtwoord is aangepast!"))
+        } else if (response == 400) {
+          NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u wachtwoord!"))
+        }
+      })
     }
+  }
+    });
+
   }
 
   @override
