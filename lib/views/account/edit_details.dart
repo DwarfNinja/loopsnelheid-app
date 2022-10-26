@@ -7,12 +7,13 @@ import 'package:loopsnelheidapp/models/profile.dart';
 import 'package:loopsnelheidapp/widgets/info_base.dart';
 import 'package:loopsnelheidapp/widgets/account/account_field.dart';
 import 'package:loopsnelheidapp/widgets/account/account_button.dart';
-import 'package:loopsnelheidapp/widgets/custom_snackbar.dart';
+import 'package:loopsnelheidapp/widgets/notification/custom_snackbar.dart';
 import 'package:loopsnelheidapp/widgets/register/date_input.dart';
 import 'package:loopsnelheidapp/widgets/gender_toggle.dart';
 
 import 'package:loopsnelheidapp/services/api/profile_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/services/notification_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -83,13 +84,9 @@ class _EditDetailsState extends State<EditDetails> {
 
   handleRegisterResponse(response) {
     if (response == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          CustomSnackbar(messageType: MessageType.success, message: "Success! U gegevens zijn aangepast!")
-      );
+      NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! U gegevens zijn aangepast!"));
     } else if (response == 400) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u gegevens!")
-      );
+      NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u gegevens!"));
     }
   }
 

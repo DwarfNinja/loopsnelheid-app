@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:loopsnelheidapp/models/average_measure.dart';
+import 'package:loopsnelheidapp/services/measure/background_service.dart';
+import 'package:loopsnelheidapp/services/measure/location_service.dart';
+import 'package:loopsnelheidapp/services/notification_service.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -10,9 +14,11 @@ import 'package:loopsnelheidapp/widgets/dashboard/legend_text.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/toggle_button.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
+import 'package:loopsnelheidapp/widgets/notification/custom_alert.dart';
 
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
 import 'package:loopsnelheidapp/services/measure/activity_service.dart';
+import 'package:loopsnelheidapp/services/setting/setting_service.dart';
 
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
@@ -40,15 +46,64 @@ class _DashboardState extends State<Dashboard> {
     graphDataAverageMeasures = Future.wait([weeklyAverageMeasure, monthlyAverageMeasure]);
   }
 
+  void requestPermissions() {
+    ActivityService.isActivityPermissionGranted().then((activityPermission) async {
+      if (activityPermission) {
+        LocationService.isAlwaysLocationPermissionGranted().then((locationPermission) async {
+          if (!locationPermission) {
+            NotificationService.showAlert(
+                context,
+                CustomAlert(
+                  titleText: "Toestemming vereist",
+                  messageText: "Locatie toestemming is nodig om u loopsnelheid te meten. Ga naar Instellingen en zet de Locatie rechten voor de Loopsnelheid app op \"Altijd toestaan\".",
+                  buttonText: "Naar Instellingen",
+                  onPressed: () {
+                    LocationService.openAppSettings().then((value) {
+                      if (value == true) {
+                        Navigator.pop(context);
+                        requestPermissions();
+                      }
+                    });
+                  },
+                ),
+                dismissable: false
+            );
+          }
+        });
+      }
+      else {
+        NotificationService.showAlert(
+            context,
+            CustomAlert(
+              titleText: "Toestemming vereist",
+              messageText:"Fysieke Activiteit toestemming is nodig om u loopsnelheid te meten. Ga naar Instellingen en zet de Fysieke activieit rechten voor de Loopsnelheid app op \"Toestaan\".",
+              buttonText: "Naar Instellingen",
+              onPressed: () {
+                LocationService.openAppSettings().then((value) {
+                  if (value == true) {
+                    Navigator.pop(context);
+                    requestPermissions();
+                  }
+                });
+              },
+            ),
+            dismissable: false
+        );
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
 
     getAllMeasureValues();
 
-    ActivityService.isActivityPermissionGranted().then((activityPermission) async {
-      if (activityPermission) {
-        ActivityService.startActivityService();
+    requestPermissions();
+
+    SettingService.getMeasureSetting().then((measureSetting) async {
+      if (measureSetting) {
+        BackgroundService.startBackgroundService();
       }
     });
   }
