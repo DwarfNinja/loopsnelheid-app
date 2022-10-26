@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/services/measure/location_service.dart';
 
 import 'package:loopsnelheidapp/widgets/info_base.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
@@ -10,8 +10,9 @@ import 'package:loopsnelheidapp/services/router/navigation_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 import 'package:loopsnelheidapp/services/api/export_service.dart';
 import 'package:loopsnelheidapp/services/api/research_service.dart';
-import 'package:loopsnelheidapp/services/setting/setting_service.dart';
 import 'package:loopsnelheidapp/services/measure/background_service.dart';
+
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class Settings extends StatefulWidget {
 
@@ -132,6 +133,25 @@ class _SettingsState extends State<Settings> {
                 return Container();
               },
             ),
+            const Spacer(),
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                  return Text(
+                      "Versie: Error",
+                      style: app_theme.textTheme.bodyText1!.copyWith(
+                          color: app_theme.black), textAlign: TextAlign.center);
+                }
+                else {
+                  return Text(
+                      "Versie: ${snapshot.data?.version}",
+                      style: app_theme.textTheme.bodyText1!.copyWith(
+                          color: app_theme.black), textAlign: TextAlign.center);
+                }
+              },
+            ),
+            const SizedBox(height: 50),
           ],
         ),
       ),
