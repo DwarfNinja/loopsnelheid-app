@@ -30,6 +30,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
+
   google_fonts: ^3.0.1
 
   sliding_up_panel: ^2.0.0+1
