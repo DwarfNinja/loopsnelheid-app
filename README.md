@@ -1,20 +1,64 @@
 # Loopsnelheid App
 
-#### v.1.0.0
+#### v.1.0.2
 
 ## Handleiding
 
-#### v.2.0.0
+#### v.2.1
 
 ### Stap 1: Installatie
 
 1. Download de app op https://app.loopsnelheid.hu.nl/
-2. Ga naar je downloads folder op uw telefoon.
-3. Klik op het APK bestand wat u hebt gedownload.
-4. Indien u een bericht krijgt over "onbekende bronnen" doorloop de stappen die uw telefoon aangeeft anders mag u deze stap overslaan.
-5. Klik op `Installeren`.
-6. Nadat de installatie is voltooid kunt u de applicatie openen.
 
+<p align="center">
+    <img src="assets/documentation/installation/web_download.png" width="150" alt="Login pagina">
+</p>
+
+<div style="page-break-after: always;"></div>
+
+2. Indien u het bericht krijgt met "Bestand kan schadelijk zijn", kunt u drukken op `Toch downloaden`. Dit is een algemeen bericht en het bestand is niet schadelijk.
+
+<p align="center">
+    <img src="assets/documentation/installation/harmful_warning.png" width="150" alt="Login pagina">
+</p>
+
+3. Ga naar de applicatie "Bestanden" op uw telefoon en ga naar de downloads folder.
+
+<p align="center">
+    <img src="assets/documentation/installation/files_app.png" width="150" alt="Login pagina">
+</p>
+
+<div style="page-break-after: always;"></div>
+
+4. Klik op het APK bestand dat u heeft gedownload.
+
+<p align="center">
+    <img src="assets/documentation/installation/apk_downloads.png" width="150" alt="Login pagina">
+</p>
+
+5. Indien u een bericht krijgt over "onbekende apps" doorloop de stappen die uw telefoon aangeeft, anders kunt u overslaan naar stap 7.
+
+<p align="center">
+    <img src="assets/documentation/installation/warning_unknown_apps.png" width="150" alt="Login pagina">
+</p>
+
+<div style="page-break-after: always;"></div>
+
+6. Klik  op `Tostaan van deze bron`.
+
+<p align="center">
+    <img src="assets/documentation/installation/allow_unknown_apps.png" width="150" alt="Login pagina">
+</p>
+
+7. Klik op `Installeren`.
+
+<p align="center">
+    <img src="assets/documentation/installation/install_apk.png" width="150" alt="Login pagina">
+</p>
+
+8. Nadat de installatie is voltooid kunt u de applicatie openen.
+
+<div style="page-break-after: always;"></div>
 
 ### Stap 2: Account aanmaaken
 
@@ -30,8 +74,9 @@
     <img src="assets/documentation/login/register_page.png" width="150" alt="Registreer pagina">
 </p>
 
-3. Volg de rest van de stappen beschreven in de volgende paginas om een account aan te maken.
+3. Volg de rest van de stappen beschreven in de applicatie om het aanmaken van uw account te voltooien.
 
+<div style="page-break-after: always;"></div>
 
 ### Stap 3: Log-in op uw account
 
@@ -60,6 +105,8 @@
     <img src="assets/documentation/permissions/app_permissions_activity_step1.png" width="150" alt="App rechten">
     <img src="assets/documentation/permissions/app_permissions_activity_step2.png" width="150" alt="Fysieke activeit rechten">
 </p>
+
+<div style="page-break-after: always;"></div>
 
 3. Bij de melding om "Loopsnelheid toegang te geven tot de locatie van dit apparaat?", druk op **Altijd toestaan**. Als uw deze optie niet ziet staan druk dan op **Tijdens gebruik van de app**. 
 
@@ -92,6 +139,8 @@
     <img src="assets/documentation/sidebar_settings.png" width="150" alt="Navigatie menu">
 </p>
 
+<div style="page-break-after: always;"></div>
+
 3. Zorg dat de knop `Metingen` **aan** staat zoals de foto hieronder.
 
 <p align="center">
@@ -104,7 +153,8 @@
     <img src="assets/documentation/settings_page_devices.png" width="150" alt="Instellingen">
 </p>
 
-3. Zorg dat uw apparaat aangevinkt is en dat het woord `Meetapparaat` er onder staat.
+<div style="page-break-after: always;"></div>
+
 5. Zorg dat uw apparaat aangevinkt is en dat het woord `Meetapparaat` er onder staat.
 
 <p align="center">
