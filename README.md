@@ -98,19 +98,20 @@
     <img src="assets/documentation/settings_page_toggles.png" width="150" alt="Instellingen">
 </p>
 
-3. Klik op de knop `Mijn apparaten`.
+4. Klik op de knop `Mijn apparaten`.
 
 <p align="center">
     <img src="assets/documentation/settings_page_devices.png" width="150" alt="Instellingen">
 </p>
 
 3. Zorg dat uw apparaat aangevinkt is en dat het woord `Meetapparaat` er onder staat.
+5. Zorg dat uw apparaat aangevinkt is en dat het woord `Meetapparaat` er onder staat.
 
 <p align="center">
     <img src="assets/documentation/devices_page_device.png" width="150" alt="Mijn Apparaten">
 </p>
 
-4. Uw apparaat is gereed en de Loopsnelheid app kan worden gebruikt!
+6. Uw apparaat is gereed en de Loopsnelheid app kan worden gebruikt!
 
 <div style="page-break-after: always;"></div>
 
