@@ -30,12 +30,10 @@ class _EditDetailsState extends State<EditDetails> {
   final formKey = GlobalKey<FormState>();
 
   final dateOfBirthController = TextEditingController();
-  final sexController = TextEditingController();
   final heightController = TextEditingController();
   final weightController = TextEditingController();
   final SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
 
-  bool isFemale = false;
   bool submitted = false;
 
   Future<Profile>? profile;
@@ -60,7 +58,6 @@ class _EditDetailsState extends State<EditDetails> {
 
   setAccountInFields(Profile profile) {
     setState(() {
-      isFemale = profile.sex == "FEMALE";
       dateOfBirthController.text = profile.dateOfBirth;
       heightController.text = profile.height.toString();
       weightController.text = profile.weight.toString();
@@ -72,11 +69,9 @@ class _EditDetailsState extends State<EditDetails> {
     DateTime gettingDate = format.parse(dateOfBirthController.text);
     String formattedDate = DateFormat('yyyy-MM-dd').format(gettingDate);
 
-    String formattedSex = isFemale ? "FEMALE" : "MALE";
-
     if (formKey.currentState!.validate()) {
       profile?.then((value) => {
-        ProfileService.changeDetails(formattedSex, formattedDate, int.parse(heightController.text), int.parse(weightController.text), value.isResearchCandidate)
+        ProfileService.changeDetails(value.sex, formattedDate, int.parse(heightController.text), int.parse(weightController.text), value.isResearchCandidate)
           .then((response) => handleRegisterResponse(response))
       });
     }
@@ -84,7 +79,7 @@ class _EditDetailsState extends State<EditDetails> {
 
   handleRegisterResponse(response) {
     if (response == 200) {
-      NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Success! U gegevens zijn aangepast!"));
+      NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! U gegevens zijn aangepast!"));
     } else if (response == 400) {
       NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.error, message: "Fout! Er is iets misgegaan met het aanpassen van u gegevens!"));
     }
@@ -135,18 +130,6 @@ class _EditDetailsState extends State<EditDetails> {
                       style: app_theme.textTheme.bodyText2!.copyWith(
                           fontSize: 15, color: app_theme.grey)),
                   const SizedBox(height: 25),
-                  GenderToggle(
-                      headerStyle: app_theme.textTheme.bodyText1!.copyWith(
-                          color: app_theme.black),
-                      switchSize: const Size(105, 35),
-                      toggleSize: 30,
-                      value: isFemale,
-                      onToggle: (val) {
-                        setState(() {
-                          isFemale = val;
-                        });
-                      }),
-                  const SizedBox(height: 15),
                   DateInput(
                     controller: dateOfBirthController,
                     headerStyle: app_theme.textTheme.bodyText1!.copyWith(

@@ -44,7 +44,7 @@ class _RegisterDocumentsState extends State<RegisterDocuments> {
 
     handleRegisterResponse(response) {
       if (response.statusCode == 200) {
-        NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Success! U heeft een email ontvangen met u code!"));
+        NotificationService.showSnackBar(context, CustomSnackbar(messageType: MessageType.success, message: "Succes! U heeft een email ontvangen met u code!"));
         final body = jsonDecode(response.body!);
         sharedPreferencesService.setInteger("register_id", body['id']);
       } else if (response.statusCode == 400) {
