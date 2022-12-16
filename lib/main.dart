@@ -40,8 +40,35 @@ void main() async {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+
+  GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      navigatorKey.currentState!.pushNamed(getCurrentRouteUsingNavigatorKey() ?? "/");
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +76,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
+      navigatorKey: navigatorKey,
       onGenerateRoute: onGenerateRoute,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -58,8 +86,15 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    AuthService authService = AuthService();
+  String? getCurrentRouteUsingNavigatorKey() {
+    String? currentPath;
+    navigatorKey.currentState?.popUntil((route) {
+      currentPath = route.settings.name;
+      return true;
+    });
+    return currentPath;
+  }
+
   Route<dynamic> onGenerateRoute(RouteSettings settings) {
     return CustomPageRoute(
       settings: settings,
