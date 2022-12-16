@@ -143,6 +143,12 @@ class _SettingsState extends State<Settings> {
                       style: app_theme.textTheme.bodyText1!.copyWith(
                           color: app_theme.black), textAlign: TextAlign.center);
                 }
+                else if (snapshot.data?.buildNumber != null) {
+                  return Text(
+                      "Versie: ${snapshot.data?.version} + ${snapshot.data?.buildNumber}",
+                      style: app_theme.textTheme.bodyText1!.copyWith(
+                          color: app_theme.black), textAlign: TextAlign.center);
+                }
                 else {
                   return Text(
                       "Versie: ${snapshot.data?.version}",
