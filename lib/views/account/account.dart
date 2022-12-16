@@ -111,7 +111,7 @@ class _AccountState extends State<Account> {
                   onPressed: () async {
                     await ProfileService.cancelAccountDeletion().then((value) =>
                     {
-                      getProfile()
+                      setState(() {profile = getProfile();})
                     });
                   }) : AccountButton(
                 iconData: Icons.delete_rounded,
@@ -120,7 +120,7 @@ class _AccountState extends State<Account> {
                 onPressed: () async {
                   await ProfileService.deleteAccount().then((value) =>
                   {
-                    getProfile()
+                    setState(() {profile = getProfile();})
                   });
                 },
               ),
