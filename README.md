@@ -44,7 +44,7 @@
 
 <div style="page-break-after: always;"></div>
 
-6. Klik  op `Tostaan van deze bron`.
+6. Klik  op `Toestaan van deze bron`.
 
 <p align="center">
     <img src="assets/documentation/installation/allow_unknown_apps.png" width="150" alt="Login pagina">
@@ -60,7 +60,7 @@
 
 <div style="page-break-after: always;"></div>
 
-### Stap 2: Account aanmaaken
+### Stap 2: Account aanmaken
 
 1. Klik op de knop `Registreren`.
 
