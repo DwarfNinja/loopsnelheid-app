@@ -9,7 +9,7 @@ class LoginService {
   final String loginUserEndpoint = EnvService().loadBackendApiFromEnvFile() + "/auth/login";
   final String logoutUserEndpoint = EnvService().loadBackendApiFromEnvFile() + "/auth/logout";
 
-  Future<http.Response> authenticate(String email, String password, String deviceOs, String deviceModel)  {
+  Future<http.Response> login(String email, String password, String deviceOs, String deviceModel)  {
      return http.post(Uri.parse(loginUserEndpoint),
          headers: {
            'Content-Type': 'application/json',
