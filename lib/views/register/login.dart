@@ -105,18 +105,35 @@ class _LoginState extends State<Login> {
               private: true
           ),
           const SizedBox(height: 15),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: const Size(5, 30),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-              onPressed: () {
-                Navigator.pushNamed(context, "/forgot_password");
-              },
-              child: Text('Wachtwoord vergeten', style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.blue)),
-            ),
+          Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(5, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/forgot_password");
+                  },
+                  child: Text('Wachtwoord vergeten', style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.blue)),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(5, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/register_verification");
+                  },
+                  child: Text('Verificatie code ontvangen?', style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.blue)),
+                ),
+              ),
+            ],
           )
         ]
     );
