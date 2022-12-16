@@ -1,21 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/widgets/notification/custom_snackbar.dart';
-import 'package:loopsnelheidapp/widgets/register/register_base.dart';
-
-import 'package:pdfx/pdfx.dart';
-
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/models/user.dart';
-
+import 'package:loopsnelheidapp/services/api/register_service.dart';
+import 'package:loopsnelheidapp/services/notification_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/widgets/notification/custom_snackbar.dart';
 import 'package:loopsnelheidapp/widgets/register/checkbox_line.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
-
-import 'package:loopsnelheidapp/services/api/register_service.dart';
-import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
-import 'package:loopsnelheidapp/services/notification_service.dart';
-
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/widgets/register/register_base.dart';
+import 'package:pdfx/pdfx.dart';
 
 class RegisterDocuments extends StatefulWidget {
   const RegisterDocuments({Key? key}) : super(key: key);

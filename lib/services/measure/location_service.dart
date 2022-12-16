@@ -1,13 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:pausable_timer/pausable_timer.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-
+import 'package:geolocator/geolocator.dart';
 import 'package:loopsnelheidapp/models/measure.dart';
-
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
+import 'package:pausable_timer/pausable_timer.dart';
 
 class LocationService {
   static StreamSubscription<Position>? positionStream;

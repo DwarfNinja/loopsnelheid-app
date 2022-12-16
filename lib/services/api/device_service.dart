@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:loopsnelheidapp/models/device.dart';
-
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 
