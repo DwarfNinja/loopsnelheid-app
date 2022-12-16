@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_activity_recognition/flutter_activity_recognition.dart';
-import 'package:pausable_timer/pausable_timer.dart';
-
 import 'package:loopsnelheidapp/services/setting/setting_service.dart';
+import 'package:pausable_timer/pausable_timer.dart';
 
 import 'location_service.dart';
 

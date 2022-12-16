@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-
-import 'package:loopsnelheidapp/models/device.dart';
-import 'package:loopsnelheidapp/services/notification_service.dart';
-
-import 'package:loopsnelheidapp/widgets/info_base.dart';
-import 'package:loopsnelheidapp/widgets/account/account_button.dart';
-
-import 'package:loopsnelheidapp/services/api/device_service.dart';
-import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
-import 'package:loopsnelheidapp/services/api/login_service.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/models/device.dart';
+import 'package:loopsnelheidapp/services/api/device_service.dart';
+import 'package:loopsnelheidapp/services/api/login_service.dart';
+import 'package:loopsnelheidapp/services/notification_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/widgets/account/account_button.dart';
+import 'package:loopsnelheidapp/widgets/info_base.dart';
 
 class Devices extends StatefulWidget {
 

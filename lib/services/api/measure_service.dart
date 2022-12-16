@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-
 import 'package:loopsnelheidapp/models/average_measure.dart';
 import 'package:loopsnelheidapp/models/measure.dart';
-
 import 'package:loopsnelheidapp/services/env_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class DateInput extends StatefulWidget {
