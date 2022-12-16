@@ -92,7 +92,7 @@ class _DevicesState extends State<Devices> {
                       label: Text('Apparaat'),
                     ),
                     DataColumn(
-                      label: Expanded(child: Center(child: Text('Actie', textAlign: TextAlign.center))),
+                      label: Expanded(child: Text('Meet\nApparaat', textAlign: TextAlign.center)),
                     )
                   ],
                   rows: List.generate(
@@ -106,7 +106,7 @@ class _DevicesState extends State<Devices> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(device.model),
+                                Text(device.model, overflow: TextOverflow.ellipsis,),
                                 Text(device.type == "READING_DEVICE" ? "Leesapparaat" : "Meetapparaat")
                               ],
                             )
