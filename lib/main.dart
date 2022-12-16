@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'package:device_preview/device_preview.dart' as device_preview;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:loopsnelheidapp/custom_page_route.dart';
 import 'package:loopsnelheidapp/views/account/edit_basics.dart';
@@ -48,7 +49,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      onGenerateRoute: onGenerateRoute
+      onGenerateRoute: onGenerateRoute,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 
