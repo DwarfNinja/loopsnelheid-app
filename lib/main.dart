@@ -60,19 +60,23 @@ class MyApp extends StatelessWidget {
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     AuthService authService = AuthService();
+  Route<dynamic> onGenerateRoute(RouteSettings settings) {
     return CustomPageRoute(
       settings: settings,
       child: FutureBuilder<bool>(
-        future: authService.isUserAuthenticated(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
-            generateRouteBasedOnAuthentication(settings.name, snapshot.data)
+        future: AuthService().isUserAuthenticatedAndHasValidSession(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+            return Container();
+          }
+          bool isUserAuthenticatedAndHasSession = snapshot.data as bool;
+          return generateRouteBasedOnAuthentication(settings.name, isUserAuthenticatedAndHasSession);
+        }
       ),
     );
   }
 
-  static generateRouteBasedOnAuthentication(String? routeName, bool? authenticated) {
-    if(authenticated == null) return Container();
-
+  Widget generateRouteBasedOnAuthentication(String? routeName, bool authenticated) {
     if(authenticated) {
       switch (routeName) {
         case "/":
