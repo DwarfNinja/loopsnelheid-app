@@ -59,8 +59,8 @@ class LocationService {
 
   static void onReceivePosition(Position position) {
     var speed = position.speed;
-    if (speed != 0 && speed < 10) { //TODO: ADD MARGIN
-      double convertedSpeed = MeasureService.convertMsToKmh(speed);
+    double convertedSpeed = MeasureService.convertMsToKmh(speed);
+    if (speed != 0 && convertedSpeed <= 7) {
       Measure measure = Measure(
           DateTime.now().toIso8601String(), convertedSpeed);
       measureList.add(measure);
