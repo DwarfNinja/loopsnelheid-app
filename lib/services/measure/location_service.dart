@@ -1,18 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:pausable_timer/pausable_timer.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-
+import 'package:geolocator/geolocator.dart';
 import 'package:loopsnelheidapp/models/measure.dart';
-
 import 'package:loopsnelheidapp/services/api/measure_service.dart';
+import 'package:pausable_timer/pausable_timer.dart';
 
 class LocationService {
   static StreamSubscription<Position>? positionStream;
 
-  static PausableTimer uploadTimer = PausableTimer(const Duration(seconds: 30), () {
+  static PausableTimer uploadTimer = PausableTimer(const Duration(minutes: 1), () {
     uploadData();
     uploadTimer.reset();
     uploadTimer.start();
@@ -21,8 +19,6 @@ class LocationService {
   static List<Measure> measureList = [];
 
   static bool isServiceRunning = false;
-
-  static StreamSubscription<Position>? positionStream;
 
   static const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.best,
@@ -63,7 +59,7 @@ class LocationService {
 
   static void onReceivePosition(Position position) {
     var speed = position.speed;
-    if (speed != 0) { //TODO: ADD MARGIN
+    if (speed != 0 && speed < 10) { //TODO: ADD MARGIN
       double convertedSpeed = MeasureService.convertMsToKmh(speed);
       Measure measure = Measure(
           DateTime.now().toIso8601String(), convertedSpeed);

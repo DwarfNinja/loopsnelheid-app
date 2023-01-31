@@ -1,17 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
-import 'package:loopsnelheidapp/widgets/register/form_button.dart';
-import 'package:loopsnelheidapp/widgets/register/input_field.dart';
-import 'package:loopsnelheidapp/widgets/register/register_base.dart';
-
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/services/api/login_service.dart';
 import 'package:loopsnelheidapp/services/device_info_service.dart';
 import 'package:loopsnelheidapp/services/setting/setting_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
-
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/widgets/register/form_button.dart';
+import 'package:loopsnelheidapp/widgets/register/input_field.dart';
+import 'package:loopsnelheidapp/widgets/register/register_base.dart';
 
 class Login extends StatefulWidget {
 
@@ -41,7 +38,7 @@ class _LoginState extends State<Login> {
 
       await deviceInfoService.initPlatform();
 
-      return loginService.authenticate(emailController.text, passwordController.text, deviceInfoService.os!, deviceInfoService.model!);
+      return loginService.login(emailController.text, passwordController.text, deviceInfoService.os!, deviceInfoService.model!);
     }
 
     handleAuthenticateResponse(response) {
@@ -108,18 +105,35 @@ class _LoginState extends State<Login> {
               private: true
           ),
           const SizedBox(height: 15),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: const Size(5, 30),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-              onPressed: () {
-                Navigator.pushNamed(context, "/forgot_password");
-              },
-              child: Text('Wachtwoord vergeten', style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.blue)),
-            ),
+          Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(5, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/forgot_password");
+                  },
+                  child: Text('Wachtwoord vergeten', style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.blue)),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(5, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/register_verification");
+                  },
+                  child: Text('Verificatie code ontvangen?', style: app_theme.textTheme.bodyText2!.copyWith(color: app_theme.blue)),
+                ),
+              ),
+            ],
           )
         ]
     );

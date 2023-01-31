@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
-
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/services/api/login_service.dart';
 import 'package:loopsnelheidapp/services/router/navigation_service.dart';
-
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/widgets/sidebar/sidebar_button.dart';
 
 class SideBar extends StatefulWidget {
 
@@ -90,13 +88,16 @@ class _SideBarState extends State<SideBar> {
     );
   }
 
-  void logoutUser(BuildContext context)
-  {
+  void logoutUser(BuildContext context) async {
+    SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+    await sharedPreferencesService.getSharedPreferenceInstance();
+
     LoginService loginService = LoginService();
-    loginService.logout().then((value) => {
-      if (value) {
-        NavigationService.executeRoute(context, "/login")
-      }
+    loginService.logout().then((statusCode) => {
+      if (statusCode == 200 || statusCode == 404) {
+        sharedPreferencesService.clearPreferences()
+      },
+      NavigationService.executeRoute(context, "/login")
     });
   }
 }

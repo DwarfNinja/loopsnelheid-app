@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class DateInput extends StatefulWidget {
@@ -95,7 +94,9 @@ class _DateInputState extends State<DateInput> {
                 ),
                 context: context, initialDate: DateTime.now(),
                 firstDate: DateTime(1900),
-                lastDate: DateTime.now()
+                lastDate: DateTime.now(),
+                initialDatePickerMode: DatePickerMode.year,
+                locale: const Locale("nl"),
             );
             if(pickedDate != null ){
               this.pickedDate = pickedDate;

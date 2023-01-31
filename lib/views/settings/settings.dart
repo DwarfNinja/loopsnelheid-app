@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:loopsnelheidapp/services/measure/location_service.dart';
-
-import 'package:loopsnelheidapp/widgets/info_base.dart';
-
-import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
-import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
-
-import 'package:loopsnelheidapp/services/router/navigation_service.dart';
-import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/services/api/export_service.dart';
 import 'package:loopsnelheidapp/services/api/research_service.dart';
-import 'package:loopsnelheidapp/services/setting/setting_service.dart';
 import 'package:loopsnelheidapp/services/measure/background_service.dart';
+import 'package:loopsnelheidapp/services/router/navigation_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/widgets/info_base.dart';
+import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
+import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Settings extends StatefulWidget {
 
@@ -30,10 +27,7 @@ class _SettingsState extends State<Settings> {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
     await sharedPreferencesService.getSharedPreferenceInstance();
 
-    bool isAdministrator = false;
-    await sharedPreferencesService.getObject("roles").then((value) => {
-      isAdministrator = value.contains("ROLE_ADMIN")
-    });
+    bool isAdministrator = sharedPreferencesService.getObject("roles").contains("ROLE_ADMIN");
 
     return isAdministrator;
   }
@@ -102,22 +96,6 @@ class _SettingsState extends State<Settings> {
                   status ? BackgroundService.startBackgroundService() : BackgroundService.stopBackgroundService();
               }
             ),
-            const SizedBox(height: 25),
-            ToggleSetting(
-                text: "[Test]\nHandmatig Meten",
-                setting: "manual_measure",
-                onToggle: (bool status) {
-                  if (status == false) {
-                    LocationService.runLocationService();
-                    return;
-                  }
-                  SettingService.getMeasureSetting().then((value) async {
-                    bool isMeasureDevice = await SettingService.isMeasureDevice();
-                    if(value == true && isMeasureDevice) {
-                      status ? LocationService.runLocationService() : LocationService.stopLocationService();
-                    }
-                  });
-                }),
             const SizedBox(height: 50),
             SettingsButton(
               iconData: Icons.devices_rounded,
@@ -148,10 +126,34 @@ class _SettingsState extends State<Settings> {
                       },
                     );
                 }
-
                 return Container();
               },
             ),
+            const Spacer(),
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+                  return Text(
+                      "Versie: Error",
+                      style: app_theme.textTheme.bodyText1!.copyWith(
+                          color: app_theme.black), textAlign: TextAlign.center);
+                }
+                else if (snapshot.data?.buildNumber != null) {
+                  return Text(
+                      "Versie: ${snapshot.data?.version} + ${snapshot.data?.buildNumber}",
+                      style: app_theme.textTheme.bodyText1!.copyWith(
+                          color: app_theme.black), textAlign: TextAlign.center);
+                }
+                else {
+                  return Text(
+                      "Versie: ${snapshot.data?.version}",
+                      style: app_theme.textTheme.bodyText1!.copyWith(
+                          color: app_theme.black), textAlign: TextAlign.center);
+                }
+              },
+            ),
+            const SizedBox(height: 50),
           ],
         ),
       ),

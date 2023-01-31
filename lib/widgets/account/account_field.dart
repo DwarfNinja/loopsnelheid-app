@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'package:loopsnelheidapp/widgets/register/input_field.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 
 class AccountField extends StatefulWidget {
   final TextEditingController? controller;
