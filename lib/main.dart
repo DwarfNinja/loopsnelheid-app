@@ -25,7 +25,7 @@ void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
 
-  if ((EnvService().loadFromEnvFile("WEB_DEBUG") as String).toBoolean() == true) {
+  if ((EnvService().loadFromEnvFile("DEVICE_PREVIEW") as String).toBoolean() == true) {
     runApp(device_preview.DevicePreview(
         builder: (context) => const MyApp(),
         enabled: !kReleaseMode));
