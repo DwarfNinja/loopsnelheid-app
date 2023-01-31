@@ -2,7 +2,7 @@
 
 #### v.1.0.2
 
-## Handleiding
+## Gebruikers Handleiding
 
 #### v.2.1
 
