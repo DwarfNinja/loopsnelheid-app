@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:loopsnelheidapp/models/device.dart';
+import 'package:loopsnelheidapp/services/env_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
-
 class DeviceService {
-  final String devicesEndpoint = dotenv.env['BACKEND_API_URL']! + "/auth/devices";
+  final String devicesEndpoint = EnvService().loadBackendApiFromEnvFile() + "/auth/devices";
 
   Future<List<Device>> getDevices() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();

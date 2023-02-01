@@ -1,10 +1,9 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:loopsnelheidapp/services/env_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
-
 class ResearchService {
-  final String statisticsEndpoint = dotenv.env['BACKEND_API_URL']! + "/stats/research";
+  final String statisticsEndpoint = EnvService().loadBackendApiFromEnvFile() + "/stats/research";
 
   Future<int> getStatistics() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
