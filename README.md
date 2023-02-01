@@ -38,3 +38,7 @@ class.
 To launch the application on the web, execute `flutter run -d web-server` in the terminal and afterwards open the shown url in your browser of choice. Alternatively you can check your IDE's device manager for browsers it has registered and launch the application from there. When launching the application in the browser it is recommended to enable the device screen emulator by setting `DEVICE_PREVIEW` to `true` in the `.env` file, this allows for integrated responsiveness debugging of mobile screens in the browser.
 
 
+## Building the application
+To build the application for production you must make use of the `upload.keystore` (this can be requested at the client/employer). Once you have the `upload.keystore` file you must create a `key.properties` file in the `/android/app/` directory and enter the details of the `upload.keystore`: `storePassword`, `keyPassword`, `keyAlias` and `storeFile`. These details can be requested at the client/employer.
+
+After you have correctly set up the `upload.keystore` and `key.properties` you can either use `Build APK` in your IDE or execute `flutter build apk` in the terminal to start building the APK.
