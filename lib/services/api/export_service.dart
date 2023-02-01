@@ -1,10 +1,9 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:loopsnelheidapp/services/env_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 
 class ExportService {
-  final String exportUserEndpoint = dotenv.env['BACKEND_API_URL']! + "/privacy";
+  final String exportUserEndpoint = EnvService().loadBackendApiFromEnvFile() + "/privacy";
 
   Future<http.Response> requestExportData() async {
     SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
