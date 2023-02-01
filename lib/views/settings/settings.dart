@@ -72,14 +72,6 @@ class _SettingsState extends State<Settings> {
       });
     }
 
-    exportDataButtonOnPressed(){
-      exportData();
-    }
-
-    exportAllDataButtonOnPressed(){
-      exportAllData();
-    }
-
     return InfoBase(
       pageName: "Instellingen",
       pageIcon: Icons.settings,
@@ -108,9 +100,7 @@ class _SettingsState extends State<Settings> {
             SettingsButton(
               iconData: Icons.cloud_download_rounded,
               text: "Exporteer gegevens",
-              onPressed: (){
-                exportDataButtonOnPressed();
-              },
+              onPressed: () => exportData(),
             ),
             const SizedBox(height: 20),
             FutureBuilder<bool>(
@@ -121,9 +111,7 @@ class _SettingsState extends State<Settings> {
                     SettingsButton(
                       iconData: Icons.download_rounded,
                       text: "Exporteer onderzoek",
-                      onPressed: (){
-                        exportAllDataButtonOnPressed();
-                      },
+                      onPressed: () => exportAllData(),
                     );
                 }
                 return Container();
