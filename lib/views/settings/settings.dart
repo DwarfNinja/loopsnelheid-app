@@ -3,9 +3,11 @@ import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/services/api/export_service.dart';
 import 'package:loopsnelheidapp/services/api/research_service.dart';
 import 'package:loopsnelheidapp/services/measure/background_service.dart';
+import 'package:loopsnelheidapp/services/notification_service.dart';
 import 'package:loopsnelheidapp/services/router/navigation_service.dart';
 import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 import 'package:loopsnelheidapp/widgets/info_base.dart';
+import 'package:loopsnelheidapp/widgets/notification/custom_alert.dart';
 import 'package:loopsnelheidapp/widgets/settings/settings_button.dart';
 import 'package:loopsnelheidapp/widgets/settings/toggle_setting.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -34,30 +36,22 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    showAlertDialog(BuildContext context) {
-      Widget okButton = TextButton(
-        child: const Text("OK"),
-        onPressed: () => NavigationService.executeRoute(context, "/"),
-      );
-      AlertDialog alert = AlertDialog(
-        title: const Text("Data Exporteren..."),
-        content: const Text("Uw data is aan het exporteren, u zult het binnen 2 minuten via uw mail ontvangen."),
-        actions: [
-          okButton,
-        ],
-      );
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
+
+    showExportDataAlertDialog() {
+      NotificationService.showAlert(
+          context,
+          CustomAlert(
+            titleText: "Data Exporteren...",
+            messageText:"Uw data is aan het exporteren, u zult het binnen 2 minuten via uw mail ontvangen.",
+            buttonText: "Ok", onPressed: () => Navigator.pop(context),
+          ),
+          dismissable: false
       );
     }
 
     exportData() {
-
       exportService.requestExportData();
-      showAlertDialog(context);
+      showExportDataAlertDialog();
     }
 
     exportAllData() {
@@ -65,19 +59,11 @@ class _SettingsState extends State<Settings> {
         if (value) {
           researchService.getStatistics().then((value) => {
             if (value == 200) {
-              showAlertDialog(context)
+              showExportDataAlertDialog()
             }
           })
         }
       });
-    }
-
-    exportDataButtonOnPressed(){
-      exportData();
-    }
-
-    exportAllDataButtonOnPressed(){
-      exportAllData();
     }
 
     return InfoBase(
@@ -108,9 +94,7 @@ class _SettingsState extends State<Settings> {
             SettingsButton(
               iconData: Icons.cloud_download_rounded,
               text: "Exporteer gegevens",
-              onPressed: (){
-                exportDataButtonOnPressed();
-              },
+              onPressed: () => exportData(),
             ),
             const SizedBox(height: 20),
             FutureBuilder<bool>(
@@ -121,9 +105,7 @@ class _SettingsState extends State<Settings> {
                     SettingsButton(
                       iconData: Icons.download_rounded,
                       text: "Exporteer onderzoek",
-                      onPressed: (){
-                        exportAllDataButtonOnPressed();
-                      },
+                      onPressed: () => exportAllData(),
                     );
                 }
                 return Container();
