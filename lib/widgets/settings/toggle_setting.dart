@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_switch/flutter_switch.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ToggleSetting extends StatefulWidget {
 

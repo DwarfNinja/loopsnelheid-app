@@ -1,14 +1,16 @@
+import 'package:device_preview/device_preview.dart' as device_preview;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:device_preview/device_preview.dart' as device_preview;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/custom_page_route.dart';
+import 'package:loopsnelheidapp/services/api/auth_service.dart';
+import 'package:loopsnelheidapp/services/env_service.dart';
+import 'package:loopsnelheidapp/views/account/account.dart';
 import 'package:loopsnelheidapp/views/account/edit_basics.dart';
 import 'package:loopsnelheidapp/views/account/edit_details.dart';
-
 import 'package:loopsnelheidapp/views/dashboard/dashboard.dart';
 import 'package:loopsnelheidapp/views/register/forgot_password.dart';
 import 'package:loopsnelheidapp/views/register/login.dart';
@@ -18,18 +20,12 @@ import 'package:loopsnelheidapp/views/register/register_documents.dart';
 import 'package:loopsnelheidapp/views/register/register_verification.dart';
 import 'package:loopsnelheidapp/views/settings/devices.dart';
 import 'package:loopsnelheidapp/views/settings/settings.dart';
-import 'package:loopsnelheidapp/views/account/account.dart';
-
-import 'package:loopsnelheidapp/services/env_service.dart';
-import 'package:loopsnelheidapp/services/api/auth_service.dart';
-
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
 
-  if ((EnvService().loadFromEnvFile("WEB_DEBUG") as String).toBoolean() == true) {
+  if ((EnvService().loadFromEnvFile("DEVICE_PREVIEW") as String).toBoolean() == true) {
     runApp(device_preview.DevicePreview(
         builder: (context) => const MyApp(),
         enabled: !kReleaseMode));
@@ -39,8 +35,35 @@ void main() async {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+
+  GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      navigatorKey.currentState!.pushNamed(getCurrentRouteUsingNavigatorKey() ?? "/");
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,25 +71,42 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loopsnelheid App',
       theme: app_theme.themeData,
-      onGenerateRoute: onGenerateRoute
+      navigatorKey: navigatorKey,
+      onGenerateRoute: onGenerateRoute,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 
-  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    AuthService authService = AuthService();
+  String? getCurrentRouteUsingNavigatorKey() {
+    String? currentPath;
+    navigatorKey.currentState?.popUntil((route) {
+      currentPath = route.settings.name;
+      return true;
+    });
+    return currentPath;
+  }
+
+  Route<dynamic> onGenerateRoute(RouteSettings settings) {
     return CustomPageRoute(
       settings: settings,
       child: FutureBuilder<bool>(
-        future: authService.isUserAuthenticated(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
-            generateRouteBasedOnAuthentication(settings.name, snapshot.data)
+        future: AuthService().isUserAuthenticatedAndHasValidSession(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasError || snapshot.data == null || snapshot.connectionState == ConnectionState.waiting) {
+            return Container();
+          }
+          bool isUserAuthenticatedAndHasSession = snapshot.data as bool;
+          return generateRouteBasedOnAuthentication(settings.name, isUserAuthenticatedAndHasSession);
+        }
       ),
     );
   }
 
-  static generateRouteBasedOnAuthentication(String? routeName, bool? authenticated) {
-    if(authenticated == null) return Container();
-
+  Widget generateRouteBasedOnAuthentication(String? routeName, bool authenticated) {
     if(authenticated) {
       switch (routeName) {
         case "/":

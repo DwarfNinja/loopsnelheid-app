@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-
-import 'package:loopsnelheidapp/models/profile.dart';
-import 'package:loopsnelheidapp/services/notification_service.dart';
-
-import 'package:loopsnelheidapp/widgets/info_base.dart';
-import 'package:loopsnelheidapp/widgets/account/account_field.dart';
-import 'package:loopsnelheidapp/widgets/account/account_button.dart';
-import 'package:loopsnelheidapp/widgets/notification/custom_snackbar.dart';
-
-import 'package:loopsnelheidapp/services/api/profile_service.dart';
-import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:loopsnelheidapp/models/profile.dart';
+import 'package:loopsnelheidapp/services/api/profile_service.dart';
+import 'package:loopsnelheidapp/services/notification_service.dart';
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
+import 'package:loopsnelheidapp/widgets/account/account_button.dart';
+import 'package:loopsnelheidapp/widgets/account/account_field.dart';
+import 'package:loopsnelheidapp/widgets/info_base.dart';
+import 'package:loopsnelheidapp/widgets/notification/custom_snackbar.dart';
 
 class EditBasics extends StatefulWidget {
 

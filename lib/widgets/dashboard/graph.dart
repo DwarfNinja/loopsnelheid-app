@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class Graph extends StatefulWidget {

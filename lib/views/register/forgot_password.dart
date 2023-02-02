@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/services/api/profile_service.dart';
-
+import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
 import 'package:loopsnelheidapp/widgets/register/form_button.dart';
 import 'package:loopsnelheidapp/widgets/register/input_field.dart';
 import 'package:loopsnelheidapp/widgets/register/register_base.dart';
-
-import 'package:loopsnelheidapp/services/shared_preferences_service.dart';
-
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 
 class ForgotPassword extends StatefulWidget {
 

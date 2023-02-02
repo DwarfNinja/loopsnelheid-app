@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
-
+import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
 import 'package:loopsnelheidapp/models/average_measure.dart';
+import 'package:loopsnelheidapp/services/api/measure_service.dart';
+import 'package:loopsnelheidapp/services/measure/activity_service.dart';
 import 'package:loopsnelheidapp/services/measure/background_service.dart';
 import 'package:loopsnelheidapp/services/measure/location_service.dart';
 import 'package:loopsnelheidapp/services/notification_service.dart';
-
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-
+import 'package:loopsnelheidapp/services/setting/setting_service.dart';
 import 'package:loopsnelheidapp/views/sidebar/sidebar.dart';
-
+import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
+import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/graph.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/legend_text.dart';
 import 'package:loopsnelheidapp/widgets/dashboard/toggle_button.dart';
-import 'package:loopsnelheidapp/widgets/dashboard/current_speed_card.dart';
-import 'package:loopsnelheidapp/widgets/dashboard/average_speed_card.dart';
 import 'package:loopsnelheidapp/widgets/notification/custom_alert.dart';
-
-import 'package:loopsnelheidapp/services/api/measure_service.dart';
-import 'package:loopsnelheidapp/services/measure/activity_service.dart';
-import 'package:loopsnelheidapp/services/setting/setting_service.dart';
-
-import 'package:loopsnelheidapp/app_theme.dart' as app_theme;
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
